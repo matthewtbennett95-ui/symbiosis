@@ -787,7 +787,7 @@
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>📋 SUGGESTED LESSON PLAN (two ~50-minute periods)</h3>
             <div class="grid" style="gap: 16px; font-size: 14px;">
-                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing plays a short clip from Veritasium's Prisoner's Dilemma video (it plays inside the page; if YouTube is blocked for students, play it on the projector), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"</div>
+                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows the first 2:10 of a Veritasium video on the Prisoner's Dilemma, then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip is on Facebook, which many school networks block for students. If it doesn't load, play 0:00–2:10 on the projector before students start.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
@@ -3152,14 +3152,19 @@ function mountHandPlay(el, cfg) {
 
 
 // ---------- Briefing: the video clip and the game in 60 seconds ----------
-// The clip is the opening of Veritasium's "What The Prisoner's Dilemma Reveals About Life, The Universe, and Everything" (Dec 2023).
-// Change start/end (in seconds) to choose which part of the video students see.
-const INTRO_VIDEO = { id: 'mScpHTIi-kM', start: 0, end: 360 };
+// The clip is the opening of a 13:40 Veritasium video on the Prisoner's Dilemma, chosen by the teacher.
+// Students watch 0:00–2:10: the puzzle of cooperation, up to "what is the best strategy?"
+// provider 'facebook': embedded with Facebook's video plugin. It can't stop by itself, so students are told when to stop.
+// provider 'youtube': set id instead of url; start/end are then enforced by the player.
+const INTRO_VIDEO = { provider: 'facebook', url: 'https://www.facebook.com/share/v/1YyirBGsus/', start: 0, end: 130 };
 function videoTime(sec) { return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
 
 function mountBriefing(el) {
     const P = state.payoff, v = INTRO_VIDEO;
-    const src = `https://www.youtube-nocookie.com/embed/${v.id}?start=${v.start}&end=${v.end}&rel=0&modestbranding=1`;
+    const yt = v.provider === 'youtube';
+    const src = yt ? `https://www.youtube-nocookie.com/embed/${v.id}?start=${v.start}&end=${v.end}&rel=0&modestbranding=1`
+                   : `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.url)}&show_text=false&width=734&t=${v.start}`;
+    const openUrl = yt ? `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s` : v.url;
     const answers = exp.data.brief || (exp.data.brief = {});
     const Q = [
         { id: 'q1', text: 'Your partner <b>cooperates</b>. Which choice earns <i>you</i> more?', opts: [['C', `🤝 Cooperate (you get ${P.R})`], ['D', `🗡️ Defect (you get ${P.T})`]], right: P.T > P.R ? 'D' : 'C' },
@@ -3169,11 +3174,11 @@ function mountBriefing(el) {
     el.innerHTML = `
         <div class="card" style="padding: 14px;">
             <div style="position: relative; padding-top: 56.25%; border-radius: 10px; overflow: hidden; background: #0f172a;">
-                <iframe src="${src}" title="Veritasium: What The Prisoner's Dilemma Reveals About Life, The Universe, and Everything" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>
+                <iframe src="${src}" title="Veritasium: the Prisoner's Dilemma" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen loading="lazy"></iframe>
             </div>
-            <div class="row" style="margin-top: 8px; font-size: 13px;">
-                <span class="muted">🎬 Veritasium · watch ${videoTime(v.start)}–${videoTime(v.end)}</span><span class="spacer"></span>
-                <a href="https://www.youtube.com/watch?v=${v.id}&t=${v.start}s" target="_blank" rel="noopener">Video not loading? Open it on YouTube ↗</a>
+            <div class="row" style="margin-top: 10px; gap: 12px;">
+                <div style="flex: 1; min-width: 220px; font-size: 15px;">🎬 <b>Veritasium.</b> Watch from <b>${videoTime(v.start)}</b> ${yt ? `to <b>${videoTime(v.end)}</b> (it stops by itself).` : `and <b>stop at ${videoTime(v.end)}</b>, when the video asks what the best strategy is. Don't watch further: the rest gives away answers you'll discover yourself!`}</div>
+                <a class="row" href="${openUrl}" target="_blank" rel="noopener" style="text-decoration: none;"><button class="secondary small" tabindex="-1">▶ Video not showing? Open it ↗</button></a>
             </div>
         </div>
         <div class="card soft" style="margin-top: 16px;">
