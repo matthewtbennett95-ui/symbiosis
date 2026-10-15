@@ -787,7 +787,7 @@
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>📋 SUGGESTED LESSON PLAN (two ~50-minute periods)</h3>
             <div class="grid" style="gap: 16px; font-size: 14px;">
-                <div><b>Day 1 · Expedition chapters 1–3 (~45 min)</b><br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"</div>
+                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows the first 2:10 of a Veritasium video on the Prisoner's Dilemma, then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip is on Facebook, which many school networks block for students. If it doesn't load, play 0:00–2:10 on the projector before students start.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
@@ -2737,7 +2737,7 @@ function renderGuide() {
             <div class="lesson"><b>🔍 Be clear</b>Simple, predictable behaviour lets partners learn that cooperating with you pays.</div>
             <div class="lesson"><b>🚫 Don't be envious</b>You don't need to score more than your partner. Tit for Tat <i>never</i> outscores anyone in a single game — it can at best tie — yet it wins tournaments.</div>
         </div>
-        <p>The tournament leaderboard checks the first three traits for every entrant automatically, so you can test whether Axelrod's advice holds in <i>your</i> class's ecosystem.</p>
+        <p>The tournament leaderboard checks the first three (nice, retaliatory, forgiving) for every entrant automatically, so you can test whether Axelrod's advice holds in <i>your</i> class's ecosystem.</p>
     </section>
 
     <section id="g-shadow">
@@ -3150,6 +3150,60 @@ function mountHandPlay(el, cfg) {
     return g;
 }
 
+
+// ---------- Briefing: the video clip and the game in 60 seconds ----------
+// The clip is the opening of a 13:40 Veritasium video on the Prisoner's Dilemma, chosen by the teacher.
+// Students watch 0:00–2:10: the puzzle of cooperation, up to "what is the best strategy?"
+// provider 'facebook': embedded with Facebook's video plugin. It can't stop by itself, so students are told when to stop.
+// provider 'youtube': set id instead of url; start/end are then enforced by the player.
+const INTRO_VIDEO = { provider: 'facebook', url: 'https://www.facebook.com/share/v/1YyirBGsus/', start: 0, end: 130 };
+function videoTime(sec) { return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+
+function mountBriefing(el) {
+    const P = state.payoff, v = INTRO_VIDEO;
+    const yt = v.provider === 'youtube';
+    const src = yt ? `https://www.youtube-nocookie.com/embed/${v.id}?start=${v.start}&end=${v.end}&rel=0&modestbranding=1`
+                   : `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.url)}&show_text=false&width=734&t=${v.start}`;
+    const openUrl = yt ? `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s` : v.url;
+    const answers = exp.data.brief || (exp.data.brief = {});
+    const Q = [
+        { id: 'q1', text: 'Your partner <b>cooperates</b>. Which choice earns <i>you</i> more?', opts: [['C', `🤝 Cooperate (you get ${P.R})`], ['D', `🗡️ Defect (you get ${P.T})`]], right: P.T > P.R ? 'D' : 'C' },
+        { id: 'q2', text: 'Your partner <b>defects</b>. Which choice earns <i>you</i> more?', opts: [['C', `🤝 Cooperate (you get ${P.S})`], ['D', `🗡️ Defect (you get ${P.P})`]], right: P.P > P.S ? 'D' : 'C' },
+        { id: 'q3', text: 'Suppose you <i>and</i> your partner both follow that logic. Compared with both cooperating, you each end up…', opts: [['better', 'better off'], ['worse', 'worse off'], ['same', 'the same']], right: P.P < P.R ? 'worse' : 'better' }
+    ];
+    el.innerHTML = `
+        <div class="card" style="padding: 14px;">
+            <div style="position: relative; padding-top: 56.25%; border-radius: 10px; overflow: hidden; background: #0f172a;">
+                <iframe src="${src}" title="Veritasium: the Prisoner's Dilemma" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="row" style="margin-top: 10px; gap: 12px;">
+                <div style="flex: 1; min-width: 220px; font-size: 15px;">🎬 <b>Veritasium.</b> Watch from <b>${videoTime(v.start)}</b> ${yt ? `to <b>${videoTime(v.end)}</b> (it stops by itself).` : `and <b>stop at ${videoTime(v.end)}</b>, when the video asks what the best strategy is. Don't watch further: the rest gives away answers you'll discover yourself!`}</div>
+                <a class="row" href="${openUrl}" target="_blank" rel="noopener" style="text-decoration: none;"><button class="secondary small" tabindex="-1">▶ Video not showing? Open it ↗</button></a>
+            </div>
+        </div>
+        <div class="card soft" style="margin-top: 16px;">
+            <h3>🎲 THE GAME IN 60 SECONDS</h3>
+            <p style="font-size: 15px; margin-top: 0;">Two organisms meet. Each secretly chooses to <b>cooperate</b> 🤝 or <b>defect</b> 🗡️. Then both choices are revealed, and each organism collects resources (points):</p>
+            <table class="payoff-table" style="margin: 0 auto 14px;">
+                <tr><th></th><th>Partner cooperates 🤝</th><th>Partner defects 🗡️</th></tr>
+                <tr><th>You cooperate 🤝</th><td class="cc">You <b>${P.R}</b> · Partner ${P.R}</td><td class="mix">You <b>${P.S}</b> · Partner ${P.T}</td></tr>
+                <tr><th>You defect 🗡️</th><td class="mix">You <b>${P.T}</b> · Partner ${P.S}</td><td class="dd">You <b>${P.P}</b> · Partner ${P.P}</td></tr>
+            </table>
+            <p style="font-size: 15px;">Use the table to answer:</p>
+            ${Q.map((q, i) => `<div style="margin: 12px 0;"><b>${i + 1}.</b> ${q.text}
+                <div class="pick-row" style="margin: 6px 0 0;">${q.opts.map(([val, label]) => `<button class="pick ${answers[q.id] === val ? 'on' : ''}" onclick="expBrief('${q.id}', '${val}')">${label}</button>`).join('')}</div>
+                <div class="muted" style="font-size: 13px; min-height: 18px;">${answers[q.id] ? (answers[q.id] === q.right ? '✅ Right.' : '❌ Not quite. Look at the table again.') : ''}</div></div>`).join('')}
+        </div>`;
+    window.expBrief = (id, val) => {
+        exp.data.brief[id] = val; saveExp();
+        mountBriefing(el);
+        if (Q.every(q => exp.data.brief[q.id] === q.right)) {
+            exp.summary.briefing = 'Worked out the payoff logic of the game.';
+            expComplete();
+        }
+    };
+}
+
 // ---------- Chapter 1: vampire bats ----------
 const BAT = {
     you: { emoji: '🦇', name: 'You' }, unit: 'blood', roundName: 'Night', endName: 'The season is over',
@@ -3392,7 +3446,7 @@ async function runExpTournament() {
 }
 
 function needGenomeHTML() {
-    return `<div class="note note-amber">You need an organism first. <button class="small" onclick="expGo(2)">← Go to Chapter 3</button></div>`;
+    return `<div class="note note-amber">You need an organism first. <button class="small" onclick="expGo(chIndex('genome'))">← Go to Chapter ${chIndex('genome')}</button></div>`;
 }
 
 function mountTourney(el) {
@@ -3409,7 +3463,7 @@ function mountTourney(el) {
             <button class="amber big" id="c4-run" style="margin-top: 10px;" onclick="expRunTourney()">▶ Run the tournament</button>
         </div>
         <div id="c4-results" style="margin-top: 16px;"></div>`;
-    CHAPTERS[3].onWhy();
+    chById('tourney').onWhy();
     if (expT && exp.done.tourney) renderExpTourney();
     else if (exp.done.tourney) $('c4-results').innerHTML = '<div class="note note-amber">Welcome back! Your results table isn\'t saved between sessions. Press <b>Run the tournament</b> again to see it (the results will be similar, not identical).</div>';
 }
@@ -3461,7 +3515,7 @@ function mountGenerations(el) {
                     <div id="c5-notes"></div>
                 </div>
             </div>`;
-        CHAPTERS[4].onWhy();
+        chById('generations').onWhy();
         if (exp.done.generations) expRunGenerations();
     };
     if (expT) build();
@@ -3510,7 +3564,7 @@ function mountBiofilm(el) {
             </div>
         </div>
         <div class="card" style="margin-top: 14px;"><h3>📋 DATA TABLE</h3><div id="c6-table"></div><div id="c6-status" class="muted" style="font-size: 13px; margin-top: 8px;"></div></div>`;
-    CHAPTERS[5].onWhy();
+    chById('biofilm').onWhy();
     renderBiofilmTable();
 }
 function biofilmTrials() { return exp.data.trials6 || (exp.data.trials6 = {}); }
@@ -3605,6 +3659,15 @@ window.expSocietyCheck = () => {
 // story: no spoilers. task: what to do, not how. think: explain before the discovery. connect: apply it somewhere new.
 const CHAPTERS = [
     {
+        id: 'briefing', day: 1, icon: '🎬', short: 'Briefing', place: 'Before you begin', title: 'A Puzzle in Nature',
+        story: `Evolution rewards organisms that survive and reproduce. So you might expect every living thing to be ruthlessly selfish. Yet nature is full of creatures that <b>help each other</b>: animals that groom and feed one another, and partners from completely different species that trade services.<br><br>Watch the clip, then figure out the simple game scientists use to study this puzzle.`,
+        task: 'Watch the video clip, then use the table to answer the three questions about the game.',
+        think: 'Look at your three answers. Why do you think scientists call this situation a <b>dilemma</b>? Explain how a choice that seems smart for one player can turn out badly for both.',
+        discovery: `This game is called the <b>Prisoner's Dilemma</b>. Whatever your partner does, defecting earns <i>you</i> more in that single meeting. But if both players reason that way, both end up with less than if they had cooperated. What's best for each individual is worse for the pair.<br><br>In biology, the outcomes have names: both cooperating is <b>mutualism</b> 🌿 (both benefit), one exploiting the other is <b>parasitism</b> 🦠, and both defecting is <b>competition</b> ⚔️ (both lose out).<br><br>So if defecting always wins a single meeting, how does cooperation evolve at all? <b>That's the question for this whole expedition.</b> Here's a hint: real organisms rarely meet just once.`,
+        connect: 'Name a real situation, in nature or in your own life, where individuals cooperate even though cheating would pay more in the moment. What do you think makes cooperating worth it there?',
+        mount: mountBriefing
+    },
+    {
         id: 'roost', day: 1, icon: '🦇', short: 'The Roost', place: 'A roost in Costa Rica', title: 'The Roost',
         story: `You are a <b>vampire bat</b>. Every night you fly out to find blood. Some nights you come home empty, and a bat that misses two or three nights in a row can starve. Back at the roost you can share some of your meal with a hungry roostmate… or keep it all.
             <div class="story-quote">Sharing costs you something tonight. Keeping is always better <i>for tonight</i>. So why would any bat share?</div>`,
@@ -3633,11 +3696,16 @@ const CHAPTERS = [
         think: 'Your organism passed both trials, but it isn\'t perfect. Describe a kind of partner it would do <b>badly</b> against, and explain why. Why did you accept that weakness instead of designing it away?',
         discovery: () => {
             const t = genomeTraits(genes());
-            return `Political scientist Robert Axelrod studied which strategies succeed, and described the winners with three traits. Your organism is:<br>
-                • <b>${t.nice ? 'Nice' : 'Not nice'}</b>: ${t.nice ? 'it is never the first to defect.' : 'it sometimes defects first.'}<br>
-                • <b>${t.retaliatory ? 'Retaliatory' : 'Not retaliatory'}</b>: ${t.retaliatory ? 'it responds to cheating.' : 'it lets cheaters get away with it.'}<br>
-                • <b>${t.forgiving ? 'Forgiving' : 'Unforgiving'}</b>: ${t.forgiving ? 'it goes back to cooperating once its partner does.' : 'it holds past cheating against its partner.'}<br><br>
-                The Freeloader trial tests whether you retaliate. The Partnership trial tests whether you're nice. Every design is a <b>trade-off</b>: more forgiveness helps you recover from misunderstandings but costs you against cheaters. There's no single perfect genome, which is part of why nature contains so many different strategies.`;
+            const row = (ok, name, meaning, yes, no) => `<tr><td><b>${name}</b></td><td>${meaning}</td><td>${ok ? '✅ ' + yes : '❌ ' + no}</td></tr>`;
+            return `Political scientist Robert Axelrod studied the winning strategies from his tournaments and found that the most successful ones shared <b>four properties</b>:
+                <table style="margin: 10px 0; background: #fff;">
+                    <tr><th>Property</th><th>What it means</th><th>Your organism</th></tr>
+                    ${row(t.nice, '😇 Nice', 'Never the first to defect', 'Yes', 'No, it sometimes defects first')}
+                    ${row(t.retaliatory, '🛡️ Retaliatory', 'Strikes back when it is cheated (Axelrod called this "provocable")', 'Yes', 'No, cheaters get away with it')}
+                    ${row(t.forgiving, '🕊️ Forgiving', 'Goes back to cooperating once its partner does', 'Yes', 'No, it holds past cheating against its partner')}
+                    <tr><td><b>🔍 Clear</b></td><td>Simple enough that partners can figure out how it behaves</td><td>Four genes keep any design fairly clear</td></tr>
+                </table>
+                Your two trials tested the first two: the Freeloader trial checks whether you <b>retaliate</b>, and the Partnership trial checks whether you're <b>nice</b>. Every design is a <b>trade-off</b>: more forgiveness helps you recover from misunderstandings but costs you against cheaters. There's no single perfect genome, which is part of why nature contains so many different strategies.`;
         },
         connect: 'In the "Ultimatum Game," psychologists give one person money to split with a stranger. If the stranger rejects the offer, <b>both get nothing</b>. Many people reject unfair offers (like 20%), even though that leaves them with less. Is that irrational? Or could a "punish unfairness" instinct be adaptive? Connect your answer to Gene 3.',
         mount: mountGenome
@@ -3701,7 +3769,14 @@ const CHAPTERS = [
 ];
 
 // ---------- Expedition shell ----------
-function chapterFinished(c) { return !!(exp.done[c.id] && (exp.revealed[c.id] || !c.think) && realWords(exp.answers[c.id + ':connect']) >= CONNECT_WORDS); }
+function chById(id) { return CHAPTERS.find(c => c.id === id); }
+function chIndex(id) { return CHAPTERS.findIndex(c => c.id === id); }
+function chLabel(i) { return CHAPTERS[i].id === 'briefing' ? 'Briefing' : `Chapter ${i} of ${CHAPTERS.length - 1}`; }
+function chapterFinished(c) {
+    // Students who started before the briefing existed shouldn't be sent back to it.
+    if (c.id === 'briefing' && exp.done.roost) return true;
+    return !!(exp.done[c.id] && (exp.revealed[c.id] || !c.think) && realWords(exp.answers[c.id + ':connect']) >= CONNECT_WORDS);
+}
 function expChapterUnlocked(i) { return i === 0 || CHAPTERS.slice(0, i).every(chapterFinished) || exp.unlockAll; }
 function chText(v) { return typeof v === 'function' ? v() : v; }
 
@@ -3711,7 +3786,7 @@ function renderExpRail() {
         if (c.day !== lastDay) { if (lastDay) html += '<div class="exp-divider"></div>'; html += `<div class="exp-day">DAY ${c.day}</div>`; lastDay = c.day; }
         const fin = chapterFinished(c);
         const cls = [fin ? 'done' : '', i === exp.cur ? 'cur' : '', expChapterUnlocked(i) ? '' : 'locked'].join(' ');
-        html += `<div class="exp-step ${cls}" role="button" tabindex="0" aria-label="Chapter ${i + 1}: ${c.short}${fin ? ' (complete)' : ''}" onclick="expGo(${i})"><span class="n">${fin ? '✅' : c.icon}</span><b>${i + 1}. ${c.short}</b></div>`;
+        html += `<div class="exp-step ${cls}" role="button" tabindex="0" aria-label="${chLabel(i)}: ${c.short}${fin ? ' (complete)' : ''}" onclick="expGo(${i})"><span class="n">${fin ? '✅' : c.icon}</span><b>${c.id === 'briefing' ? '' : i + '. '}${c.short}</b></div>`;
     });
     $('exp-rail').innerHTML = html;
 }
@@ -3721,7 +3796,7 @@ function renderExpedition() {
     const i = exp.cur, c = CHAPTERS[i], last = i === CHAPTERS.length - 1;
     $('exp-body').innerHTML = `
         <div class="exp-hero">
-            <div><div class="exp-kicker">Day ${c.day} · Chapter ${i + 1} of ${CHAPTERS.length} · ${c.place}</div><h2>${c.title}</h2><div class="exp-story">${c.story}</div></div>
+            <div><div class="exp-kicker">Day ${c.day} · ${chLabel(i)} · ${c.place}</div><h2>${c.title}</h2><div class="exp-story">${c.story}</div></div>
             <div class="exp-emoji">${c.icon}</div>
         </div>
         <div class="exp-task"><b>🎯 YOUR TASK</b>${c.task}</div>
@@ -3812,7 +3887,7 @@ function generateJournal() {
         <p><b>Name:</b> ${name ? esc(name) : '____________________'} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()} &nbsp; <b>Chapters completed:</b> ${CHAPTERS.filter(chapterFinished).length} of ${CHAPTERS.length}</p>`;
     const whys = { tourney: 'why4', generations: 'why5', biofilm: 'why6' };
     CHAPTERS.forEach((c, i) => {
-        html += `<h3>${i + 1}. ${c.icon} ${c.title}</h3>${exp.summary[c.id] ? `<p><i>Result:</i> ${esc(exp.summary[c.id])}</p>` : `<p><i>Not completed.</i></p>`}`;
+        html += `<h3>${c.id === 'briefing' ? '' : i + '. '}${c.icon} ${c.title}</h3>${exp.summary[c.id] ? `<p><i>Result:</i> ${esc(exp.summary[c.id])}</p>` : `<p><i>Not completed.</i></p>`}`;
         if (whys[c.id]) html += `<p><b>Hypothesis, and why:</b></p>${ans(exp.data[whys[c.id]])}`;
         if (c.id === 'society') {
             const a = exp.data.society || {}, d = DILEMMAS.find(x => x.id === a.scenario);
