@@ -269,12 +269,81 @@
         .env-grid .control-group input { width: 100%; }
         .share-box { width: 100%; height: 110px; font-family: var(--mono); font-size: 12px; word-break: break-all; }
 
+        /* ---------- Expedition (guided path) ---------- */
+        .exp-intro { display: flex; gap: 14px; align-items: center; background: var(--soft-2); border-left: 4px solid var(--accent-blue); border-radius: 0 8px 8px 0; padding: 12px 18px; font-size: 14px; margin-bottom: 18px; }
+        .exp-rail { display: flex; gap: 6px; align-items: stretch; margin-bottom: 22px; overflow-x: auto; padding-bottom: 4px; }
+        .exp-day { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-muted); writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; padding: 0 2px; }
+        .exp-step { flex: 1 0 118px; border: 1px solid var(--border-color); background: #fff; border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 12px; line-height: 1.3; transition: all .15s; }
+        .exp-step:hover { border-color: var(--accent-blue); }
+        .exp-step .n { font-size: 18px; }
+        .exp-step b { display: block; font-size: 12px; }
+        .exp-step.done { background: #f0fdf4; border-color: #86efac; }
+        .exp-step.cur { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59,130,246,.18); }
+        .exp-step.locked { opacity: .45; cursor: not-allowed; }
+        .exp-divider { width: 1px; background: var(--border-color); margin: 0 4px; }
+        .exp-hero { display: grid; grid-template-columns: 1fr 120px; gap: 20px; align-items: center; }
+        .exp-kicker { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-blue); }
+        .exp-hero h2 { margin: 2px 0 8px; font-size: 28px; font-weight: 600; letter-spacing: -.5px; }
+        .exp-story { font-size: 16px; line-height: 1.6; }
+        .exp-emoji { font-size: 92px; text-align: center; line-height: 1; filter: drop-shadow(0 6px 10px rgba(0,0,0,.12)); }
+        .exp-task { background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 12px; padding: 14px 18px; font-size: 16px; margin: 18px 0; }
+        .exp-task b:first-child { color: #1d4ed8; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 2px; }
+        .exp-discovery { background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 14px 18px; font-size: 15px; margin-top: 20px; animation: fadeIn .4s ease; }
+        .exp-discovery b:first-child { color: #15803d; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 4px; }
+        .exp-journal { margin-top: 16px; }
+        .exp-journal label { font-weight: 700; font-size: 15px; display: block; margin-bottom: 6px; }
+        .exp-journal textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; }
+        .exp-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color); gap: 10px; flex-wrap: wrap; }
+        .exp-nav .big { font-size: 15px; padding: 13px 24px; }
+        .hand-arena { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 16px; align-items: center; background: #fff; border: 1px solid var(--border-color); border-radius: 14px; padding: 22px; }
+        .critter { text-align: center; }
+        .critter .big { font-size: 64px; line-height: 1.1; transition: transform .2s; }
+        .critter .big.bump { transform: scale(1.2); }
+        .critter b { display: block; font-size: 14px; margin: 4px 0 8px; }
+        .meter { height: 12px; background: var(--soft-2); border-radius: 6px; overflow: hidden; }
+        .meter div { height: 100%; width: 0; transition: width .35s; }
+        .meter .me { background: var(--accent-green); } .meter .them { background: var(--accent-red); }
+        .hp-score { font-family: var(--mono); font-weight: 700; font-size: 18px; margin-top: 4px; }
+        .critter .said { min-height: 22px; font-weight: 700; font-size: 13px; margin-top: 6px; }
+        .hand-center { text-align: center; }
+        .hand-round { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+        .hand-msg { font-size: 15px; min-height: 70px; margin: 8px 0 14px; padding: 10px 12px; border-radius: 10px; background: var(--soft); display: flex; align-items: center; justify-content: center; }
+        .hand-msg.CC { background: #dcfce7; } .hand-msg.DD { background: #e2e8f0; } .hand-msg.CD { background: #fee2e2; } .hand-msg.DC { background: #fef3c7; }
+        .big-btn { font-size: 16px; padding: 16px 20px; min-width: 150px; text-transform: none; letter-spacing: 0; }
+        .big-btn.coop { background: #16a34a; box-shadow: 0 4px 8px -2px rgba(22,163,74,.4); }
+        .big-btn.defect { background: #dc2626; box-shadow: 0 4px 8px -2px rgba(220,38,38,.4); }
+        .hand-history { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 12px; align-items: flex-end; }
+        .hand-history .lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px; margin-right: 4px; }
+        .hh { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 18px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 3px 5px; }
+        .hh small { font-size: 10px; color: var(--text-muted); }
+        .pick-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .pick { border: 2px solid var(--border-color); background: #fff; color: var(--text-main); box-shadow: none; text-transform: none; letter-spacing: 0; font-size: 15px; padding: 12px 16px; }
+        .pick:hover { border-color: var(--accent-blue); filter: none; }
+        .pick.on { border-color: var(--accent-blue); background: #eff6ff; color: #1d4ed8; }
+        .gene { display: grid; grid-template-columns: 230px 1fr; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px dashed var(--border-color); }
+        .gene-label b { display: block; font-size: 15px; }
+        .gene-label span { font-size: 13px; color: var(--text-muted); }
+        .gene .pick-row { margin: 0; }
+        .gene .pick { font-size: 14px; padding: 9px 13px; }
+        .goal { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; background: #fef2f2; border: 1px solid #fecaca; }
+        .goal.pass { background: #f0fdf4; border-color: #86efac; }
+        .goal .gi { font-size: 20px; line-height: 1; }
+        .nodule-tabs { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .exp-dish { display: grid; grid-template-columns: 1fr 240px; gap: 16px; margin-top: 14px; }
+        .result-pill { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 14px; margin: 4px 6px 4px 0; }
+        .story-quote { border-left: 4px solid var(--accent-amber); background: #fffbeb; padding: 10px 16px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 15px; }
+        .tab-sep { align-self: center; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-muted); padding: 0 0 6px; }
+
         /* ---------- Responsive ---------- */
         @media (max-width: 900px) {
             #app { padding: 20px 16px; }
             h1 { font-size: 26px; }
             .grid, .grid-lab, .guide, #ecosystem-container { grid-template-columns: 1fr; }
             .howto { grid-template-columns: repeat(2, 1fr); }
+            .exp-hero { grid-template-columns: 1fr; } .exp-emoji { font-size: 60px; order: -1; }
+            .hand-arena { grid-template-columns: 1fr 1fr; } .hand-center { grid-column: 1 / -1; order: 3; }
+            .gene { grid-template-columns: 1fr; } .exp-dish { grid-template-columns: 1fr; }
+            .big-btn { min-width: 0; flex: 1; }
             .tab-container { flex-wrap: nowrap; overflow-x: auto; gap: 14px; }
             .tab { white-space: nowrap; }
             #toast-box { left: 16px; right: 16px; bottom: 16px; max-width: none; }
@@ -329,34 +398,31 @@
                 <button class="secondary small" onclick="openEnvModal()">⚙️ Environment Payoffs</button>
             </div>
         </div>
-        <div class="student-briefing">
-            <b>MISSION BRIEFING:</b> In 1980, political scientist Robert Axelrod hosted a computer tournament to solve a paradox: <i>How does cooperation emerge in a world of self-interest?</i>
-            Experts mailed in programs that played the Prisoner's Dilemma against each other. The winner was the simplest program entered.<br><br>
-            Your task: engineer an organism's behavioral "genome" — a strategy that decides, every encounter, whether to form a mutualistic alliance (<b style="color:#15803d">Cooperate</b>) or to exploit (<b style="color:#b91c1c">Defect</b>). Then test it against the famous strategies, your classmates, and evolution itself.
-            <div class="howto">
-                <div onclick="switchTab('tab-lab')"><b>① Engineer</b>Build a strategy with rules or code.</div>
-                <div onclick="switchTab('tab-1v1')"><b>② Duel</b>Test it 1v1 and read the field notes.</div>
-                <div onclick="switchTab('tab-tournament')"><b>③ Tournament</b>Recreate Axelrod's round robin.</div>
-                <div onclick="switchTab('tab-petri')"><b>④ Evolve</b>Watch it spread — or die out — in the Petri Dish.</div>
-                <div onclick="switchTab('tab-guide')"><b>⑤ Understand</b>Connect it to real biology &amp; society.</div>
-            </div>
-        </div>
     </div>
 
     <!-- =================== TABS =================== -->
     <div class="tab-container" id="tabs">
-        <div class="tab active" data-tab="tab-lab" style="--tab-color: var(--accent-blue)">🧬 STRATEGY LAB</div>
-        <div class="tab" data-tab="tab-1v1" style="--tab-color: var(--accent-green)">⚔️ TARGET SIMULATION [1v1]</div>
-        <div class="tab" data-tab="tab-tournament" style="--tab-color: var(--accent-amber)">🏆 GLOBAL TOURNAMENT</div>
+        <div class="tab active" data-tab="tab-expedition" style="--tab-color: var(--accent-blue)">🧭 EXPEDITION</div>
+        <div class="tab-sep">│ OPEN LAB:</div>
+        <div class="tab" data-tab="tab-tournament" style="--tab-color: var(--accent-amber)">🏆 TOURNAMENT</div>
         <div class="tab" data-tab="tab-petri" style="--tab-color: var(--accent-purple)">🧫 SURVIVAL CRUCIBLE</div>
         <div class="tab" data-tab="tab-missions" style="--tab-color: #10b981">🎯 MISSIONS <span id="mission-count" class="badge badge-pos">0/0</span></div>
+        <div class="tab" data-tab="tab-lab" style="--tab-color: var(--accent-blue)">🧬 STRATEGY LAB</div>
+        <div class="tab" data-tab="tab-1v1" style="--tab-color: var(--accent-green)">⚔️ HEAD-TO-HEAD</div>
         <div class="tab" data-tab="tab-guide" style="--tab-color: var(--accent-pink)">📚 FIELD GUIDE</div>
         <div style="flex-grow: 1;"></div>
-        <div class="tab" data-tab="tab-class" style="--tab-color: var(--accent-teal)">🛠️ CLASS ARENA (TEACHER)</div>
+        <div class="tab" data-tab="tab-class" style="--tab-color: var(--accent-teal)">🛠️ TEACHER</div>
+    </div>
+
+    <!-- =================== TAB: EXPEDITION =================== -->
+    <div id="tab-expedition" class="tab-content active">
+        <div class="exp-intro"><span style="font-size: 28px;">🧭</span><div><b>How does cooperation evolve in a selfish world?</b> In 1980, Robert Axelrod ran a famous contest to find out. In this expedition you'll play as real organisms, design your own, and watch evolution decide who survives.</div></div>
+        <div class="exp-rail" id="exp-rail"></div>
+        <div id="exp-body"></div>
     </div>
 
     <!-- =================== TAB: STRATEGY LAB =================== -->
-    <div id="tab-lab" class="tab-content active">
+    <div id="tab-lab" class="tab-content">
         <div class="note note-blue">
             <b>🧬 GENETIC ENGINEERING BAY</b><br>
             Your strategy is a set of instructions that runs <i>every round</i> of an encounter. It can see everything that has happened so far between you and your partner, and must answer with <b>C</b> (cooperate) or <b>D</b> (defect).
@@ -459,6 +525,10 @@
 
     <!-- =================== TAB: 1v1 =================== -->
     <div id="tab-1v1" class="tab-content">
+        <div class="note note-green">
+            <b>⚔️ HEAD-TO-HEAD</b><br>
+            Put any two strategies in a ring and watch them play round by round. Use it to check that your strategy does what you think it does, or to figure out how a classmate's strategy behaves.
+        </div>
         <div class="controls">
             <div class="control-group" style="flex: 1; min-width: 220px;">
                 <label style="color: #15803d;">🟩 Primary organism</label>
@@ -705,6 +775,14 @@
 
     <!-- =================== TAB: CLASS ARENA =================== -->
     <div id="tab-class" class="tab-content">
+        <div class="card soft" style="margin-bottom: 20px;">
+            <h3>📋 SUGGESTED LESSON PLAN (two ~50-minute periods)</h3>
+            <div class="grid" style="gap: 16px; font-size: 14px;">
+                <div><b>Day 1 · Expedition chapters 1–3 (~40 min)</b><br>Students play as a vampire bat, then a soybean plant, then design a 4-gene organism that passes two survival tests.<br><i>Wrap-up (5 min):</i> "Why did your roostmate share with you?"</div>
+                <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Tournament, generations, the biofilm invasion, and cooperation in human societies. In chapter 7 students send you their organism's share card.<br><i>Finale (15 min):</i> paste the cards below and run the <b>Class Championship</b> on the projector. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
+            </div>
+            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
+        </div>
         <div class="note note-teal">
             <b>🛠️ ROSTER COMPILATION ENGINE</b><br>
             Collect your students' strategies here, then run them against each other (and the famous strategies) in the Global Tournament or the Survival Crucible.
@@ -951,13 +1029,14 @@ var Engine = (function () {
     // Behavioural fingerprint of one side of an encounter.
     // mi = my intended moves, ya = their actual moves.
     function sideStats(mi, ya) {
-        var n = mi.length, s = { unprovoked: false, firstDefectRound: 0, retOpp: 0, retEv: 0, forOpp: 0, forEv: 0, coop: 0, n: n };
+        var n = mi.length, s = { unprovoked: false, firstDefectRound: 0, retOpp: 0, retEv: 0, cOpp: 0, cEv: 0, forOpp: 0, forEv: 0, coop: 0, n: n };
         var theyDefected = false;
         for (var r = 0; r < n; r++) {
             if (mi[r] === 'C') s.coop++;
             else if (!theyDefected && !s.unprovoked) { s.unprovoked = true; s.firstDefectRound = r + 1; }
             if (ya[r] === 'D') theyDefected = true;
             if (r + 1 < n && ya[r] === 'D') { s.retOpp++; if (mi[r + 1] === 'D') s.retEv++; }
+            if (r + 1 < n && ya[r] === 'C') { s.cOpp++; if (mi[r + 1] === 'D') s.cEv++; }
             if (r >= 1 && r + 1 < n && ya[r - 1] === 'D' && ya[r] === 'C') {
                 s.forOpp++;
                 if (mi[r + 1] === 'C' || (r + 2 < n && mi[r + 2] === 'C')) s.forEv++;
@@ -968,7 +1047,7 @@ var Engine = (function () {
 
     function addStats(t, s) {
         t.unprovoked = t.unprovoked || s.unprovoked;
-        t.retOpp += s.retOpp; t.retEv += s.retEv; t.forOpp += s.forOpp; t.forEv += s.forEv;
+        t.retOpp += s.retOpp; t.retEv += s.retEv; t.cOpp += s.cOpp; t.cEv += s.cEv; t.forOpp += s.forOpp; t.forEv += s.forEv;
         t.coop += s.coop; t.n += s.n;
     }
 
@@ -994,7 +1073,7 @@ var Engine = (function () {
         var sum = [], i2, j;
         for (i = 0; i < N; i++) { sum.push([]); for (j = 0; j < N; j++) sum[i].push(0); }
         var stats = [], errors = [];
-        for (i = 0; i < N; i++) { stats.push({ unprovoked: false, retOpp: 0, retEv: 0, forOpp: 0, forEv: 0, coop: 0, n: 0 }); errors.push(null); }
+        for (i = 0; i < N; i++) { stats.push({ unprovoked: false, retOpp: 0, retEv: 0, cOpp: 0, cEv: 0, forOpp: 0, forEv: 0, coop: 0, n: 0 }); errors.push(null); }
         var games = {}, lengths = [];
 
         function noteErr(idx, e) {
@@ -1049,7 +1128,8 @@ var Engine = (function () {
             var s = stats[i];
             traits.push({
                 nice: !s.unprovoked,
-                retaliation: s.retOpp ? s.retEv / s.retOpp : null,
+                // How much MORE it defects after a betrayal than after help. Always Defect scores 0: it isn't responding to anything.
+                retaliation: s.retOpp ? Math.max(0, s.retEv / s.retOpp - (s.cOpp ? s.cEv / s.cOpp : 0)) : null,
                 forgiveness: s.forOpp ? s.forEv / s.forOpp : null,
                 coopRate: s.n ? s.coop / s.n : 0
             });
@@ -1173,7 +1253,7 @@ return theirHistory[theirHistory.length - 1];`
         key: 'grim', name: 'Grim Trigger', role: 'Reactive Symbiont (Grudger)', emoji: '🌳', traits: ['Nice', 'Retaliatory', 'Unforgiving'],
         origin: "Economist James Friedman studied this \"permanent retaliation\" idea in 1971; a version was entered in Axelrod's first tournament.",
         behavior: 'Cooperates until you defect even once. Then it defects forever.',
-        bio: 'Soybean plants cut the oxygen supply to root nodules whose bacteria stop fixing nitrogen, starving the cheaters (Kiers et al. 2003). Yucca plants abort flowers where moths laid too many eggs.',
+        bio: 'Soybean plants punish root nodules whose bacteria stop fixing nitrogen, most likely by restricting their oxygen, so the cheaters reproduce less (Kiers et al. 2003). Yucca plants abort flowers where moths laid too many eggs.',
         politics: 'Blood feuds, trade embargoes and "zero tolerance" rules work like this. Strong deterrent — but one mistake or misunderstanding ends cooperation for good.',
         code: `// Grim Trigger (Grudger): cooperate until betrayed once, then never again.
 if (theirHistory.includes('D')) return 'D';
@@ -1200,7 +1280,7 @@ return 'C';`
     {
         key: 'tf2t', name: 'Tit for Two Tats', role: 'Tolerant Symbiont', emoji: '🐘', traits: ['Nice', 'Very forgiving'],
         origin: "Axelrod found it would have won the first tournament if anyone had entered it. Biologist John Maynard Smith entered it in round two, where it did not win — the field had changed.",
-        behavior: 'Cooperates unless you defect twice in a row. Then it defects once.',
+        behavior: 'Cooperates unless you defected in BOTH of the last two rounds. One betrayal is always forgiven.',
         bio: 'Long-term partners often tolerate occasional imbalance rather than responding to every lapse — useful when "defections" are often just bad luck.',
         politics: "Giving the benefit of the doubt: diplomats rarely treat a single incident as an act of war. But a patient partner can be exploited by someone who alternates.",
         code: `// Tit for Two Tats: only retaliate after TWO defections in a row.
@@ -1231,7 +1311,7 @@ if (round === 1) return 'D';
 return theirHistory[theirHistory.length - 1];`
     },
     {
-        key: 'pavlov', name: 'Pavlov', role: 'Adaptive Learner (Win-Stay, Lose-Shift)', emoji: '🐕', traits: ['Nice', 'Retaliatory', 'Self-correcting'],
+        key: 'pavlov', name: 'Pavlov', role: 'Adaptive Learner (Win-Stay, Lose-Shift)', emoji: '🐕', traits: ['Nice', 'Sometimes retaliates', 'Self-correcting'],
         origin: 'Nowak and Sigmund (1993) showed this simple learning rule can outcompete Tit for Tat in evolution when mistakes happen.',
         behavior: 'If the last round went well for it (you cooperated), it repeats its move. If it went badly (you defected), it switches.',
         bio: 'Basic reinforcement learning: repeat what was rewarded, change what was punished. No need to remember who did what.',
@@ -2054,10 +2134,13 @@ async function runTournament() {
 
 function rankOrder(T) { return T.entries.map((e, i) => i).sort((a, b) => T.res.perRound[b] - T.res.perRound[a]); }
 
+// A strategy counts as forgiving if it returns to cooperation within two rounds at least a third of the time.
+const FORGIVE_CUTOFF = 0.33;
+
 function traitBadges(t, err) {
     let h = t.nice ? '<span class="badge badge-pos" title="Never the first to defect">NICE</span>' : '<span class="badge badge-neg" title="Sometimes defects first">NASTY</span>';
-    if (t.retaliation !== null && t.retaliation >= 0.5) h += '<span class="badge badge-blue" title="Usually answers a defection with a defection">RETALIATORY</span>';
-    if (t.forgiveness !== null && t.forgiveness >= 0.5) h += '<span class="badge badge-purple" title="Returns to cooperation after the partner does">FORGIVING</span>';
+    if (t.retaliation !== null && t.retaliation >= 0.5) h += '<span class="badge badge-blue" title="Defects more after being cheated than after being helped">RETALIATORY</span>';
+    if (t.forgiveness !== null && t.forgiveness >= FORGIVE_CUTOFF) h += '<span class="badge badge-purple" title="Returns to cooperation after the partner does">FORGIVING</span>';
     if (err) h += `<span class="badge badge-amber" title="${esc(err.first.message)}">⚠ ERRORS</span>`;
     return h;
 }
@@ -2101,7 +2184,7 @@ function replayGame(i, j) {
 function tourneyNotes(T) {
     const R = T.res, order = rankOrder(T), N = T.entries.length, notes = [];
     const w = order[0], we = T.entries[w], wt = R.traits[w];
-    notes.push(`🏆 <b>${esc(we.emoji)} ${esc(we.name)}</b> won with ${fmt(R.perRound[w])} points per round. Personality: ${wt.nice ? 'nice' : 'nasty'}${wt.retaliation !== null && wt.retaliation >= 0.5 ? ', retaliatory' : ''}${wt.forgiveness !== null && wt.forgiveness >= 0.5 ? ', forgiving' : ''}.`);
+    notes.push(`🏆 <b>${esc(we.emoji)} ${esc(we.name)}</b> won with ${fmt(R.perRound[w])} points per round. Personality: ${wt.nice ? 'nice' : 'nasty'}${wt.retaliation !== null && wt.retaliation >= 0.5 ? ', retaliatory' : ''}${wt.forgiveness !== null && wt.forgiveness >= FORGIVE_CUTOFF ? ', forgiving' : ''}.`);
 
     const niceRanks = [], nastyRanks = [];
     order.forEach((i, r) => (R.traits[i].nice ? niceRanks : nastyRanks).push(r + 1));
@@ -2128,7 +2211,7 @@ function tourneyNotes(T) {
         const checks = [
             t.nice ? '✅ nice' : '❌ not nice (it defects first)',
             t.retaliation === null ? '➖ never provoked' : (t.retaliation >= 0.5 ? '✅ retaliatory' : '❌ rarely retaliates'),
-            t.forgiveness === null ? '➖ never tested' : (t.forgiveness >= 0.5 ? '✅ forgiving' : '❌ holds grudges')
+            t.forgiveness === null ? '➖ never tested' : (t.forgiveness >= FORGIVE_CUTOFF ? '✅ forgiving' : '❌ holds grudges')
         ];
         notes.push(`🧬 <b>Your ${esc(e.emoji)} ${esc(e.name)}</b> placed <b>#${r} of ${N}</b> (${fmt(R.perRound[i])}/round, cooperated ${pct(t.coopRate)} of the time). Axelrod checklist: ${checks.join(' · ')}.`);
         if (R.errors[i]) notes.push(`⚠️ ${esc(e.name)} crashed ${R.errors[i].count} times: <span class="mono">${esc(R.errors[i].first.message)}</span>`);
@@ -2143,7 +2226,23 @@ const PALETTE = ['#22c55e', '#3b82f6', '#ef4444', '#a855f7', '#f59e0b', '#14b8a6
 function runEcology() {
     const T = state.lastTourney;
     if (!T) { toast('Run a tournament first.', 'warn'); return; }
-    const gens = parseInt($('eco-gens').value, 10), N = T.entries.length, A = T.res.avg;
+    const eco = computeEcology(T, parseInt($('eco-gens').value, 10));
+    state.lastEco = eco;
+    drawEcoChart($('eco-chart'), $('eco-legend'), T, eco);
+    $('eco-notes').innerHTML = `<h3>📓 ECOLOGY NOTES</h3><ul>${eco.notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+    if (eco.extinct.length) completeMission('extinct');
+}
+
+function drawEcoChart(canvas, legendEl, T, eco, maxLegend = PALETTE.length) {
+    const series = T.entries.map((e, i) => ({ name: e.emoji + ' ' + e.name, color: eco.colors[i], values: eco.hist.map(h => h[i]), width: eco.colors[i] === '#cbd5e1' ? 1 : 2.4 }));
+    // Draw grey lines first so coloured ones sit on top.
+    series.sort((a, b) => a.width - b.width);
+    drawLineChart(canvas, series, { yMax: Math.min(1, Math.max(...eco.peak) * 1.1), xLabel: 'Generation', percent: true });
+    legendEl.innerHTML = eco.finalOrder.slice(0, maxLegend).map(i => `<span><i style="background: ${eco.colors[i]}"></i>${esc(T.entries[i].emoji)} ${esc(T.entries[i].name)} <b>${pct(eco.x[i])}</b></span>`).join('');
+}
+
+function computeEcology(T, gens) {
+    const N = T.entries.length, A = T.res.avg;
     let minV = Infinity;
     A.forEach(r => r.forEach(v => { minV = Math.min(minV, v); }));
     const shift = minV < 0 ? -minV + 1e-6 : 0;
@@ -2161,13 +2260,6 @@ function runEcology() {
     const colors = Array(N).fill('#cbd5e1');
     finalOrder.slice(0, PALETTE.length).forEach((i, k) => { colors[i] = PALETTE[k]; });
     const peak = Array(N).fill(0).map((_, i) => Math.max(...hist.map(h => h[i])));
-    state.lastEco = { hist, extinctAt, finalOrder, colors, peak, gens };
-
-    const series = T.entries.map((e, i) => ({ name: e.emoji + ' ' + e.name, color: colors[i], values: hist.map(h => h[i]), width: colors[i] === '#cbd5e1' ? 1 : 2.4 }));
-    // Draw grey lines first so coloured ones sit on top.
-    series.sort((a, b) => a.width - b.width);
-    drawLineChart($('eco-chart'), series, { yMax: Math.min(1, Math.max(...peak) * 1.1), xLabel: 'Generation', percent: true });
-    $('eco-legend').innerHTML = finalOrder.slice(0, PALETTE.length).map(i => `<span><i style="background: ${colors[i]}"></i>${esc(T.entries[i].emoji)} ${esc(T.entries[i].name)} <b>${pct(x[i])}</b></span>`).join('');
 
     const notes = [];
     const survivors = finalOrder.filter(i => x[i] >= 0.01);
@@ -2178,9 +2270,7 @@ function runEcology() {
     if (boomBust.length) notes.push(`📈📉 <b>${boomBust.map(i => esc(T.entries[i].name)).join(', ')}</b> grew at first, then crashed. Exploiters thrive while there are victims to feed on — once the pushovers go extinct, they starve. That's the fate of a parasite that kills its hosts.`);
     const niceShare = T.entries.reduce((s, e, i) => s + (T.res.traits[i].nice ? x[i] : 0), 0);
     notes.push(`😇 Nice strategies now make up <b>${pct(niceShare)}</b> of the population.`);
-    state.lastEco.notes = notes;
-    $('eco-notes').innerHTML = `<h3>📓 ECOLOGY NOTES</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
-    if (extinct.length) completeMission('extinct');
+    return { x, hist, extinctAt, finalOrder, colors, peak, gens, notes, extinct, boomBust };
 }
 
 // ---------- Line chart ----------
@@ -2245,9 +2335,12 @@ function renderSpeciesSlots() {
         </div>`).join('');
 }
 
+const labPetriView = () => ({
+    dish: $('eco-canvas'), chart: $('petri-chart'), census: $('petri-census'), gen: $('petri-gen'), notes: $('petri-notes'),
+    start: $('start-conditions'), pause: $('pause-btn'), step: $('step-btn'), speed: () => parseInt($('petri-speed').value, 10)
+});
+
 async function startPetri() {
-    stopPetriTimer();
-    petri.running = false; petri.finished = false;
     const chosen = [];
     speciesSel.forEach((s, k) => {
         if (!s.id || chosen.some(c => c.id === s.id)) return;
@@ -2257,16 +2350,29 @@ async function startPetri() {
     if (chosen.length < 2) { toast('Choose at least two different species.', 'warn'); return; }
     const layout = $('petri-layout').value;
     if (layout === 'invasion' && chosen[0].slot !== 0) { toast('Invasion layout needs Species 1 filled in — that is the invader.', 'warn'); return; }
-    const rounds = parseInt($('petri-rounds').value, 10), noise = parseInt($('petri-noise').value, 10) / 100;
     const [W, H] = $('petri-size').value.split('x').map(Number);
-    $('petri-notes').innerHTML = '<h3>📓 NOTES</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>';
+    await launchPetri({
+        species: chosen, layout, W, H, rounds: parseInt($('petri-rounds').value, 10),
+        noise: parseInt($('petri-noise').value, 10) / 100, mut: parseInt($('petri-mut').value, 10) / 1000
+    }, labPetriView());
+}
+
+// Runs a dish into the given view. Only one dish runs at a time; starting a new one stops the old one.
+async function launchPetri(cfg, view) {
+    stopPetriTimer();
+    if (petri.view && petri.view !== view) { if (petri.view.pause) petri.view.pause.disabled = true; if (petri.view.step) petri.view.step.disabled = true; }
+    Object.assign(petri, { running: false, finished: false, view });
+    const setNotes = html => { if (view.notes) view.notes.innerHTML = html; };
+    const { species: chosen, layout, rounds, noise, W, H } = cfg;
+    setNotes('<h3>📓 NOTES</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>');
     let res;
     try {
         res = await Runner.run('tournament', { entries: chosen.map(c => ({ code: c.code })), rounds, noise, repeats: 6, selfPlay: true, payoff: state.payoff, seed: newSeed(), keepGames: false }, 10000);
     } catch (e) {
-        $('petri-notes').innerHTML = `<h3>📓 NOTES</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`;
-        return;
+        setNotes(`<h3>📓 NOTES</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`);
+        return false;
     }
+    if (petri.view !== view) return false;   // another dish was started meanwhile
     const k = chosen.length;
     const grid = new Int8Array(W * H);
     const totalShare = chosen.reduce((s, c) => s + c.share, 0);
@@ -2281,7 +2387,7 @@ async function startPetri() {
     } else if (layout === 'invasion') {
         const rest = chosen.map((c, i) => i).slice(1);
         for (let i = 0; i < W * H; i++) grid[i] = pickWeighted(rest);
-        const side = Math.max(2, Math.round(Math.min(W, H) / 6));
+        const side = cfg.clusterSide || Math.max(2, Math.round(Math.min(W, H) / 6));
         const x0 = Math.floor((W - side) / 2), y0 = Math.floor((H - side) / 2);
         for (let y = y0; y < y0 + side; y++) for (let x = x0; x < x0 + side; x++) grid[y * W + x] = 0;
     } else if (k === 4) {
@@ -2295,16 +2401,18 @@ async function startPetri() {
     }
     Object.assign(petri, {
         W, H, grid, k, species: chosen, M: res.avg, rounds, noise, layout, gen: 0, stable: 0, changed: new Uint8Array(W * H),
-        mut: parseInt($('petri-mut').value, 10) / 1000, history: [], finished: false, banner: null
+        mut: cfg.mut || 0, history: [], finished: false, banner: null, onFinish: cfg.onFinish || null
     });
     petri.history.push(censusCounts());
     petri.start = petri.history[0].slice();
-    $('start-conditions').innerHTML = `<b>STARTING (${layout}, ${rounds} round${rounds === 1 ? '' : 's'}/encounter${noise ? ', ' + pct(noise) + ' noise' : ''}):</b><br>` + chosen.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${petri.start[i]}`).join(' · ');
-    $('petri-notes').innerHTML = '<h3>📓 NOTES</h3><div class="muted">Observations appear when the dish settles.</div>';
-    $('pause-btn').disabled = false; $('step-btn').disabled = false;
+    if (view.start) view.start.innerHTML = `<b>STARTING (${layout}, ${rounds} round${rounds === 1 ? '' : 's'}/encounter${noise ? ', ' + pct(noise) + ' noise' : ''}):</b><br>` + chosen.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${petri.start[i]}`).join(' · ');
+    setNotes('<h3>📓 NOTES</h3><div class="muted">Observations appear when the dish settles.</div>');
+    if (view.pause) { view.pause.disabled = false; view.pause.innerText = 'Pause'; view.pause.className = 'secondary'; }
+    if (view.step) view.step.disabled = false;
     drawPetri(); renderCensus();
-    petri.running = true; $('pause-btn').innerText = 'Pause'; $('pause-btn').className = 'secondary';
+    petri.running = true;
     schedulePetri();
+    return true;
 }
 
 function censusCounts() {
@@ -2317,12 +2425,13 @@ function stopPetriTimer() { if (petri.timer) { clearTimeout(petri.timer); petri.
 function schedulePetri() {
     stopPetriTimer();
     if (!petri.running || petri.finished) return;
-    petri.timer = setTimeout(() => { stepPetri(); schedulePetri(); }, parseInt($('petri-speed').value, 10));
+    petri.timer = setTimeout(() => { stepPetri(); schedulePetri(); }, petri.view && petri.view.speed ? petri.view.speed() : 150);
 }
 function togglePetri() {
     if (!petri.grid || petri.finished) return;
     petri.running = !petri.running;
-    const btn = $('pause-btn');
+    const btn = petri.view.pause;
+    if (!btn) return;
     if (petri.running) { btn.innerText = 'Pause'; btn.className = 'secondary'; schedulePetri(); }
     else { btn.innerText = 'Resume'; btn.className = 'red'; stopPetriTimer(); }
 }
@@ -2372,7 +2481,8 @@ function stepPetri() {
 
 function finishPetri(reason) {
     petri.finished = true; petri.running = false; stopPetriTimer();
-    $('pause-btn').disabled = true; $('step-btn').disabled = true;
+    if (petri.view.pause) petri.view.pause.disabled = true;
+    if (petri.view.step) petri.view.step.disabled = true;
     const counts = petri.history[petri.history.length - 1];
     const lead = counts.indexOf(Math.max(...counts));
     const sp = petri.species[lead];
@@ -2380,10 +2490,11 @@ function finishPetri(reason) {
     petri.result = { reason, lead };
     petriNotes();
     checkPetriMissions();
+    if (petri.onFinish) petri.onFinish(petri);
 }
 
 function drawPetri() {
-    const cv = $('eco-canvas');
+    const cv = petri.view ? petri.view.dish : $('eco-canvas');
     const { ctx, w, h } = setupCanvas(cv);
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
@@ -2413,9 +2524,10 @@ function drawPetri() {
 
 function renderCensus() {
     const counts = petri.history[petri.history.length - 1], total = petri.W * petri.H;
-    $('petri-gen').innerText = petri.gen;
-    $('petri-census').innerHTML = petri.species.map((s, i) => `<div class="stat-row"><span style="color: ${s.color};">${esc(s.emoji)} ${esc(s.name)}</span><span>${counts[i]} <span class="muted" style="font-size: 11px;">${pct(counts[i] / total)}</span></span></div>`).join('');
-    drawLineChart($('petri-chart'), petri.species.map((s, i) => ({ name: s.name, color: s.color, values: petri.history.map(c => c[i] / total), width: 2.4 })), { yMax: 1, percent: true, xLabel: 'Generation' });
+    const v = petri.view;
+    if (v.gen) v.gen.innerText = petri.gen;
+    if (v.census) v.census.innerHTML = petri.species.map((s, i) => `<div class="stat-row"><span style="color: ${s.color};">${esc(s.emoji)} ${esc(s.name)}</span><span>${counts[i]} <span class="muted" style="font-size: 11px;">${pct(counts[i] / total)}</span></span></div>`).join('');
+    if (v.chart) drawLineChart(v.chart, petri.species.map((s, i) => ({ name: s.name, color: s.color, values: petri.history.map(c => c[i] / total), width: 2.4 })), { yMax: 1, percent: true, xLabel: 'Generation' });
 }
 
 function petriNotes() {
@@ -2437,7 +2549,7 @@ function petriNotes() {
     if (rounds <= 2 && !coopKind[lead]) notes.push(`⏳ With only ${rounds} round${rounds === 1 ? '' : 's'} per encounter, there is no "shadow of the future": defecting has no consequences. Try 10+ rounds and compare.`);
     if (petri.layout === 'invasion') notes.push(final[0] > start[0] ? `🧫 The invader grew from ${start[0]} to ${final[0]} cells.` : `🧫 The invader shrank from ${start[0]} to ${final[0]} cells.`);
     petri.notes = notes;
-    $('petri-notes').innerHTML = `<h3>📓 NOTES</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+    if (petri.view.notes) petri.view.notes.innerHTML = `<h3>📓 NOTES</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
 }
 
 // ============================================================================
@@ -2607,7 +2719,7 @@ function renderGuide() {
         <div class="case-grid">
             <div class="case"><span class="em">🦇</span><b>Vampire bats</b>A bat that fails to feed for a few nights can starve. Roostmates regurgitate blood for it, and bats tend to give to those who have given to them. <div class="src">Wilkinson 1984, Nature; Carter &amp; Wilkinson 2013. ↔ Tit for Tat</div></div>
             <div class="case"><span class="em">🐟</span><b>Cleaner wrasse</b>Cleaners eat parasites off "client" fish but would rather bite their nutritious mucus. Clients chase cheaters or leave, and cleaners behave better when other clients are watching. <div class="src">Bshary &amp; Grutter 2006, Nature. ↔ Joss, reputation</div></div>
-            <div class="case"><span class="em">🌱</span><b>Soybeans &amp; rhizobia</b>Bacteria in root nodules fix nitrogen in exchange for sugar. When nodules stop fixing nitrogen, the plant cuts their oxygen supply and the cheaters grow less. <div class="src">Kiers et al. 2003, Nature. ↔ retaliation / sanctions</div></div>
+            <div class="case"><span class="em">🌱</span><b>Soybeans &amp; rhizobia</b>Bacteria in root nodules fix nitrogen in exchange for sugar. When nodules stop fixing nitrogen, the plant appears to restrict their oxygen, and the cheating bacteria reproduce about half as much. <div class="src">Kiers et al. 2003, Nature. ↔ retaliation / sanctions</div></div>
             <div class="case"><span class="em">🍄</span><b>Fungal markets</b>Plants trade sugar to mycorrhizal fungi for phosphorus. Both partners send more resources to the partners that give more in return. <div class="src">Kiers et al. 2011, Science. ↔ reciprocal reward</div></div>
             <div class="case"><span class="em">🦋</span><b>Yucca &amp; yucca moth</b>The moth pollinates the yucca and lays eggs in its flowers; its larvae eat some seeds. Yuccas abort flowers with too many eggs, keeping the moth from becoming a parasite. <div class="src">Pellmyr &amp; Huth 1994, Nature. ↔ Grim Trigger / Gradual</div></div>
             <div class="case"><span class="em">🐦</span><b>Cuckoos</b>Brood parasites lay eggs in other birds' nests. Hosts evolve to spot and reject foreign eggs, and cuckoos evolve better-disguised eggs — an evolutionary arms race. <div class="src">↔ Always Defect vs. retaliatory hosts</div></div>
@@ -2894,8 +3006,8 @@ function generateReport(tabType) {
             <table><tr><th>Species</th><th>Start</th><th>Final</th><th>Share</th></tr>
             ${petri.species.map((s, i) => `<tr><td style="text-align: left;">${esc(s.emoji)} ${esc(s.name)}</td><td>${petri.start[i]}</td><td>${final[i]}</td><td>${pct(final[i] / total)}</td></tr>`).join('')}</table>
             <p><b>Conclusion:</b> ${petri.banner ? esc(petri.banner) : 'Simulation still running.'}</p>
-            <img src="${$('eco-canvas').toDataURL('image/png')}" alt="Petri dish">
-            <img src="${$('petri-chart').toDataURL('image/png')}" alt="Population over time">
+            <img src="${petri.view.dish.toDataURL('image/png')}" alt="Petri dish">
+            ${petri.view.chart ? `<img src="${petri.view.chart.toDataURL('image/png')}" alt="Population over time">` : ''}
             ${petri.notes ? `<h3>Notes</h3><ul>${petri.notes.map(n => `<li>${n}</li>`).join('')}</ul>` : ''}
             ${reflection([
                 'Which species took over, and how did clustering (or the lack of it) matter?',
@@ -2910,7 +3022,630 @@ function generateReport(tabType) {
 }
 
 // ============================================================================
-// SECTION 15: INITIALISATION
+// SECTION 15: EXPEDITION (the guided, two-day path)
+// ============================================================================
+// Seven short chapters. Each one: a biology story, one task, a discovery, and a journal question.
+
+let exp = Object.assign({ cur: 0, done: {}, answers: {}, data: {}, summary: {} }, Store.get('exp', {}));
+let expT = null;   // chapter 4 tournament (kept in memory; re-run if the page reloads)
+function saveExp() { Store.set('exp', exp); }
+
+// Library strategies are our own code, so they can run directly on the page during hand play.
+function compileTrusted(code) { return new Function(ENGINE_PARAMS, code); }
+function payFor(a, b) {
+    const P = state.payoff;
+    if (a === 'C') return b === 'C' ? [P.R, P.R] : [P.S, P.T];
+    return b === 'C' ? [P.T, P.S] : [P.P, P.P];
+}
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+// ---------- Hand-play widget: the student makes every choice ----------
+function mountHandPlay(el, cfg) {
+    const fn = compileTrusted(LIB[cfg.partner].code);
+    const g = { my: [], their: [], sMe: 0, sThem: 0, memory: {} };
+    const P = state.payoff, max = Math.max(P.T, P.R) * cfg.rounds;
+    el.innerHTML = `
+        <div class="hand-arena">
+            <div class="critter"><div class="big me-face">${cfg.you.emoji}</div><b>${cfg.you.name}</b>
+                <div class="meter"><div class="me"></div></div><div class="hp-score me-score">0 ${cfg.unit}</div><div class="said me-said"></div></div>
+            <div class="hand-center">
+                <div class="hand-round">${cfg.roundName} 1</div>
+                <div class="hand-msg"><span>${cfg.prompt}</span></div>
+                <div class="row" style="justify-content: center;">
+                    <button class="big-btn coop">${cfg.labels.C}</button>
+                    <button class="big-btn defect">${cfg.labels.D}</button>
+                </div>
+            </div>
+            <div class="critter"><div class="big them-face">${cfg.them.emoji}</div><b>${cfg.them.name}</b>
+                <div class="meter"><div class="them"></div></div><div class="hp-score them-score">0 ${cfg.unit}</div><div class="said them-said"></div></div>
+        </div>
+        <div class="hand-history"><div class="lbl"><span>You</span><span>${cfg.them.short || 'Them'}</span></div></div>`;
+    const q = sel => el.querySelector(sel);
+    const bc = q('.coop'), bd = q('.defect');
+    const play = m => {
+        if (g.my.length >= cfg.rounds) return;
+        const r = g.my.length + 1;
+        let t;
+        try { t = fn(g.their.slice(), g.my.slice(), r, g.memory, Math.random); } catch (e) { t = 'C'; }
+        t = t === 'D' ? 'D' : 'C';
+        g.my.push(m); g.their.push(t);
+        const [a, b] = payFor(m, t);
+        g.sMe += a; g.sThem += b;
+        q('.me').style.width = Math.min(100, 100 * Math.max(0, g.sMe) / max) + '%';
+        q('.them').style.width = Math.min(100, 100 * Math.max(0, g.sThem) / max) + '%';
+        q('.me-score').innerText = `${fmtScore(g.sMe)} ${cfg.unit}`;
+        q('.them-score').innerText = `${fmtScore(g.sThem)} ${cfg.unit}`;
+        q('.me-said').innerHTML = `<span style="color: ${m === 'C' ? '#15803d' : '#b91c1c'}">${cfg.said.me[m]}</span>`;
+        q('.them-said').innerHTML = `<span style="color: ${t === 'C' ? '#15803d' : '#b91c1c'}">${cfg.said.them[t]}</span>`;
+        const msg = q('.hand-msg');
+        msg.innerHTML = `<span>${cfg.text[m + t](fmtScore(a), fmtScore(b))}</span>`;
+        msg.className = 'hand-msg ' + m + t;
+        const face = q('.them-face');
+        face.classList.add('bump'); setTimeout(() => face.classList.remove('bump'), 200);
+        q('.hand-history').insertAdjacentHTML('beforeend', `<div class="hh" title="${cfg.roundName} ${r}"><span>${cfg.icons.me[m]}</span><span>${cfg.icons.them[t]}</span><small>${r}</small></div>`);
+        if (g.my.length >= cfg.rounds) {
+            bc.disabled = bd.disabled = true;
+            q('.hand-round').innerText = cfg.endName;
+            if (cfg.onDone) cfg.onDone(g);
+        } else {
+            q('.hand-round').innerText = `${cfg.roundName} ${r + 1}`;
+        }
+    };
+    bc.onclick = () => play('C');
+    bd.onclick = () => play('D');
+    return g;
+}
+
+// ---------- Chapter 1: vampire bats ----------
+const BAT = {
+    you: { emoji: '🦇', name: 'You' }, unit: 'blood', roundName: 'Night', endName: 'The season is over',
+    prompt: 'You made it back to the roost. Your roostmate is hungry. <b>Do you share some of your blood meal?</b>',
+    labels: { C: '🩸 Share blood', D: '🙅 Keep it' },
+    said: { me: { C: 'shared 🩸', D: 'kept it 🙅' }, them: { C: 'shared 🩸', D: 'kept it 🙅' } },
+    icons: { me: { C: '🩸', D: '🙅' }, them: { C: '🩸', D: '🙅' } },
+    text: {
+        CC: (a) => `🩸 You both shared. Everyone makes it through the night. <b>+${a} each</b>.`,
+        CD: (a, b) => `😰 You shared, but your roostmate kept its blood. You go to sleep hungry. <b>You +${a}</b>, roostmate +${b}.`,
+        DC: (a, b) => `😋 You kept your blood, <i>and</i> your roostmate shared with you. <b>You +${a}</b>, roostmate +${b}.`,
+        DD: (a) => `😐 Nobody shared. You both scrape by. <b>+${a} each</b>.`
+    }
+};
+const MYSTERY_BATS = ['grim', 'alld', 'allc', 'tf2t', 'tft', 'pavlov'];
+
+function revealHTML(key, g, label) {
+    const L = LIB[key], shared = g.their.filter(m => m === 'C').length;
+    return `<div class="story-quote"><b>${label} revealed: ${L.emoji} ${esc(L.name)}.</b> ${L.behavior} It cooperated ${shared} of ${g.their.length} times. You ended with <b>${fmtScore(g.sMe)}</b>; it ended with <b>${fmtScore(g.sThem)}</b>.</div>`;
+}
+
+function mountRoost(el) {
+    el.innerHTML = `<div id="c1-play"></div><div id="c1-reveal"></div>`;
+    const run = (key, first) => {
+        $('c1-reveal').innerHTML = '';
+        mountHandPlay($('c1-play'), Object.assign({}, BAT, {
+            partner: key, rounds: 10,
+            them: { emoji: '🦇', name: first ? 'Your roostmate' : 'Mystery roostmate', short: 'Roostmate' },
+            onDone: g => {
+                $('c1-reveal').innerHTML = revealHTML(key, g, first ? 'Your roostmate' : 'Mystery roostmate') +
+                    `<button class="secondary" onclick="expRoostAgain()">🎲 Try a new mystery roostmate</button>`;
+                if (first) {
+                    exp.summary.roost = `Shared ${g.my.filter(m => m === 'C').length}/10 nights and earned ${fmtScore(g.sMe)} blood vs. a Tit for Tat roostmate (${fmtScore(g.sThem)}).`;
+                    expComplete();
+                }
+            }
+        }));
+    };
+    window.expRoostAgain = () => run(MYSTERY_BATS[Math.floor(Math.random() * MYSTERY_BATS.length)], false);
+    run('tft', true);
+}
+
+// ---------- Chapter 2: soybeans & rhizobia ----------
+const STRAINS = {
+    allc: 'Honest fixer: always fixes nitrogen',
+    alld: 'Freeloader: never fixes nitrogen',
+    tft: 'Mirror: copies what YOU did the day before'
+};
+const SOY = {
+    you: { emoji: '🌱', name: 'You (soybean)' }, unit: 'growth', roundName: 'Day', endName: 'Done. Pick another nodule',
+    prompt: 'Your nodule is waiting. <b>Feed it sugar, or cut off its oxygen?</b>',
+    labels: { C: '🍬 Feed it', D: '✂️ Cut it off' },
+    said: { me: { C: 'fed 🍬', D: 'cut off ✂️' }, them: { C: 'fixed nitrogen ✅', D: 'freeloaded 🚫' } },
+    icons: { me: { C: '🍬', D: '✂️' }, them: { C: '✅', D: '🚫' } },
+    text: {
+        CC: (a) => `🍬✅ You fed the bacteria and they fixed nitrogen for you. You both grow. <b>+${a} each</b>.`,
+        CD: (a, b) => `🍬🚫 You fed them, but they freeloaded: no nitrogen. <b>You +${a}</b>, bacteria +${b}.`,
+        DC: (a, b) => `✂️✅ You cut them off, but they fixed nitrogen anyway. <b>You +${a}</b>, bacteria +${b}.`,
+        DD: (a) => `✂️🚫 You cut them off and they freeloaded. Nobody gains much. <b>+${a} each</b>.`
+    }
+};
+
+function mountNodules(el) {
+    if (!exp.data.nodules) { exp.data.nodules = shuffle(['allc', 'alld', 'tft']); saveExp(); }
+    const order = exp.data.nodules, names = ['A', 'B', 'C'], played = [null, null, null];
+    el.innerHTML = `<div class="nodule-tabs" id="c2-tabs"></div><div id="c2-play"><div class="muted">Pick a nodule to start.</div></div><div id="c2-quiz" class="hidden" style="margin-top: 18px;"></div>`;
+    const renderTabs = active => {
+        $('c2-tabs').innerHTML = names.map((n, i) => `<button class="${i === active ? '' : 'secondary'}" onclick="expNodule(${i})">🦠 Nodule ${n} ${played[i] ? '✓' : ''}</button>`).join('');
+    };
+    const renderQuiz = () => {
+        if (played.some(p => !p)) return;
+        const quiz = $('c2-quiz');
+        const kept = names.map((n, i) => ($('c2-guess-' + i) || {}).value || '');
+        quiz.classList.remove('hidden');
+        quiz.innerHTML = `<div class="card soft"><h3>🔬 IDENTIFY EACH STRAIN</h3>
+            ${names.map((n, i) => `<div class="row" style="margin-bottom: 10px;"><b style="width: 90px;">Nodule ${n}</b>
+                <span style="font-size: 16px; letter-spacing: 2px;">${played[i].their.map(m => m === 'C' ? '✅' : '🚫').join('')}</span>
+                <span class="muted" style="font-size: 12px;">(after you: ${played[i].my.map(m => m === 'C' ? '🍬' : '✂️').join('')})</span>
+                <select id="c2-guess-${i}" style="margin-left: auto;"><option value="">Which strain is it?</option>${Object.entries(STRAINS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></div>`).join('')}
+            <div class="row"><button onclick="expCheckNodules()">✅ Check my answers</button><span id="c2-feedback"></span></div></div>`;
+        kept.forEach((v, i) => { $('c2-guess-' + i).value = v; });
+    };
+    window.expNodule = i => {
+        renderTabs(i);
+        mountHandPlay($('c2-play'), Object.assign({}, SOY, {
+            partner: order[i], rounds: 6,
+            them: { emoji: '🦠', name: `Nodule ${names[i]}`, short: 'Nodule' },
+            onDone: g => { played[i] = g; renderTabs(i); renderQuiz(); }
+        }));
+    };
+    window.expCheckNodules = () => {
+        const guesses = order.map((k, i) => $('c2-guess-' + i).value);
+        const right = guesses.filter((gk, i) => gk === order[i]).length;
+        if (right === 3) {
+            $('c2-feedback').innerHTML = '<b style="color: #15803d;">🎉 All three correct!</b>';
+            exp.summary.nodules = `Correctly identified the Honest fixer, the Freeloader and the Mirror.`;
+            expComplete();
+        } else {
+            $('c2-feedback').innerHTML = `<span style="color: #b91c1c;">${right} of 3 correct.</span> <span class="muted">Hint: the Honest fixer and the Mirror look the same until you cut one off. Replay a nodule and try ✂️ once.</span>`;
+        }
+    };
+    renderTabs(-1);
+}
+
+// ---------- Chapter 3: design a genome ----------
+const DEFAULT_GENES = { first: 'C', afterC: 'C', afterD: 'D', forgive: 10, grudge: false, grudgeN: 3, name: '', emoji: '🧬' };
+function genes() { return exp.data.genes || (exp.data.genes = Object.assign({}, DEFAULT_GENES)); }
+
+function genesToRules(G) {
+    const rules = [{ cond: 'first', act: G.first, p: 100 }];
+    if (G.grudge) rules.push({ cond: 'theyDtotal', n: G.grudgeN, act: 'D', p: 100 });
+    if (G.afterD === 'D') rules.push({ cond: 'theyDlast', act: 'D', p: 100 });
+    else if (G.afterD === 'C') rules.push({ cond: 'theyDlast', act: 'C', p: 100 });
+    else { rules.push({ cond: 'theyDlast', act: 'D', p: 100 - G.forgive }); rules.push({ cond: 'theyDlast', act: 'C', p: 100 }); }
+    rules.push({ cond: 'theyClast', act: G.afterC, p: 100 });
+    return rules;
+}
+function genomeTraits(G) {
+    return {
+        nice: G.first === 'C' && G.afterC === 'C',
+        retaliatory: G.afterD !== 'C' || G.grudge,
+        forgiving: G.afterC === 'C' && !G.grudge,   // goes back to cooperating once the partner does
+        holdsGrudge: G.grudge
+    };
+}
+function genomeRecord() { return exp.data.genomeId ? state.my.find(s => s.id === exp.data.genomeId) : null; }
+
+function mountGenome(el) {
+    const G = genes();
+    const opt = (gene, val, label) => `<button class="pick ${G[gene] === val ? 'on' : ''}" onclick="expGene('${gene}', ${typeof val === 'string' ? `'${val}'` : val})">${label}</button>`;
+    el.innerHTML = `
+        <div class="grid" style="grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);">
+            <div class="card">
+                <div class="row" style="margin-bottom: 6px;">
+                    <div class="control-group" style="flex: 1;"><label>Name your organism</label><input type="text" id="c3-name" value="${esc(G.name)}" placeholder="e.g., The Loyal Lichen" oninput="genes().name = this.value; saveExp(); expGenomeDirty()"></div>
+                    <div class="control-group"><label>Look</label><select id="c3-emoji" style="font-size: 18px;" onchange="genes().emoji = this.value; saveExp(); expGenomeDirty()">${EMOJIS.map(e => `<option ${e === G.emoji ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
+                </div>
+                <div class="gene"><div class="gene-label"><b>Gene 1 · First meeting</b><span>What do you do with a stranger?</span></div>
+                    <div class="pick-row">${opt('first', 'C', '🤝 Cooperate')}${opt('first', 'D', '🗡️ Defect')}</div></div>
+                <div class="gene"><div class="gene-label"><b>Gene 2 · After they cooperate</b><span>Your partner just helped you.</span></div>
+                    <div class="pick-row">${opt('afterC', 'C', '🤝 Cooperate')}${opt('afterC', 'D', '🗡️ Take advantage')}</div></div>
+                <div class="gene"><div class="gene-label"><b>Gene 3 · After they defect</b><span>Your partner just cheated you.</span></div>
+                    <div><div class="pick-row">${opt('afterD', 'D', '🗡️ Strike back')}${opt('afterD', 'forgive', '🕊️ Strike back, but sometimes forgive')}${opt('afterD', 'C', '🤝 Ignore it')}</div>
+                    ${G.afterD === 'forgive' ? `<div class="row" style="margin-top: 8px; font-size: 14px;">Forgive <input type="range" min="5" max="60" step="5" value="${G.forgive}" oninput="genes().forgive = +this.value; $('c3-fv').innerText = this.value + '%'; saveExp(); expGenomeDirty(); expGenomeTest()"> <b id="c3-fv">${G.forgive}%</b> of the time</div>` : ''}</div></div>
+                <div class="gene" style="border-bottom: none;"><div class="gene-label"><b>Gene 4 · Grudge</b><span>Do you ever give up on a partner?</span></div>
+                    <div><div class="pick-row">${opt('grudge', false, '🙂 No grudges')}${opt('grudge', true, '😠 Never trust again after…')}</div>
+                    ${G.grudge ? `<div class="row" style="margin-top: 8px; font-size: 14px;"><input type="number" min="1" max="20" value="${G.grudgeN}" style="width: 70px;" onchange="genes().grudgeN = clampInt(this.value, 1, 20); saveExp(); expGenomeDirty(); expGenomeTest()"> betrayals</div>` : ''}</div></div>
+            </div>
+            <div>
+                <div class="card soft">
+                    <h3>🧪 SURVIVAL TESTS <span class="muted" style="font-weight: 400; font-size: 12px;">(30 encounters each, updates live)</span></h3>
+                    <div id="c3-goals"><div class="muted">Testing…</div></div>
+                </div>
+                <div class="btn-group">
+                    <button class="green big" id="c3-lock" onclick="expLockGenome()">🔒 Lock in my organism</button>
+                    <span id="c3-lock-msg" class="muted" style="font-size: 13px;"></span>
+                </div>
+                <p class="muted" style="font-size: 12px; margin-top: 10px;">Want more control? Your organism also appears in the <b>Strategy Lab</b> once it's locked in, where you can add more rules or write code.</p>
+            </div>
+        </div>`;
+    expGenomeDirty();
+    expGenomeTest();
+}
+
+window.expGene = (gene, val) => { genes()[gene] = val; saveExp(); mountGenome($('exp-widget')); };
+let genomeTestTimer = null, genomeLastPass = false;
+window.expGenomeDirty = () => {
+    const rec = genomeRecord(), G = genes();
+    const same = rec && rec.name === G.name.trim() && rec.emoji === G.emoji && JSON.stringify(rec.rules) === JSON.stringify(genesToRules(G));
+    const msg = $('c3-lock-msg');
+    if (msg) msg.innerHTML = rec ? (same ? '✅ Locked in. Change any gene and lock in again to update it.' : '<span style="color: var(--accent-amber)">You changed your organism. Lock it in again to save.</span>') : '';
+};
+window.expGenomeTest = () => {
+    clearTimeout(genomeTestTimer);
+    genomeTestTimer = setTimeout(async () => {
+        const code = generateCode(genesToRules(genes()), 'C');
+        const opps = [{ key: 'alld', label: '🦠 the Freeloader (Always Defect)' }, { key: 'tft', label: '🪞 the Mirror (Tit for Tat)' }, { key: 'allc', label: '🌿 the Honest fixer (Always Cooperate)' }]
+            .map(o => ({ name: o.label, emoji: LIB[o.key].emoji, code: LIB[o.key].code }));
+        let res;
+        try { res = await Runner.run('validate', { code, opponents: opps, rounds: 30, payoff: state.payoff, seed: 42 }, 4000); }
+        catch (e) { $('c3-goals').innerHTML = `<div class="note note-red">${esc(e.message)}</div>`; return; }
+        const box = $('c3-goals');
+        if (!box) return;
+        const P = state.payoff, [fr, mi, ho] = res.results;
+        const passA = fr.sB < 2 * Math.max(fr.sA, 0.0001);
+        const needB = Math.round(0.87 * P.R * 10) / 10, passB = mi.sA / 30 >= needB;
+        genomeLastPass = passA && passB;
+        box.innerHTML = `
+            <div class="goal ${passA ? 'pass' : ''}"><span class="gi">${passA ? '✅' : '❌'}</span><div><b>Don't be a pushover.</b> Against ${fr.name}, the Freeloader must earn <i>less than double</i> what you earn.<br><span class="muted">You ${fmtScore(fr.sA)} · Freeloader ${fmtScore(fr.sB)}</span></div></div>
+            <div class="goal ${passB ? 'pass' : ''}"><span class="gi">${passB ? '✅' : '❌'}</span><div><b>Build a partnership.</b> Against ${mi.name}, earn at least <i>${needB} per encounter</i> (the most possible is ${P.R}).<br><span class="muted">You averaged ${fmt(mi.sA / 30)}</span></div></div>
+            <div class="goal pass" style="background: #fff; border-color: var(--border-color);"><span class="gi">ℹ️</span><div>Against ${ho.name} you earned ${fmtScore(ho.sA)} (they earned ${fmtScore(ho.sB)}). No test here. Just notice what you do to those who are always kind.</div></div>`;
+    }, 150);
+};
+window.expLockGenome = () => {
+    const G = genes();
+    if (!G.name.trim()) { toast('Give your organism a name first.', 'warn'); $('c3-name').focus(); return; }
+    if (!genomeLastPass) { toast('Your organism must pass both survival tests before you lock it in. Try changing a gene.', 'warn'); return; }
+    const rules = genesToRules(G);
+    const rec = genomeRecord() || { id: uid() };
+    Object.assign(rec, { name: G.name.trim(), emoji: G.emoji, author: studentName(), mode: 'rules', rules, otherwise: 'C', code: generateCode(rules, 'C'), updated: Date.now(), genome: true });
+    if (!state.my.includes(rec)) state.my.unshift(rec);
+    Store.set('my', state.my);
+    exp.data.genomeId = rec.id;
+    expT = null;   // the organism changed, so later chapters should re-run
+    const t = genomeTraits(G);
+    exp.summary.genome = `Designed ${G.emoji} ${G.name.trim()}: ${[t.nice ? 'nice' : 'nasty', t.retaliatory ? 'retaliatory' : 'not retaliatory', t.forgiving ? 'forgiving' : 'unforgiving'].join(', ')}. Genes: first meeting ${G.first}, after cooperation ${G.afterC}, after defection ${G.afterD === 'forgive' ? 'strike back but forgive ' + G.forgive + '%' : G.afterD}${G.grudge ? ', grudge after ' + G.grudgeN + ' betrayals' : ''}.`;
+    renderMyList(); refreshSelects();
+    completeMission('builder');
+    expGenomeDirty();
+    toast(`🔒 ${esc(G.emoji)} <b>${esc(G.name)}</b> is locked in.`);
+    expComplete();
+};
+
+// ---------- Chapter 4: the tournament ----------
+async function runExpTournament() {
+    const rec = genomeRecord();
+    if (!rec) return null;
+    const mine = { id: 'my:' + rec.id, name: rec.name, emoji: rec.emoji, group: 'Mine', mine: true, code: strategyCode(rec) };
+    const entries = [mine, ...LIBRARY.map(s => ({ id: 'lib:' + s.key, name: s.name, emoji: s.emoji, group: 'Famous', lib: s, code: s.code }))];
+    const settings = { rounds: 200, unknown: false, noise: 0, repeats: 2, selfPlay: true };
+    const res = await Runner.run('tournament', { entries: entries.map(e => ({ code: e.code })), rounds: 200, repeats: 2, selfPlay: true, noise: 0, payoff: state.payoff, seed: newSeed() }, 30000);
+    expT = { entries: entries.map(({ code, ...e }) => e), res, settings, payoff: { ...state.payoff } };
+    // Also show it in the Open Lab tournament tab.
+    state.lastTourney = expT; state.lastEco = null;
+    renderTournament();
+    $('tourney-status').innerText = 'TOURNAMENT FROM THE EXPEDITION · 16 ENTRANTS · 200 ROUNDS';
+    checkTourneyMissions(expT);
+    return expT;
+}
+
+function needGenomeHTML() {
+    return `<div class="note note-amber">You need an organism first. <button class="small" onclick="expGo(2)">← Go to Chapter 3</button></div>`;
+}
+
+function mountTourney(el) {
+    if (!genomeRecord()) { el.innerHTML = needGenomeHTML(); return; }
+    const pred = exp.data.predict4;
+    el.innerHTML = `
+        <div class="card soft">
+            <b style="font-size: 16px;">🔮 Predict first: what kind of strategy will win?</b>
+            <div class="pick-row">
+                <button class="pick ${pred === 'nasty' ? 'on' : ''}" onclick="expPredict4('nasty')">😈 A <b>nasty</b> one: it defects first and exploits others</button>
+                <button class="pick ${pred === 'nice' ? 'on' : ''}" onclick="expPredict4('nice')">😇 A <b>nice</b> one: it never defects first</button>
+            </div>
+            <button class="amber big" id="c4-run" ${pred ? '' : 'disabled'} onclick="expRunTourney()">▶ Run the tournament</button>
+        </div>
+        <div id="c4-results" style="margin-top: 16px;"></div>`;
+    if (expT && pred) renderExpTourney();
+}
+window.expPredict4 = v => { exp.data.predict4 = v; saveExp(); mountTourney($('exp-widget')); };
+window.expRunTourney = async () => {
+    $('c4-results').innerHTML = '<div class="muted">🏆 Running 136 encounters of 200 rounds…</div>';
+    $('c4-run').disabled = true;
+    try { await runExpTournament(); } catch (e) { $('c4-results').innerHTML = `<div class="note note-red">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`; return; }
+    renderExpTourney();
+};
+function renderExpTourney() {
+    const T = expT, R = T.res, order = rankOrder(T);
+    const winner = order[0], myIdx = T.entries.findIndex(e => e.mine), myRank = order.indexOf(myIdx) + 1;
+    const winNice = R.traits[winner].nice, right = (exp.data.predict4 === 'nice') === winNice;
+    const top5Nice = order.slice(0, 5).filter(i => R.traits[i].nice).length;
+    const alld = T.entries.findIndex(e => e.id === 'lib:alld');
+    $('c4-results').innerHTML = `
+        <div class="grid" style="grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
+            <div class="card scroll-box" style="padding: 0; max-height: 470px;"><table style="margin-top: 0;">
+                <thead><tr><th>#</th><th>Strategy</th><th>Points / round</th><th>Type</th></tr></thead>
+                <tbody>${order.map((i, r) => `<tr class="lb-row ${T.entries[i].mine ? 'me' : ''}"><td>${r + 1}</td><td>${esc(T.entries[i].emoji)} ${esc(T.entries[i].name)}${T.entries[i].mine ? ' ← you' : ''}</td><td><b>${fmt(R.perRound[i])}</b></td><td>${R.traits[i].nice ? '<span class="badge badge-pos">😇 NICE</span>' : '<span class="badge badge-neg">😈 NASTY</span>'}</td></tr>`).join('')}</tbody>
+            </table></div>
+            <div>
+                <div class="exp-task" style="margin-top: 0; background: ${right ? '#f0fdf4' : '#fef2f2'}; border-color: ${right ? '#86efac' : '#fecaca'};">
+                    <b style="color: ${right ? '#15803d' : '#b91c1c'};">${right ? '🔮 YOUR PREDICTION WAS RIGHT' : '🔮 SURPRISE!'}</b>
+                    The winner was <b>${esc(T.entries[winner].emoji)} ${esc(T.entries[winner].name)}</b>, a <b>${winNice ? 'nice' : 'nasty'}</b> strategy. ${top5Nice} of the top 5 never defect first.
+                </div>
+                <div class="result-pill" style="background: #dcfce7; color: #166534;">${esc(T.entries[myIdx].emoji)} Your organism placed #${myRank} of ${T.entries.length}</div>
+                <p style="font-size: 15px;">Look at <b>🦠 Always Defect</b>: it finished <b>#${order.indexOf(alld) + 1}</b>, even though it won ${R.wins[alld]} of its ${T.entries.length - 1} head-to-head matchups. It can never be outscored in a matchup, but almost nobody keeps cooperating with it, so it never earns much.</p>
+            </div>
+        </div>`;
+    exp.summary.tourney = `Predicted a ${exp.data.predict4} winner; the winner was ${T.entries[winner].name} (${winNice ? 'nice' : 'nasty'}). My organism placed #${myRank} of ${T.entries.length}.`;
+    expComplete();
+}
+
+// ---------- Chapter 5: generations ----------
+function mountGenerations(el) {
+    if (!genomeRecord()) { el.innerHTML = needGenomeHTML(); return; }
+    el.innerHTML = `<div id="c5-inner"><div class="muted">Loading the tournament results…</div></div>`;
+    const build = () => {
+        const T = expT;
+        $('c5-inner').innerHTML = `
+            <div class="card soft">
+                <b style="font-size: 16px;">🔮 Predict: after 300 generations, which strategy will be the <i>most common</i>?</b>
+                <div class="row" style="margin: 10px 0;">
+                    <select id="c5-pred" onchange="exp.data.predict5 = this.value; saveExp(); $('c5-run').disabled = !this.value;"><option value="">Choose a strategy…</option>${T.entries.map(e => `<option value="${e.id}" ${exp.data.predict5 === e.id ? 'selected' : ''}>${esc(e.emoji)} ${esc(e.name)}${e.mine ? ' (yours)' : ''}</option>`).join('')}</select>
+                    <button class="purple" id="c5-run" ${exp.data.predict5 ? '' : 'disabled'} onclick="expRunGenerations()">▶ Run 300 generations</button>
+                </div>
+            </div>
+            <div id="c5-results" class="hidden" style="margin-top: 16px;">
+                <div class="grid" style="grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);">
+                    <div class="chart-box"><canvas id="c5-chart" width="680" height="300"></canvas><div class="chart-legend" id="c5-legend"></div></div>
+                    <div id="c5-notes"></div>
+                </div>
+            </div>`;
+    };
+    if (expT) build();
+    else runExpTournament().then(build).catch(e => { $('c5-inner').innerHTML = `<div class="note note-red">${esc(e.message)}</div>`; });
+}
+window.expRunGenerations = () => {
+    const T = expT, eco = computeEcology(T, 300);
+    $('c5-results').classList.remove('hidden');
+    drawEcoChart($('c5-chart'), $('c5-legend'), T, eco, 8);
+    const lead = eco.finalOrder[0], predIdx = T.entries.findIndex(e => e.id === exp.data.predict5);
+    const myIdx = T.entries.findIndex(e => e.mine);
+    const firstOut = eco.extinct[0];
+    const bb = eco.boomBust;
+    $('c5-notes').innerHTML = `
+        <div class="exp-task" style="margin-top: 0;"><b>🔮 RESULT</b>Most common: <b>${esc(T.entries[lead].emoji)} ${esc(T.entries[lead].name)}</b> (${pct(eco.x[lead])}). You predicted ${esc(T.entries[predIdx].name)}${predIdx === lead ? '. Correct! 🎉' : ` (it ended at ${pct(eco.x[predIdx])}).`}</div>
+        <p>${esc(T.entries[myIdx].emoji)} <b>Your organism</b> ended at <b>${pct(eco.x[myIdx])}</b> of the population (it started at ${pct(1 / T.entries.length)}).</p>
+        ${firstOut !== undefined ? `<p>💀 First to go extinct: <b>${esc(T.entries[firstOut].emoji)} ${esc(T.entries[firstOut].name)}</b> (generation ${eco.extinctAt[firstOut]}).</p>` : ''}
+        ${bb.length ? `<p>📈📉 <b>${bb.map(i => esc(T.entries[i].emoji + ' ' + T.entries[i].name)).join(', ')}</b> grew at first, then crashed. ${bb.length === 1 ? 'It was' : 'They were'} feeding on easy victims. When the victims died out, so did the food supply.</p>` : ''}`;
+    exp.summary.generations = `Predicted ${T.entries[predIdx].name}; most common after 300 generations was ${T.entries[lead].name} (${pct(eco.x[lead])}). My organism: ${pct(eco.x[myIdx])}.${firstOut !== undefined ? ' First extinct: ' + T.entries[firstOut].name + '.' : ''}`;
+    if (eco.extinct.length) completeMission('extinct');
+    expComplete();
+};
+
+// ---------- Chapter 6: the biofilm ----------
+function mountBiofilm(el) {
+    const rec = genomeRecord();
+    if (!rec) { el.innerHTML = needGenomeHTML(); return; }
+    const r = exp.data.biofilm || (exp.data.biofilm = {});
+    el.innerHTML = `
+        <div class="row">
+            <button class="purple" onclick="expBiofilm('A')">🧪 Experiment A: Strangers <span style="opacity: .8; text-transform: none;">(1 encounter, never meet again)</span></button>
+            <button class="purple" onclick="expBiofilm('B')">🧪 Experiment B: Lifelong neighbors <span style="opacity: .8; text-transform: none;">(10 encounters)</span></button>
+        </div>
+        <div class="exp-dish">
+            <canvas id="c6-dish" class="dish" width="600" height="360"></canvas>
+            <div class="stats-panel">
+                <div class="row" style="justify-content: space-between;"><span class="muted" style="font-size: 12px; font-weight: 700;">GENERATION</span><span class="gen-counter" id="c6-gen">0</span></div>
+                <div id="c6-census"><div class="muted" style="font-size: 13px;">Choose an experiment.</div></div>
+                <canvas id="c6-chart" width="300" height="150" style="width: 100%;"></canvas>
+                <div id="c6-results"></div>
+            </div>
+        </div>`;
+    expBiofilmResults();
+}
+function expBiofilmResults() {
+    const r = exp.data.biofilm || {}, box = $('c6-results');
+    if (!box) return;
+    const line = (k, label) => r[k] ? `<div class="result-pill" style="background: ${r[k].end > r[k].start ? '#dcfce7' : '#fee2e2'};">${label}: ${r[k].start} → ${r[k].end} cells</div>` : `<div class="result-pill" style="background: var(--soft-2); color: var(--text-muted);">${label}: not run yet</div>`;
+    box.innerHTML = `<div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-top: 8px;">YOUR COLONY</div>${line('A', 'Strangers')}${line('B', 'Neighbors')}`;
+}
+window.expBiofilm = async which => {
+    const rec = genomeRecord();
+    const mine = { id: 'my:' + rec.id, name: rec.name, emoji: rec.emoji, code: strategyCode(rec), share: 1, color: '#22c55e', slot: 0, mine: true };
+    const alld = { id: 'lib:alld', name: 'Freeloader', emoji: '🦠', code: LIB.alld.code, share: 1, color: '#ef4444', slot: 1, lib: LIB.alld };
+    await launchPetri({
+        species: [mine, alld], layout: 'invasion', W: 30, H: 18, clusterSide: 2, rounds: which === 'A' ? 1 : 10, noise: 0, mut: 0,
+        onFinish: p => {
+            const fin = p.history[p.history.length - 1];
+            exp.data.biofilm[which] = { start: p.start[0], end: fin[0] };
+            saveExp();
+            expBiofilmResults();
+            const b = exp.data.biofilm;
+            if (b.A && b.B) {
+                exp.summary.biofilm = `Strangers: my colony went ${b.A.start} → ${b.A.end} cells. Lifelong neighbors: ${b.B.start} → ${b.B.end} cells.`;
+                expComplete();
+            }
+        }
+    }, { dish: $('c6-dish'), chart: $('c6-chart'), census: $('c6-census'), gen: $('c6-gen'), speed: () => 140 });
+};
+
+// ---------- Chapter 7: societies ----------
+function mountSociety(el) {
+    const rec = genomeRecord();
+    el.innerHTML = `
+        <div class="grid">
+            <div class="card">
+                <h3>🧠 THREE THINGS FROM HUMAN HISTORY</h3>
+                <div class="story-quote"><b>🪖 1914–1918, the Western Front.</b> Enemy soldiers in trenches only a few hundred meters apart often stopped trying to kill each other. They shelled at predictable times, avoided meal times, and answered any real attack with an attack of their own. Nobody ordered this. It evolved, like Tit for Tat.</div>
+                <div class="story-quote"><b>🎣 Fishing villages &amp; forests.</b> Elinor Ostrom won a 2009 Nobel Prize for showing how communities manage shared resources for centuries without running them dry: they watch each other, and punish cheaters a little at first, then more.</div>
+                <div class="story-quote"><b>⚠️ Not all cooperation is good.</b> Companies that secretly agree to keep prices high are cooperating with each other at <i>your</i> expense. Cooperation is a tool. Who benefits matters.</div>
+            </div>
+            <div class="card soft">
+                <h3>🏆 ENTER THE CLASS CHAMPIONSHIP</h3>
+                ${rec ? `<p style="font-size: 15px;">Send your organism, <b>${esc(rec.emoji)} ${esc(rec.name)}</b>, to your teacher. Copy this code and submit it however your teacher asks (Google Form, Classroom, chat…).</p>
+                    <textarea class="plain share-box" readonly onclick="this.select()">${esc(encodeCard({ v: 2, name: rec.name, emoji: rec.emoji, author: studentName() || rec.author || '', code: strategyCode(rec), mode: 'rules', rules: rec.rules, otherwise: rec.otherwise }))}</textarea>
+                    <div class="btn-group"><button class="big" onclick="expSendCard(this)">📋 Copy my organism's code</button></div>
+                    ${!studentName() ? '<p style="color: var(--accent-amber); font-size: 13px;">Tip: type your name in the <b>Lab Technician</b> box at the top first, so your teacher knows it is yours. Then come back.</p>' : ''}` : needGenomeHTML()}
+            </div>
+        </div>`;
+}
+window.expSendCard = btn => {
+    copyText(btn.closest('.card').querySelector('textarea').value);
+    exp.summary.society = 'Sent my organism to the Class Championship.';
+    expComplete();
+};
+
+// ---------- Chapter list ----------
+const CHAPTERS = [
+    {
+        id: 'roost', day: 1, icon: '🦇', short: 'The Roost', place: 'A roost in Costa Rica', title: 'The Roost',
+        story: `You are a <b>vampire bat</b>. Every night you fly out to find blood. Some nights you come home empty, and a bat that misses two or three nights in a row can starve. Back at the roost you can share some of your meal with a hungry roostmate… or keep it all.
+            <div class="story-quote">Sharing costs you something tonight. Keeping is always better <i>for tonight</i>. So why would any bat share?</div>`,
+        task: 'Play through the season as the bat. Choose <b>Share</b> or <b>Keep</b> each night. Nobody tells you when the season ends.',
+        discovery: `Your roostmate was playing <b>Tit for Tat</b>: it shared on the first night, then copied whatever <i>you</i> did the night before. If you ever kept your blood, it paid off only once: your roostmate stopped sharing with you the very next night.<br><br>Real vampire bats do something similar: they mostly share with bats that have shared with them (Wilkinson 1984; Carter &amp; Wilkinson 2013). Nobody has to be generous. Each bat helps because it might be the hungry one tomorrow. Biologists call this <b>reciprocal altruism</b>.`,
+        question: 'What did your roostmate do on the night after you kept your blood? Why might this behavior help real bats survive?',
+        mount: mountRoost
+    },
+    {
+        id: 'nodules', day: 1, icon: '🌱', short: 'The Nodules', place: 'A soybean field', title: 'Cheaters in the Roots',
+        story: `Now you are a <b>soybean plant</b>. Bacteria called <i>rhizobia</i> live inside little bumps on your roots called <b>nodules</b>. Honest bacteria pull nitrogen out of the air for you (you can't do this yourself). You pay them in sugar, and you control how much oxygen they get. But some strains <b>freeload</b>: they take your sugar and give nothing back.`,
+        task: 'Three nodules hold three different strains. Spend 6 days with each one, choosing <b>Feed</b> or <b>Cut off</b>. Then figure out which strain is which. <i>Hint: sometimes you have to test a partner to learn what it is.</i>',
+        discovery: `Real soybeans do this! Experiments by Toby Kiers and colleagues (2003) showed that when nodule bacteria stop fixing nitrogen, the cheating bacteria reproduce about half as much. The plant appears to restrict the nodule's oxygen supply. This is a <b>sanction</b>: retaliation against a freeloader. <i>(The three strains in this chapter were invented for the game; the plant's sanctions are real.)</i><br><br>Without the ability to punish cheaters, freeloading bacteria would spread, because they get all the sugar without paying the cost of fixing nitrogen. Being able to <b>remember</b> and <b>respond</b> is what keeps the mutualism honest.`,
+        question: 'How did you figure out which nodule was the Mirror? What would happen to a soybean plant that never cut anybody off?',
+        mount: mountNodules
+    },
+    {
+        id: 'genome', day: 1, icon: '🧬', short: 'Design an Organism', place: 'The lab', title: 'Design an Organism',
+        story: `Bats and soybeans don't sit down and plan each choice. Over millions of years, evolution has shaped their behavior through their <b>genes</b>. Now you get to play evolution: design the genes for a brand-new organism. It will be released into a world full of other strategies, and it will have to survive without you.`,
+        task: 'Set the four genes so your organism <b>passes both survival tests</b>, give it a name, then press <b>Lock in</b>.',
+        discovery: () => {
+            const t = genomeTraits(genes());
+            return `Your organism is <b>${t.nice ? 'nice' : 'nasty'}</b> (${t.nice ? 'it never defects first' : 'it sometimes defects first'}), <b>${t.retaliatory ? 'retaliatory' : 'not retaliatory'}</b> (${t.retaliatory ? 'it strikes back' : 'it lets cheaters get away with it'}), and <b>${t.forgiving ? 'forgiving' : 'not very forgiving'}</b>${t.holdsGrudge ? ' (it holds grudges)' : ''}.<br><br>Robert Axelrod found that successful strategies share these traits: be <b>nice</b>, be <b>retaliatory</b>, and be <b>forgiving</b>. The two tests you just passed check the first two. Tomorrow you'll see how your organism does against the strategies that real experts designed.`;
+        },
+        question: 'Explain in your own words what each of your four genes does, and why you chose it.',
+        mount: mountGenome
+    },
+    {
+        id: 'tourney', day: 2, icon: '🏆', short: 'The Tournament', place: 'University of Michigan, 1980', title: "Axelrod's Tournament",
+        story: `In 1980, political scientist <b>Robert Axelrod</b> invited experts in math, economics, psychology and political science to send him computer programs that would play this game against each other, 200 rounds per matchup. Some programs were long and very clever. The winner was the shortest program entered: <b>Tit for Tat</b>, just four lines long.<br><br>Your organism is about to enter a tournament against 15 famous strategies. Each one plays every other one.`,
+        task: 'Make a prediction, then run the tournament and find your organism on the leaderboard.',
+        discovery: `Strategies that are <b>nice</b> (never the first to cheat) crowd the top of the leaderboard. Strategies that exploit others win individual matchups, but they lose overall, because nobody keeps cooperating with them.<br><br>That's the key idea: in a world where you meet the same partners again and again, <b>you do well by helping your partners do well</b>. Tit for Tat never scores more than its partner in a single matchup, yet it won Axelrod's tournament twice.`,
+        question: 'Where did your organism place? What did the top three strategies have in common?',
+        mount: mountTourney
+    },
+    {
+        id: 'generations', day: 2, icon: '🐣', short: 'Generations', place: 'Deep time', title: 'Survival of the… Nicest?',
+        story: `Axelrod's next question: <i>what if points were babies?</i> In evolution, organisms that collect more resources leave more offspring. So let each strategy's score decide how many copies of it are born in the next generation. The catch: as the population changes, <b>who you meet changes too</b>.`,
+        task: 'Predict which strategy will be most common after 300 generations, then watch evolution run.',
+        discovery: `In Axelrod's version (and usually here too), exploiters grow at first by feeding on easy victims like Always Cooperate. But as the victims die out, the exploiters only meet each other and strategies that strike back, so they collapse. A parasite's success depends on its <b>hosts</b>. Brood parasites like cuckoos need host birds to raise their chicks, and a disease that kills its hosts too fast can burn itself out.<br><br>The strategies that last are the ones that do well <i>with their own kind</i>.`,
+        question: 'Which strategy grew and then crashed (or went extinct first)? Explain why, using the words "host" and "parasite".',
+        mount: mountGenerations
+    },
+    {
+        id: 'biofilm', day: 2, icon: '🧫', short: 'The Biofilm', place: 'A petri dish', title: 'Invasion of the Cooperators',
+        story: `Bacteria and yeast growing on a surface (a <b>biofilm</b>) can't move around. Each cell interacts with its neighbors, and the most successful cells' offspring take over the space next to them.<br><br>Your organism starts as a <b>tiny colony</b> in the middle of a dish packed with 🦠 Freeloaders (Always Defect). Can it survive?`,
+        task: 'Run both experiments. In <b>A</b>, neighbors interact only once (like strangers). In <b>B</b>, neighbors interact 10 times (like lifelong neighbors). Compare what happens to your colony.',
+        discovery: () => {
+            const b = exp.data.biofilm || {};
+            const grewB = b.B && b.B.end > b.B.start;
+            return `${grewB ? 'With lifelong neighbors, your colony spread through the dish.' : 'Your colony struggled even with lifelong neighbors. A strategy needs to be nice <i>and</i> retaliatory to invade. Try changing your genes in Chapter 3!'} Inside a cluster, every neighbor is a partner, so cooperators earn the mutualism payoff from all sides and out-reproduce the freeloaders at the edge.<br><br>But when neighbors meet only once, cheating has no consequences and the freeloaders win. Axelrod called this the <b>shadow of the future</b>: cooperation only pays when you're likely to meet again. Long-lived animals in stable groups (like vampire bats, which can share a roost for years) are exactly where we find the most reciprocity.`;
+        },
+        question: 'Why did your colony do differently in Experiment A and Experiment B? Use the phrase "shadow of the future" in your answer.',
+        mount: mountBiofilm
+    },
+    {
+        id: 'society', day: 2, icon: '🏛️', short: 'From Cells to Societies', place: 'Human history', title: 'From Cells to Societies',
+        story: `Axelrod was a <b>political scientist</b>, not a biologist. He wanted to know how cooperation can happen without anyone forcing it: between nations, companies, or even enemies. It turns out the same rules work for bats, bacteria and people.`,
+        task: 'Read the three examples, then send your organism to the <b>Class Championship</b> and answer the final journal question.',
+        discovery: `From vampire bats to soldiers to fishing villages, cooperation evolves when the same conditions hold: <b>you'll meet again</b>, <b>you remember who did what</b>, and <b>cheaters get a response</b>. Nobody has to be selfless. Cooperation can grow out of self-interest.<br><br>That's the answer to Axelrod's question, and part of why mutualism is everywhere in nature.`,
+        question: 'Describe one human situation (school, sports, politics, online) that works like this game. Which strategy from this expedition would work best there, and why?',
+        mount: mountSociety
+    }
+];
+
+// ---------- Expedition shell ----------
+function expChapterUnlocked(i) { return i === 0 || CHAPTERS.slice(0, i).every(c => exp.done[c.id]) || exp.unlockAll; }
+
+function renderExpRail() {
+    let html = '', lastDay = 0;
+    CHAPTERS.forEach((c, i) => {
+        if (c.day !== lastDay) { if (lastDay) html += '<div class="exp-divider"></div>'; html += `<div class="exp-day">DAY ${c.day}</div>`; lastDay = c.day; }
+        const cls = [exp.done[c.id] ? 'done' : '', i === exp.cur ? 'cur' : '', expChapterUnlocked(i) ? '' : 'locked'].join(' ');
+        html += `<div class="exp-step ${cls}" onclick="expGo(${i})"><span class="n">${exp.done[c.id] ? '✅' : c.icon}</span><b>${i + 1}. ${c.short}</b></div>`;
+    });
+    $('exp-rail').innerHTML = html;
+}
+
+function renderExpedition() {
+    renderExpRail();
+    const i = exp.cur, c = CHAPTERS[i], done = !!exp.done[c.id], last = i === CHAPTERS.length - 1;
+    const disc = typeof c.discovery === 'function' ? c.discovery() : c.discovery;
+    $('exp-body').innerHTML = `
+        <div class="exp-hero">
+            <div><div class="exp-kicker">Day ${c.day} · Chapter ${i + 1} of ${CHAPTERS.length} · ${c.place}</div><h2>${c.title}</h2><div class="exp-story">${c.story}</div></div>
+            <div class="exp-emoji">${c.icon}</div>
+        </div>
+        <div class="exp-task"><b>🎯 YOUR TASK</b>${c.task}</div>
+        <div id="exp-widget"></div>
+        <div id="exp-after" class="${done ? '' : 'hidden'}">
+            <div class="exp-discovery" id="exp-discovery"><b>💡 DISCOVERY</b>${disc}</div>
+            <div class="exp-journal"><label for="exp-answer">📓 Journal: ${c.question}</label>
+                <textarea id="exp-answer" placeholder="Write 2–3 sentences…" oninput="exp.answers['${c.id}'] = this.value; saveExp();">${esc(exp.answers[c.id] || '')}</textarea></div>
+        </div>
+        <div class="exp-nav">
+            <button class="secondary" ${i === 0 ? 'disabled' : ''} onclick="expGo(${i - 1})">← Back</button>
+            <button class="ghost" onclick="expReset()">↺ Start the expedition over</button>
+            ${last ? `<button class="green big" onclick="generateJournal()">🖨️ Print my Expedition Journal</button>`
+                   : `<button class="big" id="exp-next" ${done ? '' : 'disabled'} onclick="expGo(${i + 1})">Next chapter →</button>`}
+        </div>`;
+    c.mount($('exp-widget'));
+}
+
+function expGo(i) {
+    if (i < 0 || i >= CHAPTERS.length) return;
+    if (!expChapterUnlocked(i)) { toast('Finish the earlier chapters first.', 'warn'); return; }
+    exp.cur = i; saveExp();
+    renderExpedition();
+    $('tab-expedition').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function expComplete() {
+    const c = CHAPTERS[exp.cur], first = !exp.done[c.id];
+    exp.done[c.id] = true; saveExp();
+    const after = $('exp-after');
+    if (!after) return;
+    const disc = typeof c.discovery === 'function' ? c.discovery() : c.discovery;
+    $('exp-discovery').innerHTML = `<b>💡 DISCOVERY</b>${disc}`;
+    after.classList.remove('hidden');
+    const next = $('exp-next');
+    if (next) next.disabled = false;
+    renderExpRail();
+    if (first) setTimeout(() => after.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
+}
+
+function expReset() {
+    if (!confirm('Start the expedition over? Your journal answers will be erased. (Your saved strategies stay.)')) return;
+    exp = { cur: 0, done: {}, answers: {}, data: {}, summary: {} };
+    expT = null; saveExp(); renderExpedition();
+}
+
+function generateJournal() {
+    const name = studentName();
+    let html = `<div class="print-report-container"><h2>EXPEDITION JOURNAL</h2>
+        <p><b>Name:</b> ${name ? esc(name) : '____________________'} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()} &nbsp; <b>Chapters completed:</b> ${CHAPTERS.filter(c => exp.done[c.id]).length} of ${CHAPTERS.length}</p>`;
+    CHAPTERS.forEach((c, i) => {
+        html += `<h3>${i + 1}. ${c.icon} ${c.title}</h3>
+            ${exp.summary[c.id] ? `<p><i>Result:</i> ${esc(exp.summary[c.id])}</p>` : `<p><i>Not completed.</i></p>`}
+            <p><b>${c.question}</b></p>
+            ${exp.answers[c.id] ? `<p style="white-space: pre-wrap; border-left: 3px solid #999; padding-left: 10px;">${esc(exp.answers[c.id])}</p>` : '<div class="lines"></div><div class="lines"></div>'}`;
+    });
+    const rec = genomeRecord();
+    if (rec) html += `<h3>My organism's genome: ${esc(rec.emoji)} ${esc(rec.name)}</h3><pre>${esc(strategyCode(rec))}</pre>`;
+    html += `</div>`;
+    $('report-preview-content').innerHTML = html;
+    $('print-root').innerHTML = html;
+    openModal('report-modal');
+}
+
+// ============================================================================
+// SECTION 16: INITIALISATION
 // ============================================================================
 
 function init() {
@@ -2939,6 +3674,7 @@ Please add a comment above every line explaining what it does, and keep it short
     renderGuide();
     renderMissionCount();
     drawPetri();
+    renderExpedition();
 }
 init();
 </script>
