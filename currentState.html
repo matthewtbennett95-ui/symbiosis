@@ -1,0 +1,921 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Political Systems Lab</title>
+    <style>
+        /* ==========================================
+           CSS STYLES (BRIGHT LAB THEME)
+           ========================================== */
+        :root {
+            --bg-color: #f0f4f8; --panel-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #cbd5e1; --text-main: #1e293b; --text-muted: #64748b;
+            --accent-blue: #3b82f6; --accent-green: #22c55e;
+            --accent-red: #ef4444; --accent-purple: #a855f7;
+            --accent-teal: #14b8a6;
+            --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body { 
+            font-family: var(--font-family); background-color: var(--bg-color);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px; color: var(--text-main); 
+            display: flex; flex-direction: column; align-items: center; padding: 40px 20px; margin: 0; line-height: 1.6;
+        }
+
+        #app { 
+            width: 100%; max-width: 1100px; background: var(--panel-bg); 
+            padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); 
+            border: 1px solid var(--border-color); backdrop-filter: blur(16px);
+        }
+
+        .header-section { margin-bottom: 30px; }
+        h1 { margin: 0 0 10px 0; color: var(--text-main); font-weight: 300; font-size: 34px; letter-spacing: -0.5px; }
+        h1 span { color: var(--accent-blue); font-weight: 600; }
+        .student-briefing { font-size: 15px; color: var(--text-main); background: #e2e8f0; padding: 20px; border-left: 4px solid var(--accent-blue); border-radius: 0 8px 8px 0; }
+
+        .tab-container { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; gap: 20px; flex-wrap: wrap;}
+        .tab { padding: 10px 10px 15px 10px; cursor: pointer; background: transparent; font-weight: 600; color: var(--text-muted); font-size: 14px; letter-spacing: 0.5px; border-bottom: 3px solid transparent; transition: all 0.2s ease; margin-bottom: -2px;}
+        .tab:hover { color: var(--text-main); }
+        
+        /* Specific Tab Active Colors */
+        .tab-target.active { color: var(--accent-blue); border-bottom: 3px solid var(--accent-blue); }
+        .tab-survival.active { color: var(--accent-purple); border-bottom: 3px solid var(--accent-purple); }
+        .tab-global.active { color: #f59e0b; border-bottom: 3px solid #f59e0b; }
+        .tab-teacher.active { color: var(--accent-teal); border-bottom: 3px solid var(--accent-teal); }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .controls { display: flex; justify-content: space-between; align-items: flex-start; background: #f8fafc; padding: 15px 25px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px; gap: 15px; flex-wrap: wrap;}
+        .control-group { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        input[type="text"] { padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 14px;}
+        select, input[type="range"], input[type="number"] { padding: 8px 12px; background: #ffffff; color: var(--text-main); border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);}
+        input[type="file"] { font-size: 12px; font-family: monospace; }
+        
+        #arena { background: #ffffff; height: 380px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 25px; display: flex; align-items: flex-end; justify-content: space-around; padding: 30px; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
+        .player-station { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; width: 40%; }
+        .bioreactor { width: 160px; height: 220px; background: #f1f5f9; border: 1px solid var(--border-color); border-bottom: 4px solid var(--border-color); border-radius: 8px 8px 4px 4px; display: flex; flex-wrap: wrap-reverse; align-content: flex-start; justify-content: center; padding: 8px; overflow: auto; position: relative; }
+        .student-bioreactor { border-bottom-color: var(--accent-green); background: #f0fdf4; }
+        .opp-bioreactor { border-bottom-color: var(--accent-red); background: #fef2f2; }
+        .clone { font-size: 16px; margin: 1px; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; transform: scale(0); }
+        @keyframes popIn { to { transform: scale(1); } }
+
+        .score-board { margin-top: 20px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center;}
+        .score-val { font-size: 26px; font-weight: 700; font-family: 'Courier New', monospace; }
+        .move-indicator { font-size: 15px; font-weight: 700; margin-bottom: 15px; height: 20px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 0 0 10px 0; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;}
+        textarea { width: 100%; box-sizing: border-box; height: 320px; background: #1e293b; color: #34d399; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.4; border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; resize: vertical; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);}
+        
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;}
+        button { background: var(--accent-blue); color: #ffffff; border: none; padding: 12px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3); }
+        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        button.secondary { background: #e2e8f0; color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none;}
+        button.secondary:hover { background: #cbd5e1; }
+        button.danger { background: transparent; color: var(--accent-red); border: 1px solid var(--accent-red); padding: 6px 10px; font-size: 11px;}
+        button.danger:hover { background: var(--accent-red); color: white;}
+        button:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; filter: none; }
+        button.purple { background: var(--accent-purple); color: #ffffff; box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.3);}
+        button.red { background: var(--accent-red); color: #ffffff; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);}
+        button.teal { background: var(--accent-teal); color: #ffffff; box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.3);}
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 13px; }
+        th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; background: #f8fafc;}
+        
+        /* Alignment Badges */
+        .badge-pos { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; letter-spacing: 0.5px; display: inline-block;}
+        .badge-neg { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; letter-spacing: 0.5px; display: inline-block;}
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); padding: 20px; box-sizing: border-box;}
+        .modal-content { background: var(--panel-bg); padding: 30px; border-radius: 12px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative;}
+
+        #ecosystem-container { display: flex; gap: 20px; margin-top: 20px; }
+        canvas { background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
+        .stats-panel { flex: 1; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .stat-row { display: flex; justify-content: space-between; align-items: center; font-family: monospace; font-size: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-weight: bold;}
+
+        /* ==========================================
+           PRINT STYLES - DEDICATED REPORT PRINTING
+           ========================================== */
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            #app, .modal-overlay { display: none !important; } 
+            
+            #print-root { display: block !important; width: 100%; max-width: 100%; }
+            .print-report-container { 
+                font-family: Arial, sans-serif; color: black; 
+                page-break-inside: auto; margin: 0;
+            }
+            .print-report-container h2 { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; font-size: 24px;}
+            .print-report-container h3 { margin-top: 20px; font-size: 16px; border-bottom: 1px solid #ccc; padding-bottom: 5px;}
+            .print-report-container pre { 
+                background: #f8fafc; border: 1px solid #000; padding: 10px; 
+                font-family: monospace; font-size: 11px; white-space: pre-wrap; word-wrap: break-word;
+            }
+            .print-report-container table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; page-break-inside: auto;}
+            .print-report-container tr { page-break-inside: avoid; page-break-after: auto; }
+            .print-report-container th, .print-report-container td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+            .print-report-container th { background-color: #eee; font-weight: bold; }
+            
+            .print-report-container::after {
+                content: "OFFICIAL LAB REPORT - BIO-POLITICAL SYSTEMS";
+                display: block; text-align: center; margin-top: 40px;
+                font-size: 10px; color: #666; font-family: monospace;
+            }
+        }
+        
+        #print-root { display: none; }
+    </style>
+</head>
+<body onload="toggleCustomCode(); renderAssemblyTable();">
+
+<div id="app">
+    <div class="header-section">
+        <h1><span>SYS.LAB //</span> Bio-Political Engineering</h1>
+        <div class="student-briefing">
+            <b>MISSION BRIEFING:</b> In 1980, Robert Axelrod hosted a computer tournament to solve a paradox: <i>How does cooperation emerge in a world of self-interest?</i> <br><br>
+            Your task is to engineer a logic script that can survive a computational ecosystem. To thrive and reproduce, you must determine when to form mutualistic alliances (Cooperate) and when to exploit weakness (Defect).
+        </div>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab tab-target active" onclick="switchTab('tab-1v1')">TARGET SIMULATION [1v1]</div>
+        <div class="tab tab-survival" onclick="switchTab('tab-survival')">SURVIVAL CRUCIBLE [ECOSYSTEM]</div>
+        <div class="tab tab-global" onclick="switchTab('tab-tournament')">GLOBAL TOURNAMENT [ALL PROTOCOLS]</div>
+        <div style="flex-grow: 1;"></div>
+        <div class="tab tab-teacher" onclick="switchTab('tab-teacher')">TEACHER ASSEMBLY TOOL 🛠️</div>
+    </div>
+
+    <div id="tab-1v1" class="tab-content active">
+        <div class="controls" style="align-items: center;">
+            <div class="control-group">
+                <label>Iteration Cycles: <span id="round-val" style="color: var(--accent-blue);">20</span></label>
+                <input type="range" id="rounds-slider" min="5" max="100" value="20" oninput="document.getElementById('round-val').innerText = this.value">
+            </div>
+            <div class="control-group" style="align-items: center;">
+                <label>Current Cycle</label>
+                <div style="font-size: 20px; color: var(--accent-blue); font-family: monospace; font-weight: bold;" id="round-counter">000</div>
+            </div>
+            <div class="control-group">
+                <label>Opponent Environment:</label>
+                <select id="opponent-select" onchange="toggleCustomCode()">
+                    <option value="copycat">Protocol: Reciprocal Symbiont (Copycat)</option>
+                    <option value="parasite">Protocol: Obligate Parasite (Always Defect)</option>
+                    <option value="mutualist">Protocol: Obligate Mutualist (Always Cooperate)</option>
+                    <option value="grudger">Protocol: Reactive Symbiont (Grudger)</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="arena">
+            <div class="player-station">
+                <div class="move-indicator" id="p1-move">STANDBY</div>
+                <div class="bioreactor student-bioreactor" id="p1-avatar"></div>
+                <div class="score-board" style="color: var(--accent-green);">POPULATION<br><span class="score-val" id="p1-score">0</span></div>
+            </div>
+            <div style="font-size: 18px; color: var(--border-color); align-self: center; letter-spacing: 2px;">V/S</div>
+            <div class="player-station">
+                <div class="move-indicator" id="p2-move">STANDBY</div>
+                <div class="bioreactor opp-bioreactor" id="p2-avatar"></div>
+                <div class="score-board" style="color: var(--accent-red);">POPULATION<br><span class="score-val" id="p2-score">0</span></div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div>
+                <h3>PRIMARY SCRIPT (YOUR STRATEGY)</h3>
+                <textarea id="student-code">
+/*
+ * 🤖 AI PROMPT INSTRUCTIONS FOR GENERATING YOUR SCRIPT 🤖
+ *
+ * Copy the text below and paste it into an AI (like ChatGPT or Gemini)
+ * to help you write your code:
+ * * "Act as a Javascript expert. I am participating in a game theory 
+ * tournament based on the Iterated Prisoner's Dilemma. I need a Javascript 
+ * function body that determines my next move.
+ * * The environment provides two arrays:
+ * - myHistory: An array of my past moves (e.g., ['C', 'C', 'D']).
+ * - theirHistory: An array of the opponent's past moves.
+ * * I must return 'C' to Cooperate, or 'D' to Defect.
+ * * Please write the code for the following strategy: 
+ * [INSERT YOUR STRATEGY IDEA HERE].
+ * * Only provide the code inside the function, do not include the 
+ * function wrapper."
+ *
+ * =====================================================================
+ * EXAMPLE CODE: COPYCAT (DO NOT SUBMIT THIS EXACT STRATEGY)
+ * =====================================================================
+ */
+if (theirHistory.length === 0) {
+    return 'C'; 
+}
+return theirHistory[theirHistory.length - 1];
+                </textarea>
+            </div>
+            <div>
+                <h3 id="opp-header">ENVIRONMENT SCRIPT</h3>
+                <div id="opp-desc" style="color: var(--text-main); font-size: 13px; background: #e2e8f0; padding: 15px; border-radius: 6px; line-height: 1.5; height: 320px; box-sizing: border-box; overflow-y: auto;"></div>
+                <div class="btn-group">
+                    <button onclick="startDuel()">Run Incubation Sequence</button>
+                    <button class="secondary" onclick="openDataLog()">Data Log</button>
+                    <button class="secondary" onclick="generateReport('1v1')" style="margin-left: auto;">🖨️ Create Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-survival" class="tab-content">
+        <div style="background: rgba(168, 85, 247, 0.1); border-left: 4px solid var(--accent-purple); padding: 15px; color: var(--accent-purple); font-size: 14px; border-radius: 4px;">
+            <b>🧬 SPATIAL TAKEOVER MECHANICS</b><br>
+            Entities spawn in isolated compartments to establish community strength. Once the barrier falls, they collide in rapid 50-round matches. The entity with the higher lifetime score <b>overwrites</b> the loser. 
+        </div>
+        
+        <div class="controls" style="margin-top: 20px; align-items: center;">
+             <div class="control-group">
+                <label>Starting Population (Fixed Total):</label>
+                <div style="display: flex; gap: 10px; font-weight: normal; color: var(--text-muted);">
+                    🤖 <input type="number" id="qty-bot" value="20" style="width: 40px; padding: 4px;">
+                    🦇 <input type="number" id="qty-bat" value="20" style="width: 40px; padding: 4px;">
+                    🦠 <input type="number" id="qty-bug" value="20" style="width: 40px; padding: 4px;">
+                    🌿 <input type="number" id="qty-leaf" value="20" style="width: 40px; padding: 4px;">
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
+                <button class="purple" onclick="startEcosystem()">Inject Population</button>
+                <button class="secondary" id="pause-btn" onclick="toggleSimulation()">Pause</button>
+                <button class="secondary" onclick="generateReport('survival')">🖨️ Create Report</button>
+            </div>
+        </div>
+
+        <div id="ecosystem-container">
+            <canvas id="eco-canvas" width="700" height="400"></canvas>
+            <div class="stats-panel">
+                <h3 style="margin: 0; padding-bottom: 5px; color: var(--accent-purple);">POPULATION CENSUS</h3>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;" id="start-conditions"><i>Run simulation to capture starting conditions.</i></div>
+                <div class="stat-row"><span style="color: var(--accent-green);">🤖 Primary Script</span> <span id="count-bot">0</span></div>
+                <div class="stat-row"><span style="color: var(--accent-blue);">🦇 Copycats</span> <span id="count-bat">0</span></div>
+                <div class="stat-row"><span style="color: var(--accent-red);">🦠 Parasites</span> <span id="count-bug">0</span></div>
+                <div class="stat-row"><span style="color: #a855f7;">🌿 Mutualists</span> <span id="count-leaf">0</span></div>
+                <div style="flex-grow: 1;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-tournament" class="tab-content">
+        <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 15px; color: #d97706; font-size: 14px; border-radius: 4px; margin-bottom: 20px;">
+            <b>🏆 ROUND-ROBIN TOURNAMENT</b><br>
+            Every entity plays every other entity for the specified number of cycles. Total yields are tallied to determine the ultimate survival strategy.
+        </div>
+
+        <div class="controls" style="align-items: flex-end;">
+            <div class="control-group">
+                <label>Tournament Cycles (Per Matchup): <span id="tourney-round-val" style="color: var(--accent-blue);">100</span></label>
+                <input type="range" id="tourney-rounds-slider" min="10" max="500" value="100" oninput="document.getElementById('tourney-round-val').innerText = this.value">
+            </div>
+            <div class="control-group">
+                <label>Roster Source:</label>
+                <select id="roster-source" onchange="toggleUploadUI()">
+                    <option value="default">Standard Set (Built-in + Mock Class)</option>
+                    <option value="upload">Custom Roster (JSON Upload)</option>
+                </select>
+            </div>
+            <div class="control-group" id="upload-group" style="display: none;">
+                <label style="display: flex; justify-content: space-between;">Upload JSON: <a href="#" onclick="downloadTemplate(); return false;" style="color: var(--accent-blue); text-decoration: none; font-weight: normal; text-transform: none;">(Template)</a></label>
+                <input type="file" id="roster-file" accept=".json" onchange="handleFileUpload(event)">
+            </div>
+            
+            <div class="btn-group" style="margin-top: 0; align-items: flex-end; padding-bottom: 4px;">
+                <button style="background: #f59e0b; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);" onclick="runTournament()">Execute Tournament</button>
+                <button class="secondary" onclick="generateReport('tournament')">🖨️ Create Report</button>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px; font-weight: bold; color: var(--accent-purple);" id="tourney-status">AWAITING INITIALIZATION</div>
+
+        <div class="grid" style="grid-template-columns: 1fr 2fr; gap: 20px;">
+            <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); max-height: 500px; overflow-y: auto;">
+                <h3 style="color: var(--accent-blue); margin-top: 0; position: sticky; top: 0; background: #fff;">GLOBAL LEADERBOARD</h3>
+                <table id="leaderboard-table" style="margin-top: 10px;">
+                    <thead><tr><th>Rank</th><th>Entity</th><th>Alignment</th><th>Score</th></tr></thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Run tournament to generate rankings.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); overflow-x: auto; max-height: 500px; overflow-y: auto;">
+                <h3 style="color: var(--text-main); margin-top: 0; position: sticky; top: 0; background: #fff; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">PAYOFF MATRIX</h3>
+                <table id="matrix-table" style="font-family: monospace; font-size: 13px;">
+                    <thead id="matrix-head"></thead>
+                    <tbody id="matrix-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-teacher" class="tab-content">
+        <div style="background: rgba(20, 184, 166, 0.1); border-left: 4px solid var(--accent-teal); padding: 15px; color: #0d9488; font-size: 14px; border-radius: 4px; margin-bottom: 20px;">
+            <b>🛠️ ROSTER COMPILATION ENGINE</b><br>
+            Paste the raw JavaScript logic blocks provided by your students below. Add them to the assembly queue, then export the master JSON file. You can also import existing JSON files to append multiple classes together!
+        </div>
+
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 25px;">
+            <div style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <h3 style="color: var(--accent-teal); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">ADD ENTITY TO ROSTER</h3>
+                <div class="control-group">
+                    <label>Student/Entity Name:</label>
+                    <input type="text" id="add-roster-name" placeholder="e.g., Alex's Traitor Bot">
+                </div>
+                <div class="control-group" style="margin-top: 15px;">
+                    <label>Identifier Emoji:</label>
+                    <select id="add-roster-emoji" style="width: 80px; font-size: 16px;">
+                        <option value="🤖">🤖</option>
+                        <option value="👽">👽</option>
+                        <option value="👻">👻</option>
+                        <option value="🦊">🦊</option>
+                        <option value="🦁">🦁</option>
+                        <option value="🦉">🦉</option>
+                        <option value="🦇">🦇</option>
+                        <option value="🦠">🦠</option>
+                        <option value="🌿">🌿</option>
+                        <option value="🧠">🧠</option>
+                        <option value="⚡">⚡</option>
+                        <option value="🔥">🔥</option>
+                        <option value="❄️">❄️</option>
+                        <option value="🐍">🐍</option>
+                        <option value="🦅">🦅</option>
+                        <option value="🦈">🦈</option>
+                        <option value="🦍">🦍</option>
+                        <option value="🎭">🎭</option>
+                        <option value="🃏">🃏</option>
+                        <option value="🛡️">🛡️</option>
+                        <option value="⚔️">⚔️</option>
+                        <option value="💖">💖</option>
+                    </select>
+                </div>
+                <div class="control-group" style="margin-top: 15px;">
+                    <label>Logic Script (JS Body Only):</label>
+                    <textarea id="add-roster-code" style="height: 150px;" placeholder="if (theirHistory.length === 0) return 'C'; ..."></textarea>
+                </div>
+                <button class="teal" style="margin-top: 20px; width: 100%;" onclick="addEntityToAssembly()">➕ Add to Assembly</button>
+            </div>
+            
+            <div style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+                    <h3 style="margin: 0; border: none; padding: 0;">CURRENT CLASS ROSTER</h3>
+                    <span id="assembly-count" style="background: #e2e8f0; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;">0 Entities</span>
+                </div>
+                
+                <div style="flex-grow: 1; overflow-y: auto; max-height: 250px; border: 1px solid var(--border-color); border-radius: 6px; background: #f8fafc;">
+                    <table style="margin-top: 0;">
+                        <thead style="position: sticky; top: 0; background: #f8fafc;">
+                            <tr><th>Bot</th><th>Preview</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="assembly-body">
+                            </tbody>
+                    </table>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <input type="file" id="import-roster-file" accept=".json" style="display: none;" onchange="importAssemblyJSON(event)">
+                        <button class="secondary" onclick="document.getElementById('import-roster-file').click()">📂 Import JSON to List</button>
+                    </div>
+                    <button style="background: var(--text-main);" onclick="exportAssemblyJSON()">💾 Export Roster as JSON</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="data-log-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;">
+            <h3 style="margin: 0;">CYCLE DATA LOG</h3>
+            <button class="secondary" onclick="closeDataLog()" style="padding: 6px 12px; font-size: 12px;">Close</button>
+        </div>
+        <table>
+            <thead><tr><th>Cycle</th><th>Primary Move</th><th>Env Move</th><th>Primary Yield</th><th>Env Yield</th></tr></thead>
+            <tbody id="history-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="report-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 850px; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 18px;">📄 REPORT PREVIEW</h3>
+            <div style="display: flex; gap: 10px;">
+                <button class="secondary" onclick="closeReport()">Cancel</button>
+                <button onclick="window.print()" style="background: #10b981;">Save as PDF / Print</button>
+            </div>
+        </div>
+        <div id="report-preview-content" style="background: white; padding: 30px; border: 1px solid #ccc; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 500px;">
+            </div>
+    </div>
+</div>
+
+<div id="print-root"></div>
+
+<script>
+// ============================================================================
+// SECTION 1: GLOBAL VARIABLES & UTILITIES
+// ============================================================================
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
+
+const archetypes = {
+    "copycat": { emoji: "🦇", logic: (m, t) => t.length === 0 ? 'C' : t[t.length-1] },
+    "parasite": { emoji: "🦠", logic: () => 'D' },
+    "mutualist": { emoji: "🌿", logic: () => 'C' },
+    "grudger": { emoji: "🌳", logic: (m, t) => t.includes('D') ? 'D' : 'C' }
+};
+
+function getStandardPayout(a, b) {
+    if (a === 'C' && b === 'C') return [3, 3];
+    if (a === 'D' && b === 'C') return [5, 0];
+    if (a === 'C' && b === 'D') return [0, 5];
+    return [1, 1];
+}
+
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+}
+
+// ============================================================================
+// SECTION 2: 1V1 TARGET SIMULATION (TAB 1)
+// ============================================================================
+
+let currentOpponent = 'copycat';
+
+function toggleCustomCode() {
+    const select = document.getElementById('opponent-select');
+    currentOpponent = select.value;
+    const desc = document.getElementById('opp-desc');
+    const oppHeader = document.getElementById('opp-header');
+
+    const descriptions = {
+        'copycat': '<b style="color: var(--accent-blue);">PROTOCOL ACTIVE: RECIPROCAL SYMBIONT (COPYCAT)</b><br><br><b style="color: var(--text-main);">Strategy:</b> Initiates with cooperation (\'C\'). On subsequent cycles, it strictly replicates the exact move executed by you in the previous cycle.',
+        'parasite': '<b style="color: var(--accent-red);">PROTOCOL ACTIVE: OBLIGATE PARASITE (ALWAYS DEFECT)</b><br><br><b style="color: var(--text-main);">Strategy:</b> A purely extractive entity. It will always return \'D\', regardless of your actions.',
+        'mutualist': '<b style="color: var(--accent-green);">PROTOCOL ACTIVE: OBLIGATE MUTUALIST (ALWAYS COOPERATE)</b><br><br><b style="color: var(--text-main);">Strategy:</b> A purely symbiotic entity. It will always return \'C\', regardless of your actions.',
+        'grudger': '<b style="color: var(--accent-purple);">PROTOCOL ACTIVE: REACTIVE SYMBIONT (GRUDGER)</b><br><br><b style="color: var(--text-main);">Strategy:</b> Initiates with cooperation. Continues to cooperate UNLESS you defect even once. Then it permanently switches to Defect.'
+    };
+    desc.innerHTML = descriptions[currentOpponent];
+    oppHeader.innerText = 'ENVIRONMENT SCRIPT: ' + currentOpponent.toUpperCase();
+}
+
+async function startDuel() {
+    document.getElementById('p1-score').innerText = '0'; document.getElementById('p2-score').innerText = '0';
+    document.getElementById('p1-avatar').innerHTML = ''; document.getElementById('p2-avatar').innerHTML = '';
+    document.getElementById('history-body').innerHTML = '';
+    
+    const rounds = parseInt(document.getElementById('rounds-slider').value);
+    let studentCode = document.getElementById('student-code').value;
+    let p1Logic;
+    try { p1Logic = new Function('myHistory', 'theirHistory', studentCode); } 
+    catch (e) { alert("Syntax Error in Script:\n" + e.message); return; }
+
+    let p2Logic = archetypes[currentOpponent].logic;
+    let p2Emoji = archetypes[currentOpponent].emoji;
+    let p1History = []; let p2History = []; let p1Score = 0; let p2Score = 0;
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    for (let i = 1; i <= rounds; i++) {
+        document.getElementById('round-counter').innerText = i.toString().padStart(3, '0');
+        let p1Move, p2Move;
+        try { p1Move = p1Logic(p1History, p2History); if (p1Move !== 'C' && p1Move !== 'D') throw new Error(); } catch (e) { p1Move = 'C'; }
+        try { p2Move = p2Logic(p2History, p1History); } catch(e) { p2Move = 'C'; }
+
+        let [p1Yield, p2Yield] = getStandardPayout(p1Move, p2Move);
+        p1Score += p1Yield; p2Score += p2Yield;
+        p1History.push(p1Move); p2History.push(p2Move);
+
+        document.getElementById('p1-move').innerText = p1Move === 'C' ? 'COOPERATE' : 'DEFECT';
+        document.getElementById('p2-move').innerText = p2Move === 'C' ? 'COOPERATE' : 'DEFECT';
+        document.getElementById('p1-score').innerText = p1Score; document.getElementById('p2-score').innerText = p2Score;
+
+        for(let j=0; j<p1Yield; j++) document.getElementById('p1-avatar').appendChild(Object.assign(document.createElement('div'), {className:'clone', innerText:'🤖'}));
+        for(let j=0; j<p2Yield; j++) document.getElementById('p2-avatar').appendChild(Object.assign(document.createElement('div'), {className:'clone', innerText:p2Emoji}));
+
+        let tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i}</td><td>${p1Move}</td><td>${p2Move}</td><td>+${p1Yield}</td><td>+${p2Yield}</td>`;
+        document.getElementById('history-body').appendChild(tr);
+        await sleep(50); 
+    }
+}
+
+function openDataLog() { document.getElementById('data-log-modal').style.display = 'flex'; }
+function closeDataLog() { document.getElementById('data-log-modal').style.display = 'none'; }
+
+
+// ============================================================================
+// SECTION 3: SURVIVAL CRUCIBLE / ECOSYSTEM (TAB 2)
+// ============================================================================
+
+const canvas = document.getElementById('eco-canvas');
+const ctx = canvas.getContext('2d');
+let entities = []; let animationId; let isRunning = false; let barrierTimer = 0; 
+let ecosystemStartConditions = "Not Recorded";
+
+function toggleSimulation() {
+    isRunning = !isRunning;
+    const btn = document.getElementById('pause-btn');
+    if (isRunning) { btn.innerText = "Pause"; btn.classList.replace('red', 'secondary'); animateEcosystem(); } 
+    else { btn.innerText = "Resume"; btn.classList.replace('secondary', 'red'); cancelAnimationFrame(animationId); }
+}
+
+class Entity {
+    constructor(type, logicFunc, x, y, bounds) {
+        this.x = x || Math.random() * (canvas.width - 40) + 20; this.y = y || Math.random() * (canvas.height - 40) + 20;
+        this.vx = (Math.random() - 0.5) * 4; this.vy = (Math.random() - 0.5) * 4;
+        this.radius = 12; this.cooldown = 0; this.lifetimeScore = 0; this.bounds = bounds; 
+        this.assignTraits(type, logicFunc);
+    }
+    assignTraits(type, logicFunc) {
+        this.type = type; this.logic = logicFunc;
+        if (type === 'bot') { this.emoji = '🤖'; this.color = '#22c55e'; this.name = "PRIMARY SCRIPT"; }
+        if (type === 'bat') { this.emoji = '🦇'; this.color = '#3b82f6'; this.name = "COPYCATS"; }
+        if (type === 'bug') { this.emoji = '🦠'; this.color = '#ef4444'; this.name = "PARASITES"; }
+        if (type === 'leaf') { this.emoji = '🌿'; this.color = '#a855f7'; this.name = "MUTUALISTS"; }
+    }
+    update(isBarrierActive) {
+        this.x += this.vx; this.y += this.vy;
+        let minX = isBarrierActive ? this.bounds.minX : 0; let maxX = isBarrierActive ? this.bounds.maxX : canvas.width;
+        let minY = isBarrierActive ? this.bounds.minY : 0; let maxY = isBarrierActive ? this.bounds.maxY : canvas.height;
+        if (this.x - this.radius < minX) { this.x = minX + this.radius; this.vx *= -1; }
+        if (this.x + this.radius > maxX) { this.x = maxX - this.radius; this.vx *= -1; }
+        if (this.y - this.radius < minY) { this.y = minY + this.radius; this.vy *= -1; }
+        if (this.y + this.radius > maxY) { this.y = maxY - this.radius; this.vy *= -1; }
+        if (this.cooldown > 0) this.cooldown--;
+    }
+    draw() {
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius + 3, 0, Math.PI * 2);
+        ctx.fillStyle = this.color; ctx.globalAlpha = 0.25; ctx.fill(); ctx.globalAlpha = 1.0;
+        ctx.font = `14px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(this.emoji, this.x, this.y);
+    }
+}
+
+function startEcosystem() {
+    cancelAnimationFrame(animationId); entities = []; isRunning = true; barrierTimer = 420; 
+    document.getElementById('pause-btn').disabled = false;
+    let studentLogicFunc;
+    try { studentLogicFunc = new Function('myHistory', 'theirHistory', document.getElementById('student-code').value); } 
+    catch(e) { studentLogicFunc = archetypes['mutualist'].logic; }
+
+    const bots = parseInt(document.getElementById('qty-bot').value) || 0; const bats = parseInt(document.getElementById('qty-bat').value) || 0;
+    const bugs = parseInt(document.getElementById('qty-bug').value) || 0; const leafs = parseInt(document.getElementById('qty-leaf').value) || 0;
+
+    ecosystemStartConditions = `🤖 Primary: ${bots} | 🦇 Copycats: ${bats} | 🦠 Parasites: ${bugs} | 🌿 Mutualists: ${leafs}`;
+    document.getElementById('start-conditions').innerHTML = `<b>STARTING:</b><br>${ecosystemStartConditions}`;
+
+    const cw = canvas.width; const ch = canvas.height;
+    const q1 = { minX: 0, maxX: cw/2, minY: 0, maxY: ch/2 }; const q2 = { minX: cw/2, maxX: cw, minY: 0, maxY: ch/2 };
+    const q3 = { minX: cw/2, maxX: cw, minY: ch/2, maxY: ch }; const q4 = { minX: 0, maxX: cw/2, minY: ch/2, maxY: ch };
+    const centers = { bot: { x: cw/4, y: ch/4 }, bat: { x: (cw/4)*3, y: ch/4 }, bug: { x: (cw/4)*3, y: (ch/4)*3 }, leaf: { x: cw/4, y: (ch/4)*3 } };
+
+    const spawnCluster = (qty, type, logic, center, bounds) => {
+        for (let i = 0; i < qty; i++) entities.push(new Entity(type, logic, center.x + (Math.random() - 0.5) * 60, center.y + (Math.random() - 0.5) * 60, bounds));
+    };
+
+    spawnCluster(bots, 'bot', studentLogicFunc, centers.bot, q1); spawnCluster(bats, 'bat', archetypes['copycat'].logic, centers.bat, q2);
+    spawnCluster(bugs, 'bug', archetypes['parasite'].logic, centers.bug, q3); spawnCluster(leafs, 'leaf', archetypes['mutualist'].logic, centers.leaf, q4);
+    animateEcosystem();
+}
+
+function animateEcosystem() {
+    if (!isRunning) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let counts = { bot: 0, bat: 0, bug: 0, leaf: 0 };
+    let isBarrierActive = barrierTimer > 0; if (isBarrierActive) barrierTimer--;
+
+    if (isBarrierActive) {
+        ctx.strokeStyle = 'var(--border-color)'; ctx.lineWidth = 4; ctx.beginPath();
+        ctx.moveTo(canvas.width/2, 0); ctx.lineTo(canvas.width/2, canvas.height);
+        ctx.moveTo(0, canvas.height/2); ctx.lineTo(canvas.width, canvas.height/2); ctx.stroke();
+        ctx.fillStyle = 'var(--text-muted)'; ctx.font = 'bold 14px monospace'; ctx.fillText(`ISOLATION PHASE: ${Math.ceil(barrierTimer/60)}s`, canvas.width/2, 20);
+    }
+
+    for (let i = 0; i < entities.length; i++) {
+        let e1 = entities[i]; counts[e1.type]++; e1.update(isBarrierActive); e1.draw();
+        for (let j = i + 1; j < entities.length; j++) {
+            let e2 = entities[j];
+            if ((e1.x - e2.x)**2 + (e1.y - e2.y)**2 < (e1.radius + e2.radius)**2 && e1.cooldown === 0 && e2.cooldown === 0) {
+                let tVx = e1.vx; let tVy = e1.vy; e1.vx = e2.vx; e1.vy = e2.vy; e2.vx = tVx; e2.vy = tVy;
+                e1.x += e1.vx*2; e1.y += e1.vy*2; 
+                
+                let p1H = []; let p2H = []; let s1 = 0; let s2 = 0;
+                for(let r=0; r<50; r++) {
+                    let m1, m2;
+                    try { m1 = e1.logic(p1H, p2H) || 'C'; } catch(e) { m1 = 'C'; }
+                    try { m2 = e2.logic(p2H, p1H) || 'C'; } catch(e) { m2 = 'C'; }
+                    let [y1, y2] = getStandardPayout(m1, m2); s1 += y1; s2 += y2; p1H.push(m1); p2H.push(m2);
+                }
+                e1.lifetimeScore += s1; e2.lifetimeScore += s2;
+
+                if (e1.type !== e2.type) {
+                    if (e1.lifetimeScore > e2.lifetimeScore) { e2.assignTraits(e1.type, e1.logic); e1.lifetimeScore = Math.floor(e1.lifetimeScore * 0.5); e2.lifetimeScore = e1.lifetimeScore; } 
+                    else if (e2.lifetimeScore > e1.lifetimeScore) { e1.assignTraits(e2.type, e2.logic); e2.lifetimeScore = Math.floor(e2.lifetimeScore * 0.5); e1.lifetimeScore = e2.lifetimeScore; }
+                }
+                e1.cooldown = 15; e2.cooldown = 15; 
+            }
+        }
+    }
+
+    document.getElementById('count-bot').innerText = counts.bot; document.getElementById('count-bat').innerText = counts.bat;
+    document.getElementById('count-bug').innerText = counts.bug; document.getElementById('count-leaf').innerText = counts.leaf;
+
+    let total = entities.length;
+    if (total > 0 && (counts.bot === total || counts.bat === total || counts.bug === total || counts.leaf === total)) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)'; ctx.fillRect(0, canvas.height/2 - 30, canvas.width, 60);
+        ctx.fillStyle = entities[0].color; ctx.font = 'bold 24px monospace'; ctx.fillText(`🏆 ${entities[0].name} DOMINATED THE ECOSYSTEM`, canvas.width/2, canvas.height/2);
+        isRunning = false; document.getElementById('pause-btn').disabled = true; return; 
+    }
+    animationId = requestAnimationFrame(animateEcosystem);
+}
+
+// ============================================================================
+// SECTION 4: GLOBAL TOURNAMENT (TAB 3)
+// ============================================================================
+
+const mockClassmates = [
+    { name: "Alice's Bot (Forgiving)", emoji: "👩‍💻", logic: (m, t) => { if (t.length < 2) return 'C'; if (t[t.length-1] === 'D' && t[t.length-2] === 'D') return 'D'; return 'C';}},
+    { name: "Bob's Bot (Suspicious)", emoji: "👨‍💻", logic: (m, t) => { if (t.length === 0) return 'D'; return t[t.length-1]; }},
+    { name: "Charlie's Bot (Random)", emoji: "🧑‍💻", logic: () => Math.random() > 0.5 ? 'C' : 'D' }
+];
+
+let uploadedRoster = [];
+function toggleUploadUI() { document.getElementById('upload-group').style.display = document.getElementById('roster-source').value === 'upload' ? 'flex' : 'none'; }
+function downloadTemplate() {
+    const template = [{ name: "Student 1", emoji: "👽", code: "if (theirHistory.length === 0) return 'C';\nreturn theirHistory[theirHistory.length - 1];" }];
+    const a = document.createElement('a'); a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(template, null, 4)); a.download = "roster_template.json"; a.click();
+}
+function handleFileUpload(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try { uploadedRoster = JSON.parse(e.target.result).map(s => ({ name: s.name, emoji: s.emoji, logic: new Function('myHistory', 'theirHistory', s.code) })); alert(`Loaded ${uploadedRoster.length} scripts.`); } 
+        catch(err) { alert("Error parsing JSON."); }
+    };
+    reader.readAsText(event.target.files[0]);
+}
+
+function runTournament() {
+    let participants = [];
+    try { participants.push({ name: "YOUR SCRIPT", emoji: "⭐", logic: new Function('myHistory', 'theirHistory', document.getElementById('student-code').value) }); } 
+    catch(e) { alert("Syntax error in Primary Script!"); return; }
+
+    if (document.getElementById('roster-source').value === 'default') {
+        participants.push({ name: "Env: Copycat", emoji: "🦇", logic: archetypes['copycat'].logic }); participants.push({ name: "Env: Parasite", emoji: "🦠", logic: archetypes['parasite'].logic });
+        participants.push({ name: "Env: Mutualist", emoji: "🌿", logic: archetypes['mutualist'].logic }); participants.push({ name: "Env: Grudger", emoji: "🌳", logic: archetypes['grudger'].logic });
+        mockClassmates.forEach(c => participants.push(c));
+    } else {
+        if (uploadedRoster.length === 0) { alert("Upload a roster first."); return; }
+        uploadedRoster.forEach(c => participants.push(c));
+    }
+
+    const rounds = parseInt(document.getElementById('tourney-rounds-slider').value); const N = participants.length;
+    let totalScores = Array(N).fill(0); let matrix = Array(N).fill(0).map(() => Array(N).fill(0));
+
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            let p1H = []; let p2H = []; let s1 = 0; 
+            for (let r = 0; r < rounds; r++) {
+                let m1, m2;
+                try { m1 = participants[i].logic(p1H, p2H); if(m1!=='C'&&m1!=='D') m1='C'; } catch(e){m1='C';}
+                try { m2 = participants[j].logic(p2H, p1H); if(m2!=='C'&&m2!=='D') m2='C'; } catch(e){m2='C';}
+                s1 += getStandardPayout(m1, m2)[0]; p1H.push(m1); p2H.push(m2);
+            }
+            matrix[i][j] = s1; totalScores[i] += s1;
+        }
+    }
+
+    let rankings = participants.map((p, index) => {
+        let firstMove = 'C';
+        try { firstMove = p.logic([],[]); if (firstMove !== 'C' && firstMove !== 'D') firstMove = 'C'; } catch(e){}
+        return {
+            name: p.emoji + ' ' + p.name, 
+            score: totalScores[index], 
+            alignText: (firstMove === 'C' ? 'POSITIVE' : 'NEGATIVE'),
+            alignClass: (firstMove === 'C' ? 'badge-pos' : 'badge-neg'),
+            idx: index 
+        };
+    }).sort((a,b)=>b.score-a.score);
+    
+    document.getElementById('leaderboard-body').innerHTML = rankings.map((r, i) => `<tr><td>${i+1}</td><td style="color:${r.name.includes('YOUR SCRIPT')?'var(--accent-green)':'inherit'};font-weight:${r.name.includes('YOUR SCRIPT')?'bold':'normal'}">${r.name}</td><td><span class="${r.alignClass}">${r.alignText}</span></td><td>${r.score}</td></tr>`).join('');
+    document.getElementById('matrix-head').innerHTML = `<tr><th>VS ➡️</th>${participants.map(p=>`<th>${p.emoji}</th>`).join('')}</tr>`;
+    document.getElementById('matrix-body').innerHTML = participants.map((p,i)=>`<tr><td style="font-weight:bold;color:${p.name.includes('YOUR SCRIPT')?'var(--accent-green)':'inherit'}">${p.emoji} ${p.name.substring(0,10)}..</td>${matrix[i].map((s,j)=>`<td style="text-align:center;background:${i===j?'#f1f5f9':'transparent'}">${s}</td>`).join('')}</tr>`).join('');
+    document.getElementById('tourney-status').innerText = "TOURNAMENT COMPLETE";
+}
+
+// ============================================================================
+// SECTION 5: REPORT GENERATION
+// ============================================================================
+
+function closeReport() { document.getElementById('report-modal').style.display = 'none'; }
+
+function generateReport(tabType) {
+    const reportContent = document.getElementById('report-preview-content');
+    const printRoot = document.getElementById('print-root');
+    let html = `<div class="print-report-container">`;
+
+    if (tabType === '1v1') {
+        const scriptCode = escapeHTML(document.getElementById('student-code').value);
+        const envName = document.getElementById('opponent-select').options[document.getElementById('opponent-select').selectedIndex].text;
+        const cycles = document.getElementById('rounds-slider').value;
+        const logTableHTML = document.getElementById('history-body').innerHTML;
+
+        html += `
+            <h2>TARGET SIMULATION REPORT</h2>
+            <h3>Primary Logic Script</h3>
+            <pre>${scriptCode}</pre>
+            <h3>Simulation Parameters</h3>
+            <p><b>Opponent Environment:</b> ${envName}<br><b>Iteration Cycles:</b> ${cycles}</p>
+            <h3>Cycle Data Log</h3>
+            ${logTableHTML ? `<table><thead><tr><th>Cycle</th><th>Primary Move</th><th>Env Move</th><th>Primary Yield</th><th>Env Yield</th></tr></thead><tbody>${logTableHTML}</tbody></table>` : `<p><i>No data. Run the simulation first.</i></p>`}
+        `;
+    } 
+    else if (tabType === 'survival') {
+        const bots = document.getElementById('count-bot').innerText;
+        const bats = document.getElementById('count-bat').innerText;
+        const bugs = document.getElementById('count-bug').innerText;
+        const leafs = document.getElementById('count-leaf').innerText;
+        
+        let winner = "Ecosystem in equilibrium";
+        let total = parseInt(bots) + parseInt(bats) + parseInt(bugs) + parseInt(leafs);
+        if (total > 0) {
+            if (parseInt(bots) === total) winner = "🤖 PRIMARY SCRIPT";
+            else if (parseInt(bats) === total) winner = "🦇 COPYCATS";
+            else if (parseInt(bugs) === total) winner = "🦠 PARASITES";
+            else if (parseInt(leafs) === total) winner = "🌿 MUTUALISTS";
+        }
+
+        html += `
+            <h2>ECOSYSTEM SURVIVAL REPORT</h2>
+            <h3>Initialization Parameters</h3>
+            <p>${ecosystemStartConditions}</p>
+            <h3>Final Population Census</h3>
+            <table>
+                <tr><th>Entity Type</th><th>Final Population</th></tr>
+                <tr><td>🤖 Primary Script</td><td>${bots}</td></tr>
+                <tr><td>🦇 Copycats</td><td>${bats}</td></tr>
+                <tr><td>🦠 Parasites</td><td>${bugs}</td></tr>
+                <tr><td>🌿 Mutualists</td><td>${leafs}</td></tr>
+            </table>
+            <h3>Conclusion</h3>
+            <p><b>Dominant Phenotype:</b> ${winner}</p>
+        `;
+    }
+    else if (tabType === 'tournament') {
+        const cycles = document.getElementById('tourney-rounds-slider').value;
+        const lbHTML = document.getElementById('leaderboard-table').innerHTML;
+        const mxHead = document.getElementById('matrix-head').innerHTML;
+        const mxBody = document.getElementById('matrix-body').innerHTML;
+
+        html += `
+            <h2>GLOBAL TOURNAMENT REPORT</h2>
+            <p><b>Matchup Iteration Cycles:</b> ${cycles}</p>
+            <h3>Final Leaderboard</h3>
+            <table>${lbHTML}</table>
+            <h3>Payoff Matrix (Row Yield vs Column Entity)</h3>
+            <table><thead>${mxHead}</thead><tbody>${mxBody}</tbody></table>
+        `;
+    }
+
+    html += `</div>`;
+    
+    reportContent.innerHTML = html;
+    printRoot.innerHTML = html;
+    document.getElementById('report-modal').style.display = 'flex';
+}
+
+// ============================================================================
+// SECTION 6: TEACHER ASSEMBLY ENGINE (TAB 4)
+// ============================================================================
+
+let teacherAssembly = [];
+
+function renderAssemblyTable() {
+    const tbody = document.getElementById('assembly-body');
+    document.getElementById('assembly-count').innerText = `${teacherAssembly.length} Entities`;
+    
+    if (teacherAssembly.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">Roster is empty. Add scripts above to begin.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = teacherAssembly.map((entity, index) => {
+        let snippet = escapeHTML(entity.code.substring(0, 45).replace(/\n/g, ' '));
+        if (entity.code.length > 45) snippet += '...';
+        return `
+            <tr>
+                <td style="font-weight: 600;">${entity.emoji} ${escapeHTML(entity.name)}</td>
+                <td style="font-family: monospace; font-size: 11px; color: var(--text-muted);">${snippet}</td>
+                <td><button class="danger" onclick="removeEntity(${index})">Remove</button></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function addEntityToAssembly() {
+    let name = document.getElementById('add-roster-name').value.trim();
+    let emoji = document.getElementById('add-roster-emoji').value;
+    let code = document.getElementById('add-roster-code').value.trim();
+
+    if (!name || !code) {
+        alert("Please provide both a Name and the Logic Script.");
+        return;
+    }
+    
+    // Test code syntax quickly
+    try {
+        new Function('myHistory', 'theirHistory', code);
+    } catch(e) {
+        if(!confirm("⚠️ Syntax Warning! This code might contain an error. Add it anyway?\n\nError: " + e.message)) {
+            return;
+        }
+    }
+
+    teacherAssembly.push({ name, emoji, code });
+    
+    // Reset form
+    document.getElementById('add-roster-name').value = '';
+    document.getElementById('add-roster-emoji').selectedIndex = 0;
+    document.getElementById('add-roster-code').value = '';
+
+    renderAssemblyTable();
+}
+
+function removeEntity(index) {
+    teacherAssembly.splice(index, 1);
+    renderAssemblyTable();
+}
+
+function importAssemblyJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedRoster = JSON.parse(e.target.result);
+            if (Array.isArray(importedRoster)) {
+                let addedCount = 0;
+                importedRoster.forEach(item => {
+                    // Make sure it has the required fields
+                    if (item.name && item.code) {
+                        teacherAssembly.push({
+                            name: item.name,
+                            emoji: item.emoji || "👽",
+                            code: item.code
+                        });
+                        addedCount++;
+                    }
+                });
+                renderAssemblyTable();
+                alert(`Successfully appended ${addedCount} entities to the roster!`);
+            } else {
+                alert("Invalid JSON format. Expected an array of entities.");
+            }
+        } catch (err) {
+            alert("Error parsing JSON file: " + err.message);
+        }
+        // Clear the input so the same file can be triggered again if needed
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+function exportAssemblyJSON() {
+    if (teacherAssembly.length === 0) {
+        alert("Cannot export an empty roster.");
+        return;
+    }
+    const dataStr = JSON.stringify(teacherAssembly, null, 4);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `class_roster_${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
+
