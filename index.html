@@ -1029,13 +1029,14 @@ var Engine = (function () {
     // Behavioural fingerprint of one side of an encounter.
     // mi = my intended moves, ya = their actual moves.
     function sideStats(mi, ya) {
-        var n = mi.length, s = { unprovoked: false, firstDefectRound: 0, retOpp: 0, retEv: 0, forOpp: 0, forEv: 0, coop: 0, n: n };
+        var n = mi.length, s = { unprovoked: false, firstDefectRound: 0, retOpp: 0, retEv: 0, cOpp: 0, cEv: 0, forOpp: 0, forEv: 0, coop: 0, n: n };
         var theyDefected = false;
         for (var r = 0; r < n; r++) {
             if (mi[r] === 'C') s.coop++;
             else if (!theyDefected && !s.unprovoked) { s.unprovoked = true; s.firstDefectRound = r + 1; }
             if (ya[r] === 'D') theyDefected = true;
             if (r + 1 < n && ya[r] === 'D') { s.retOpp++; if (mi[r + 1] === 'D') s.retEv++; }
+            if (r + 1 < n && ya[r] === 'C') { s.cOpp++; if (mi[r + 1] === 'D') s.cEv++; }
             if (r >= 1 && r + 1 < n && ya[r - 1] === 'D' && ya[r] === 'C') {
                 s.forOpp++;
                 if (mi[r + 1] === 'C' || (r + 2 < n && mi[r + 2] === 'C')) s.forEv++;
@@ -1046,7 +1047,7 @@ var Engine = (function () {
 
     function addStats(t, s) {
         t.unprovoked = t.unprovoked || s.unprovoked;
-        t.retOpp += s.retOpp; t.retEv += s.retEv; t.forOpp += s.forOpp; t.forEv += s.forEv;
+        t.retOpp += s.retOpp; t.retEv += s.retEv; t.cOpp += s.cOpp; t.cEv += s.cEv; t.forOpp += s.forOpp; t.forEv += s.forEv;
         t.coop += s.coop; t.n += s.n;
     }
 
@@ -1072,7 +1073,7 @@ var Engine = (function () {
         var sum = [], i2, j;
         for (i = 0; i < N; i++) { sum.push([]); for (j = 0; j < N; j++) sum[i].push(0); }
         var stats = [], errors = [];
-        for (i = 0; i < N; i++) { stats.push({ unprovoked: false, retOpp: 0, retEv: 0, forOpp: 0, forEv: 0, coop: 0, n: 0 }); errors.push(null); }
+        for (i = 0; i < N; i++) { stats.push({ unprovoked: false, retOpp: 0, retEv: 0, cOpp: 0, cEv: 0, forOpp: 0, forEv: 0, coop: 0, n: 0 }); errors.push(null); }
         var games = {}, lengths = [];
 
         function noteErr(idx, e) {
@@ -1127,7 +1128,8 @@ var Engine = (function () {
             var s = stats[i];
             traits.push({
                 nice: !s.unprovoked,
-                retaliation: s.retOpp ? s.retEv / s.retOpp : null,
+                // How much MORE it defects after a betrayal than after help. Always Defect scores 0: it isn't responding to anything.
+                retaliation: s.retOpp ? Math.max(0, s.retEv / s.retOpp - (s.cOpp ? s.cEv / s.cOpp : 0)) : null,
                 forgiveness: s.forOpp ? s.forEv / s.forOpp : null,
                 coopRate: s.n ? s.coop / s.n : 0
             });
@@ -1251,7 +1253,7 @@ return theirHistory[theirHistory.length - 1];`
         key: 'grim', name: 'Grim Trigger', role: 'Reactive Symbiont (Grudger)', emoji: '🌳', traits: ['Nice', 'Retaliatory', 'Unforgiving'],
         origin: "Economist James Friedman studied this \"permanent retaliation\" idea in 1971; a version was entered in Axelrod's first tournament.",
         behavior: 'Cooperates until you defect even once. Then it defects forever.',
-        bio: 'Soybean plants cut the oxygen supply to root nodules whose bacteria stop fixing nitrogen, starving the cheaters (Kiers et al. 2003). Yucca plants abort flowers where moths laid too many eggs.',
+        bio: 'Soybean plants punish root nodules whose bacteria stop fixing nitrogen, most likely by restricting their oxygen, so the cheaters reproduce less (Kiers et al. 2003). Yucca plants abort flowers where moths laid too many eggs.',
         politics: 'Blood feuds, trade embargoes and "zero tolerance" rules work like this. Strong deterrent — but one mistake or misunderstanding ends cooperation for good.',
         code: `// Grim Trigger (Grudger): cooperate until betrayed once, then never again.
 if (theirHistory.includes('D')) return 'D';
@@ -1278,7 +1280,7 @@ return 'C';`
     {
         key: 'tf2t', name: 'Tit for Two Tats', role: 'Tolerant Symbiont', emoji: '🐘', traits: ['Nice', 'Very forgiving'],
         origin: "Axelrod found it would have won the first tournament if anyone had entered it. Biologist John Maynard Smith entered it in round two, where it did not win — the field had changed.",
-        behavior: 'Cooperates unless you defect twice in a row. Then it defects once.',
+        behavior: 'Cooperates unless you defected in BOTH of the last two rounds. One betrayal is always forgiven.',
         bio: 'Long-term partners often tolerate occasional imbalance rather than responding to every lapse — useful when "defections" are often just bad luck.',
         politics: "Giving the benefit of the doubt: diplomats rarely treat a single incident as an act of war. But a patient partner can be exploited by someone who alternates.",
         code: `// Tit for Two Tats: only retaliate after TWO defections in a row.
@@ -1309,7 +1311,7 @@ if (round === 1) return 'D';
 return theirHistory[theirHistory.length - 1];`
     },
     {
-        key: 'pavlov', name: 'Pavlov', role: 'Adaptive Learner (Win-Stay, Lose-Shift)', emoji: '🐕', traits: ['Nice', 'Retaliatory', 'Self-correcting'],
+        key: 'pavlov', name: 'Pavlov', role: 'Adaptive Learner (Win-Stay, Lose-Shift)', emoji: '🐕', traits: ['Nice', 'Sometimes retaliates', 'Self-correcting'],
         origin: 'Nowak and Sigmund (1993) showed this simple learning rule can outcompete Tit for Tat in evolution when mistakes happen.',
         behavior: 'If the last round went well for it (you cooperated), it repeats its move. If it went badly (you defected), it switches.',
         bio: 'Basic reinforcement learning: repeat what was rewarded, change what was punished. No need to remember who did what.',
@@ -2132,10 +2134,13 @@ async function runTournament() {
 
 function rankOrder(T) { return T.entries.map((e, i) => i).sort((a, b) => T.res.perRound[b] - T.res.perRound[a]); }
 
+// A strategy counts as forgiving if it returns to cooperation within two rounds at least a third of the time.
+const FORGIVE_CUTOFF = 0.33;
+
 function traitBadges(t, err) {
     let h = t.nice ? '<span class="badge badge-pos" title="Never the first to defect">NICE</span>' : '<span class="badge badge-neg" title="Sometimes defects first">NASTY</span>';
-    if (t.retaliation !== null && t.retaliation >= 0.5) h += '<span class="badge badge-blue" title="Usually answers a defection with a defection">RETALIATORY</span>';
-    if (t.forgiveness !== null && t.forgiveness >= 0.5) h += '<span class="badge badge-purple" title="Returns to cooperation after the partner does">FORGIVING</span>';
+    if (t.retaliation !== null && t.retaliation >= 0.5) h += '<span class="badge badge-blue" title="Defects more after being cheated than after being helped">RETALIATORY</span>';
+    if (t.forgiveness !== null && t.forgiveness >= FORGIVE_CUTOFF) h += '<span class="badge badge-purple" title="Returns to cooperation after the partner does">FORGIVING</span>';
     if (err) h += `<span class="badge badge-amber" title="${esc(err.first.message)}">⚠ ERRORS</span>`;
     return h;
 }
@@ -2179,7 +2184,7 @@ function replayGame(i, j) {
 function tourneyNotes(T) {
     const R = T.res, order = rankOrder(T), N = T.entries.length, notes = [];
     const w = order[0], we = T.entries[w], wt = R.traits[w];
-    notes.push(`🏆 <b>${esc(we.emoji)} ${esc(we.name)}</b> won with ${fmt(R.perRound[w])} points per round. Personality: ${wt.nice ? 'nice' : 'nasty'}${wt.retaliation !== null && wt.retaliation >= 0.5 ? ', retaliatory' : ''}${wt.forgiveness !== null && wt.forgiveness >= 0.5 ? ', forgiving' : ''}.`);
+    notes.push(`🏆 <b>${esc(we.emoji)} ${esc(we.name)}</b> won with ${fmt(R.perRound[w])} points per round. Personality: ${wt.nice ? 'nice' : 'nasty'}${wt.retaliation !== null && wt.retaliation >= 0.5 ? ', retaliatory' : ''}${wt.forgiveness !== null && wt.forgiveness >= FORGIVE_CUTOFF ? ', forgiving' : ''}.`);
 
     const niceRanks = [], nastyRanks = [];
     order.forEach((i, r) => (R.traits[i].nice ? niceRanks : nastyRanks).push(r + 1));
@@ -2206,7 +2211,7 @@ function tourneyNotes(T) {
         const checks = [
             t.nice ? '✅ nice' : '❌ not nice (it defects first)',
             t.retaliation === null ? '➖ never provoked' : (t.retaliation >= 0.5 ? '✅ retaliatory' : '❌ rarely retaliates'),
-            t.forgiveness === null ? '➖ never tested' : (t.forgiveness >= 0.5 ? '✅ forgiving' : '❌ holds grudges')
+            t.forgiveness === null ? '➖ never tested' : (t.forgiveness >= FORGIVE_CUTOFF ? '✅ forgiving' : '❌ holds grudges')
         ];
         notes.push(`🧬 <b>Your ${esc(e.emoji)} ${esc(e.name)}</b> placed <b>#${r} of ${N}</b> (${fmt(R.perRound[i])}/round, cooperated ${pct(t.coopRate)} of the time). Axelrod checklist: ${checks.join(' · ')}.`);
         if (R.errors[i]) notes.push(`⚠️ ${esc(e.name)} crashed ${R.errors[i].count} times: <span class="mono">${esc(R.errors[i].first.message)}</span>`);
@@ -2714,7 +2719,7 @@ function renderGuide() {
         <div class="case-grid">
             <div class="case"><span class="em">🦇</span><b>Vampire bats</b>A bat that fails to feed for a few nights can starve. Roostmates regurgitate blood for it, and bats tend to give to those who have given to them. <div class="src">Wilkinson 1984, Nature; Carter &amp; Wilkinson 2013. ↔ Tit for Tat</div></div>
             <div class="case"><span class="em">🐟</span><b>Cleaner wrasse</b>Cleaners eat parasites off "client" fish but would rather bite their nutritious mucus. Clients chase cheaters or leave, and cleaners behave better when other clients are watching. <div class="src">Bshary &amp; Grutter 2006, Nature. ↔ Joss, reputation</div></div>
-            <div class="case"><span class="em">🌱</span><b>Soybeans &amp; rhizobia</b>Bacteria in root nodules fix nitrogen in exchange for sugar. When nodules stop fixing nitrogen, the plant cuts their oxygen supply and the cheaters grow less. <div class="src">Kiers et al. 2003, Nature. ↔ retaliation / sanctions</div></div>
+            <div class="case"><span class="em">🌱</span><b>Soybeans &amp; rhizobia</b>Bacteria in root nodules fix nitrogen in exchange for sugar. When nodules stop fixing nitrogen, the plant appears to restrict their oxygen, and the cheating bacteria reproduce about half as much. <div class="src">Kiers et al. 2003, Nature. ↔ retaliation / sanctions</div></div>
             <div class="case"><span class="em">🍄</span><b>Fungal markets</b>Plants trade sugar to mycorrhizal fungi for phosphorus. Both partners send more resources to the partners that give more in return. <div class="src">Kiers et al. 2011, Science. ↔ reciprocal reward</div></div>
             <div class="case"><span class="em">🦋</span><b>Yucca &amp; yucca moth</b>The moth pollinates the yucca and lays eggs in its flowers; its larvae eat some seeds. Yuccas abort flowers with too many eggs, keeping the moth from becoming a parasite. <div class="src">Pellmyr &amp; Huth 1994, Nature. ↔ Grim Trigger / Gradual</div></div>
             <div class="case"><span class="em">🐦</span><b>Cuckoos</b>Brood parasites lay eggs in other birds' nests. Hosts evolve to spot and reject foreign eggs, and cuckoos evolve better-disguised eggs — an evolutionary arms race. <div class="src">↔ Always Defect vs. retaliatory hosts</div></div>
@@ -3163,6 +3168,7 @@ function mountNodules(el) {
     const renderQuiz = () => {
         if (played.some(p => !p)) return;
         const quiz = $('c2-quiz');
+        const kept = names.map((n, i) => ($('c2-guess-' + i) || {}).value || '');
         quiz.classList.remove('hidden');
         quiz.innerHTML = `<div class="card soft"><h3>🔬 IDENTIFY EACH STRAIN</h3>
             ${names.map((n, i) => `<div class="row" style="margin-bottom: 10px;"><b style="width: 90px;">Nodule ${n}</b>
@@ -3170,6 +3176,7 @@ function mountNodules(el) {
                 <span class="muted" style="font-size: 12px;">(after you: ${played[i].my.map(m => m === 'C' ? '🍬' : '✂️').join('')})</span>
                 <select id="c2-guess-${i}" style="margin-left: auto;"><option value="">Which strain is it?</option>${Object.entries(STRAINS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></div>`).join('')}
             <div class="row"><button onclick="expCheckNodules()">✅ Check my answers</button><span id="c2-feedback"></span></div></div>`;
+        kept.forEach((v, i) => { $('c2-guess-' + i).value = v; });
     };
     window.expNodule = i => {
         renderTabs(i);
@@ -3210,7 +3217,7 @@ function genomeTraits(G) {
     return {
         nice: G.first === 'C' && G.afterC === 'C',
         retaliatory: G.afterD !== 'C' || G.grudge,
-        forgiving: G.afterC === 'C' && G.afterD !== 'D' && !G.grudge,
+        forgiving: G.afterC === 'C' && !G.grudge,   // goes back to cooperating once the partner does
         holdsGrudge: G.grudge
     };
 }
@@ -3363,7 +3370,7 @@ function renderExpTourney() {
                     The winner was <b>${esc(T.entries[winner].emoji)} ${esc(T.entries[winner].name)}</b>, a <b>${winNice ? 'nice' : 'nasty'}</b> strategy. ${top5Nice} of the top 5 never defect first.
                 </div>
                 <div class="result-pill" style="background: #dcfce7; color: #166534;">${esc(T.entries[myIdx].emoji)} Your organism placed #${myRank} of ${T.entries.length}</div>
-                <p style="font-size: 15px;">Look at <b>🦠 Always Defect</b>: it finished <b>#${order.indexOf(alld) + 1}</b>, even though it won ${R.wins[alld]} of its ${T.entries.length - 1} head-to-head matchups. It beats whoever it meets, but nobody ever cooperates with it, so it never earns much.</p>
+                <p style="font-size: 15px;">Look at <b>🦠 Always Defect</b>: it finished <b>#${order.indexOf(alld) + 1}</b>, even though it won ${R.wins[alld]} of its ${T.entries.length - 1} head-to-head matchups. It can never be outscored in a matchup, but almost nobody keeps cooperating with it, so it never earns much.</p>
             </div>
         </div>`;
     exp.summary.tourney = `Predicted a ${exp.data.predict4} winner; the winner was ${T.entries[winner].name} (${winNice ? 'nice' : 'nasty'}). My organism placed #${myRank} of ${T.entries.length}.`;
@@ -3488,7 +3495,7 @@ window.expSendCard = btn => {
 // ---------- Chapter list ----------
 const CHAPTERS = [
     {
-        id: 'roost', day: 1, icon: '🦇', short: 'The Roost', place: 'A cave in Costa Rica', title: 'The Roost',
+        id: 'roost', day: 1, icon: '🦇', short: 'The Roost', place: 'A roost in Costa Rica', title: 'The Roost',
         story: `You are a <b>vampire bat</b>. Every night you fly out to find blood. Some nights you come home empty, and a bat that misses two or three nights in a row can starve. Back at the roost you can share some of your meal with a hungry roostmate… or keep it all.
             <div class="story-quote">Sharing costs you something tonight. Keeping is always better <i>for tonight</i>. So why would any bat share?</div>`,
         task: 'Play through the season as the bat. Choose <b>Share</b> or <b>Keep</b> each night. Nobody tells you when the season ends.',
@@ -3498,15 +3505,15 @@ const CHAPTERS = [
     },
     {
         id: 'nodules', day: 1, icon: '🌱', short: 'The Nodules', place: 'A soybean field', title: 'Cheaters in the Roots',
-        story: `Now you are a <b>soybean plant</b>. Bacteria called <i>rhizobia</i> live inside little bumps on your roots called <b>nodules</b>. Honest bacteria pull nitrogen out of the air for you (you can't do this yourself). You pay them in sugar and oxygen. But some strains <b>freeload</b>: they take your sugar and give nothing back.`,
+        story: `Now you are a <b>soybean plant</b>. Bacteria called <i>rhizobia</i> live inside little bumps on your roots called <b>nodules</b>. Honest bacteria pull nitrogen out of the air for you (you can't do this yourself). You pay them in sugar, and you control how much oxygen they get. But some strains <b>freeload</b>: they take your sugar and give nothing back.`,
         task: 'Three nodules hold three different strains. Spend 6 days with each one, choosing <b>Feed</b> or <b>Cut off</b>. Then figure out which strain is which. <i>Hint: sometimes you have to test a partner to learn what it is.</i>',
-        discovery: `Real soybeans do this! Experiments by Toby Kiers and colleagues (2003) showed that when nodule bacteria stop fixing nitrogen, the plant cuts the nodule's oxygen supply and the cheaters grow less. This is a <b>sanction</b>: retaliation against a freeloader.<br><br>Without the ability to punish cheaters, freeloading bacteria would spread, because they get all the sugar without paying the cost of fixing nitrogen. Being able to <b>remember</b> and <b>respond</b> is what keeps the mutualism honest.`,
+        discovery: `Real soybeans do this! Experiments by Toby Kiers and colleagues (2003) showed that when nodule bacteria stop fixing nitrogen, the cheating bacteria reproduce about half as much. The plant appears to restrict the nodule's oxygen supply. This is a <b>sanction</b>: retaliation against a freeloader. <i>(The three strains in this chapter were invented for the game; the plant's sanctions are real.)</i><br><br>Without the ability to punish cheaters, freeloading bacteria would spread, because they get all the sugar without paying the cost of fixing nitrogen. Being able to <b>remember</b> and <b>respond</b> is what keeps the mutualism honest.`,
         question: 'How did you figure out which nodule was the Mirror? What would happen to a soybean plant that never cut anybody off?',
         mount: mountNodules
     },
     {
         id: 'genome', day: 1, icon: '🧬', short: 'Design an Organism', place: 'The lab', title: 'Design an Organism',
-        story: `Bats and soybeans don't think through each choice. Evolution has built the behavior into their <b>genes</b>. Now you get to play evolution: design the genes for a brand-new organism. It will be released into a world full of other strategies, and it will have to survive without you.`,
+        story: `Bats and soybeans don't sit down and plan each choice. Over millions of years, evolution has shaped their behavior through their <b>genes</b>. Now you get to play evolution: design the genes for a brand-new organism. It will be released into a world full of other strategies, and it will have to survive without you.`,
         task: 'Set the four genes so your organism <b>passes both survival tests</b>, give it a name, then press <b>Lock in</b>.',
         discovery: () => {
             const t = genomeTraits(genes());
@@ -3527,7 +3534,7 @@ const CHAPTERS = [
         id: 'generations', day: 2, icon: '🐣', short: 'Generations', place: 'Deep time', title: 'Survival of the… Nicest?',
         story: `Axelrod's next question: <i>what if points were babies?</i> In evolution, organisms that collect more resources leave more offspring. So let each strategy's score decide how many copies of it are born in the next generation. The catch: as the population changes, <b>who you meet changes too</b>.`,
         task: 'Predict which strategy will be most common after 300 generations, then watch evolution run.',
-        discovery: `Exploiters grow at first by feeding on easy victims like Always Cooperate. But as the victims die out, the exploiters only meet each other and strategies that strike back, so they collapse. A parasite's success depends on its <b>hosts</b>. Brood parasites like cuckoos need host birds to raise their chicks, and a disease that kills its hosts too fast can burn itself out.<br><br>The strategies that last are the ones that do well <i>with their own kind</i>.`,
+        discovery: `In Axelrod's version (and usually here too), exploiters grow at first by feeding on easy victims like Always Cooperate. But as the victims die out, the exploiters only meet each other and strategies that strike back, so they collapse. A parasite's success depends on its <b>hosts</b>. Brood parasites like cuckoos need host birds to raise their chicks, and a disease that kills its hosts too fast can burn itself out.<br><br>The strategies that last are the ones that do well <i>with their own kind</i>.`,
         question: 'Which strategy grew and then crashed (or went extinct first)? Explain why, using the words "host" and "parasite".',
         mount: mountGenerations
     },
