@@ -298,6 +298,9 @@
         .exp-connect { background: #f5f3ff; border: 2px solid #c4b5fd; border-radius: 12px; padding: 14px 18px; }
         .exp-connect > b:first-child { color: #6d28d9; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 6px; }
         .exp-connect label { font-weight: 400 !important; }
+        .video-frame { position: relative; padding-top: 56.25%; border-radius: 10px; overflow: hidden; background: #0f172a; }
+        .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .video-frame.blocked { padding: 34px 20px; color: #e2e8f0; text-align: center; font-size: 15px; }
         .exp-journal { margin-top: 16px; }
         .exp-journal label { font-weight: 700; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-journal textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; }
@@ -787,7 +790,7 @@
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>📋 SUGGESTED LESSON PLAN (two ~50-minute periods)</h3>
             <div class="grid" style="gap: 16px; font-size: 14px;">
-                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows the first 2:10 of a Veritasium video on the Prisoner's Dilemma, then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip is on Facebook, which many school networks block for students. If it doesn't load, play 0:00–2:10 on the projector before students start.</div>
+                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows the first 2:10 of a Veritasium video on the Prisoner's Dilemma, then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
@@ -3152,19 +3155,109 @@ function mountHandPlay(el, cfg) {
 
 
 // ---------- Briefing: the video clip and the game in 60 seconds ----------
-// The clip is the opening of a 13:40 Veritasium video on the Prisoner's Dilemma, chosen by the teacher.
-// Students watch 0:00–2:10: the puzzle of cooperation, up to "what is the best strategy?"
-// provider 'facebook': embedded with Facebook's video plugin. It can't stop by itself, so students are told when to stop.
-// provider 'youtube': set id instead of url; start/end are then enforced by the player.
-const INTRO_VIDEO = { provider: 'facebook', url: 'https://www.facebook.com/share/v/1YyirBGsus/', start: 0, end: 130 };
-function videoTime(sec) { return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+// The clip is the opening of Veritasium's Prisoner's Dilemma video, cut to the sections the teacher chose:
+// the puzzle of cooperation, up to "what is the best strategy?"
+//   provider 'youtube-segments': plays each [start, end] section (in seconds) of the YouTube video in order,
+//       skipping everything in between, then stops. The video is streamed from YouTube, not copied.
+//   provider 'youtube': one section, using start/end.   provider 'facebook': url; can't stop by itself.
+// backupUrl is offered as a second link if the main video is blocked.
+const INTRO_VIDEO = {
+    provider: 'youtube-segments', id: 'mScpHTIi-kM',
+    segments: [[0, 130]],   // ← replace with the teacher's sections, e.g. [[0, 45], [312, 380], [95, 140]]
+    backupUrl: 'https://www.facebook.com/share/v/1YyirBGsus/'
+};
+function videoTime(sec) { sec = Math.round(sec); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+
+function loadYouTubeApi() {
+    if (window.YT && window.YT.Player) return Promise.resolve();
+    if (window._ytApiPromise) return window._ytApiPromise;
+    window._ytApiPromise = new Promise((resolve, reject) => {
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => { if (prev) prev(); resolve(); };
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        tag.onerror = () => reject(new Error('blocked'));
+        document.head.appendChild(tag);
+        setTimeout(() => reject(new Error('timeout')), 12000);
+    }).catch(err => { window._ytApiPromise = null; throw err; });
+    return window._ytApiPromise;
+}
+
+// Plays the chosen sections of a YouTube video back to back, as if it were one edited clip.
+function mountSegmentPlayer(frame, statusEl, v, onBlocked) {
+    const segs = v.segments, total = segs.reduce((t, [a, b]) => t + (b - a), 0);
+    const target = document.createElement('div');
+    frame.appendChild(target);
+    let player = null, timer = null, finished = false, cur = 0;   // cur = the section playing now
+    const setStatus = () => {
+        statusEl.innerHTML = finished ? '✅ <b>Clip finished.</b> Press play to watch it again.'
+            : segs.length > 1 ? `Part ${cur + 1} of ${segs.length} · total ${videoTime(total)}` : `Total ${videoTime(total)}`;
+    };
+    const finish = () => { finished = true; player.pauseVideo(); clearInterval(timer); timer = null; setStatus(); };
+    const tick = () => {
+        if (!frame.isConnected) { clearInterval(timer); try { player.destroy(); } catch (e) { /* gone */ } return; }
+        if (!player || !player.getCurrentTime) return;
+        const t = player.getCurrentTime(), [a, b] = segs[cur];
+        if (t >= a - 0.75 && t < b) { setStatus(); return; }
+        // The student scrubbed into another chosen section: follow them.
+        const inside = segs.findIndex(([x, y]) => t >= x && t < y);
+        if (inside >= 0) { cur = inside; setStatus(); return; }
+        if (t >= b) {
+            // This section is over: go to the next one in the list (sections can be out of order).
+            if (cur + 1 < segs.length) { cur++; player.seekTo(segs[cur][0], true); setStatus(); } else finish();
+        } else {
+            player.seekTo(a, true);   // scrubbed into a skipped part before this section
+        }
+    };
+    setStatus();
+    loadYouTubeApi().then(() => {
+        player = new YT.Player(target, {
+            videoId: v.id, host: 'https://www.youtube-nocookie.com',
+            playerVars: { start: Math.floor(segs[0][0]), rel: 0, modestbranding: 1, playsinline: 1 },
+            events: {
+                onStateChange: e => {
+                    if (e.data === YT.PlayerState.PLAYING) {
+                        if (finished) { finished = false; cur = 0; player.seekTo(segs[0][0], true); setStatus(); }
+                        if (!timer) timer = setInterval(tick, 200);
+                    }
+                },
+                onError: () => onBlocked()
+            }
+        });
+    }).catch(() => onBlocked());
+}
 
 function mountBriefing(el) {
-    const P = state.payoff, v = INTRO_VIDEO;
-    const yt = v.provider === 'youtube';
-    const src = yt ? `https://www.youtube-nocookie.com/embed/${v.id}?start=${v.start}&end=${v.end}&rel=0&modestbranding=1`
-                   : `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.url)}&show_text=false&width=734&t=${v.start}`;
-    const openUrl = yt ? `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s` : v.url;
+    const v = INTRO_VIDEO;
+    const fb = v.provider === 'facebook', segMode = v.provider === 'youtube-segments';
+    const openUrl = fb ? v.url : `https://www.youtube.com/watch?v=${v.id}&t=${segMode ? v.segments[0][0] : v.start}s`;
+    const end = segMode ? null : v.end;
+    el.innerHTML = `
+        <div class="card" style="padding: 14px;">
+            <div class="video-frame" id="brief-frame">
+                ${segMode ? '' : `<iframe src="${fb ? `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.url)}&show_text=false&width=734&t=${v.start}` : `https://www.youtube-nocookie.com/embed/${v.id}?start=${v.start}&end=${v.end}&rel=0&modestbranding=1`}" title="Veritasium: the Prisoner's Dilemma" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen loading="lazy"></iframe>`}
+            </div>
+            <div class="row" style="margin-top: 10px; gap: 12px;">
+                <div style="flex: 1; min-width: 220px; font-size: 15px;">🎬 <b>Veritasium.</b> ${segMode ? `This is a short edited clip. It stops by itself. <span class="muted" id="brief-status"></span>`
+                    : fb ? `Watch from <b>${videoTime(v.start)}</b> and <b>stop at ${videoTime(end)}</b>, when the video asks what the best strategy is. Don't watch further: the rest gives away answers you'll discover yourself!`
+                    : `Watch from <b>${videoTime(v.start)}</b> to <b>${videoTime(end)}</b> (it stops by itself).`}</div>
+                ${segMode ? '' : `<a href="${openUrl}" target="_blank" rel="noopener" style="text-decoration: none;"><button class="secondary small" tabindex="-1">▶ Video not showing? Open it ↗</button></a>`}
+            </div>
+        </div>
+        <div id="brief-quiz"></div>`;
+    if (segMode) {
+        mountSegmentPlayer($('brief-frame'), $('brief-status'), v, () => {
+            const f = $('brief-frame');
+            if (!f) return;
+            f.classList.add('blocked');
+            f.innerHTML = `<div><div style="font-size: 34px;">🚫🎬</div><b>The video can't load on this network.</b><br>Your teacher will show it to the class, or try the backup link.${v.backupUrl ? `<div style="margin-top: 10px;"><a href="${v.backupUrl}" target="_blank" rel="noopener" style="color: #bfdbfe;">Open the backup video ↗</a> <span style="opacity: .8;">(watch until it asks "what is the best strategy?")</span></div>` : ''}</div>`;
+        });
+    }
+    mountBriefQuiz($('brief-quiz'));
+}
+
+function mountBriefQuiz(el) {
+    const P = state.payoff;
     const answers = exp.data.brief || (exp.data.brief = {});
     const Q = [
         { id: 'q1', text: 'Your partner <b>cooperates</b>. Which choice earns <i>you</i> more?', opts: [['C', `🤝 Cooperate (you get ${P.R})`], ['D', `🗡️ Defect (you get ${P.T})`]], right: P.T > P.R ? 'D' : 'C' },
@@ -3172,15 +3265,6 @@ function mountBriefing(el) {
         { id: 'q3', text: 'Suppose you <i>and</i> your partner both follow that logic. Compared with both cooperating, you each end up…', opts: [['better', 'better off'], ['worse', 'worse off'], ['same', 'the same']], right: P.P < P.R ? 'worse' : 'better' }
     ];
     el.innerHTML = `
-        <div class="card" style="padding: 14px;">
-            <div style="position: relative; padding-top: 56.25%; border-radius: 10px; overflow: hidden; background: #0f172a;">
-                <iframe src="${src}" title="Veritasium: the Prisoner's Dilemma" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen loading="lazy"></iframe>
-            </div>
-            <div class="row" style="margin-top: 10px; gap: 12px;">
-                <div style="flex: 1; min-width: 220px; font-size: 15px;">🎬 <b>Veritasium.</b> Watch from <b>${videoTime(v.start)}</b> ${yt ? `to <b>${videoTime(v.end)}</b> (it stops by itself).` : `and <b>stop at ${videoTime(v.end)}</b>, when the video asks what the best strategy is. Don't watch further: the rest gives away answers you'll discover yourself!`}</div>
-                <a class="row" href="${openUrl}" target="_blank" rel="noopener" style="text-decoration: none;"><button class="secondary small" tabindex="-1">▶ Video not showing? Open it ↗</button></a>
-            </div>
-        </div>
         <div class="card soft" style="margin-top: 16px;">
             <h3>🎲 THE GAME IN 60 SECONDS</h3>
             <p style="font-size: 15px; margin-top: 0;">Two organisms meet. Each secretly chooses to <b>cooperate</b> 🤝 or <b>defect</b> 🗡️. Then both choices are revealed, and each organism collects resources (points):</p>
@@ -3196,7 +3280,7 @@ function mountBriefing(el) {
         </div>`;
     window.expBrief = (id, val) => {
         exp.data.brief[id] = val; saveExp();
-        mountBriefing(el);
+        mountBriefQuiz(el);
         if (Q.every(q => exp.data.brief[q.id] === q.right)) {
             exp.summary.briefing = 'Worked out the payoff logic of the game.';
             expComplete();
