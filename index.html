@@ -53,6 +53,7 @@
         .tab-container { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; gap: 6px 18px; flex-wrap: wrap; }
         .tab { padding: 10px 6px 14px 6px; cursor: pointer; background: transparent; font-weight: 600; color: var(--text-muted); font-size: 13px; letter-spacing: 0.5px; border-bottom: 3px solid transparent; transition: all 0.2s ease; margin-bottom: -2px; user-select: none; }
         .tab:hover { color: var(--text-main); }
+        .tab:focus-visible, .exp-step:focus-visible, button:focus-visible, .pick:focus-visible { outline: 3px solid var(--accent-blue); outline-offset: 2px; }
         .tab.active { color: var(--tab-color, var(--accent-blue)); border-bottom-color: var(--tab-color, var(--accent-blue)); }
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
@@ -409,21 +410,22 @@
 
     <!-- =================== TABS =================== -->
     <div class="tab-container" id="tabs">
-        <div class="tab active" data-tab="tab-expedition" style="--tab-color: var(--accent-blue)">🧭 EXPEDITION</div>
+        <div class="tab active" role="tab" tabindex="0" data-tab="tab-expedition" style="--tab-color: var(--accent-blue)">🧭 EXPEDITION</div>
         <div class="tab-sep">│ OPEN LAB:</div>
-        <div class="tab" data-tab="tab-tournament" style="--tab-color: var(--accent-amber)">🏆 TOURNAMENT</div>
-        <div class="tab" data-tab="tab-petri" style="--tab-color: var(--accent-purple)">🧫 SURVIVAL CRUCIBLE</div>
-        <div class="tab" data-tab="tab-missions" style="--tab-color: #10b981">🎯 MISSIONS <span id="mission-count" class="badge badge-pos">0/0</span></div>
-        <div class="tab" data-tab="tab-lab" style="--tab-color: var(--accent-blue)">🧬 STRATEGY LAB</div>
-        <div class="tab" data-tab="tab-1v1" style="--tab-color: var(--accent-green)">⚔️ HEAD-TO-HEAD</div>
-        <div class="tab" data-tab="tab-guide" style="--tab-color: var(--accent-pink)">📚 FIELD GUIDE</div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-tournament" style="--tab-color: var(--accent-amber)">🏆 TOURNAMENT</div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-petri" style="--tab-color: var(--accent-purple)">🧫 SURVIVAL CRUCIBLE</div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-missions" style="--tab-color: #10b981">🎯 MISSIONS <span id="mission-count" class="badge badge-pos">0/0</span></div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-lab" style="--tab-color: var(--accent-blue)">🧬 STRATEGY LAB</div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-1v1" style="--tab-color: var(--accent-green)">⚔️ HEAD-TO-HEAD</div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-guide" style="--tab-color: var(--accent-pink)">📚 FIELD GUIDE</div>
         <div style="flex-grow: 1;"></div>
-        <div class="tab" data-tab="tab-class" style="--tab-color: var(--accent-teal)">🛠️ TEACHER</div>
+        <div class="tab" role="tab" tabindex="0" data-tab="tab-class" style="--tab-color: var(--accent-teal)">🛠️ TEACHER</div>
     </div>
 
     <!-- =================== TAB: EXPEDITION =================== -->
     <div id="tab-expedition" class="tab-content active">
-        <div class="exp-intro"><span style="font-size: 28px;">🧭</span><div><b>How does cooperation evolve in a selfish world?</b> In 1980, Robert Axelrod ran a famous contest to find out. In this expedition you'll play as real organisms, design your own, and watch evolution decide who survives.</div></div>
+        <div class="exp-intro"><span style="font-size: 28px;">🧭</span><div style="flex: 1;"><b>How does cooperation evolve in a selfish world?</b> In 1980, Robert Axelrod ran a famous contest to find out. In this expedition you'll play as real organisms, design your own, and watch evolution decide who survives.</div>
+            <label class="tech-label" style="flex-direction: column; align-items: flex-start; gap: 4px;">Your name (for your journal)<input type="text" id="exp-name" placeholder="First and last name" style="width: 190px;" oninput="$('student-name').value = this.value; Store.set('studentName', this.value);"></label></div>
         <div class="exp-rail" id="exp-rail"></div>
         <div id="exp-body"></div>
     </div>
@@ -790,6 +792,28 @@
             </div>
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
         </div>
+        <div class="card soft" style="margin-bottom: 20px;">
+            <h3>🎯 STANDARDS ALIGNMENT</h3>
+            <ul style="font-size: 14px; margin: 0; padding-left: 20px;">
+                <li><b>NGSS HS-LS2-8:</b> Evaluate evidence for the role of group behavior on individual and species' chances to survive and reproduce. (Chapters 1, 4, 5, 6)</li>
+                <li><b>NGSS HS-LS4-4:</b> Construct an explanation based on evidence for how natural selection leads to adaptation of populations. (Chapters 2, 5, 6)</li>
+                <li><b>Science practices:</b> forming hypotheses, planning an investigation and bracketing a variable (Chapter 6), arguing from evidence (every 🤔 Think prompt).</li>
+            </ul>
+        </div>
+        <details class="card soft" style="margin-bottom: 20px;">
+            <summary style="cursor: pointer; font-weight: 700; font-size: 15px;">📝 ANSWER GUIDE: what to look for in each journal entry</summary>
+            <p class="muted" style="font-size: 13px;">The prompts are open-ended, so these are "look-fors," not single right answers. Strong answers use evidence from the student's own results.</p>
+            <table style="font-size: 13px;">
+                <tr><th style="width: 18%;">Chapter</th><th>🤔 Think: look for…</th><th>🔗 Connect: look for…</th></tr>
+                <tr><td>🦇 Roost</td><td>A rule close to "share on the first night, then do what I did last night" (Tit for Tat), backed by a specific night: the night after they kept their blood, the roostmate kept its blood too. Bonus: noticing they can't be sure if they never kept.</td><td><b>Kin selection:</b> relatives share genes, so helping a relative helps copies of your own genes, even without repayment. Contrast with the roostmate's reason: <b>reciprocity</b> (expected future payback).</td></tr>
+                <tr><td>🌱 Nodules</td><td>The plant senses each nodule's <i>output</i> (nitrogen) chemically and responds locally by cutting a resource (oxygen, sugar). No memory or "decision" is needed, just a response to current conditions.</td><td>Freeloaders skip the cost of fixing nitrogen, so they reproduce faster and spread through the soil. The plants then get less nitrogen and grow poorly; the mutualism could collapse. This creates selection pressure for plants that sanction.</td></tr>
+                <tr><td>🧬 Genome</td><td>A specific weakness tied to a gene, e.g. strike-back designs get stuck in revenge loops after a mistake; forgiving designs get exploited by freeloaders. A <b>trade-off</b> argument for why they accepted it.</td><td>Rejecting an unfair offer is costly now, but a reputation for punishing unfairness deters exploitation in <b>repeated</b> interactions, as in small ancestral groups. Links "anger at unfairness" to Gene 3 (retaliation).</td></tr>
+                <tr><td>🏆 Tournament</td><td>Exploiters (Always Defect, Alternator, Joss…) win matchups because they're never out-scored, but earn little because partners stop cooperating. Tit for Tat-like strategies win few matchups but score high through mutual cooperation. An honest look at their own hypothesis.</td><td>A real mutualism or partnership where both sides gain more together, e.g. pollinators and flowers, cleaner fish and clients, teammates, trading partners. Must name what <i>each</i> side gains.</td></tr>
+                <tr><td>🐣 Generations</td><td>Names a strategy that rose then fell (often an exploiter) and links its rise to feeding on pushovers (Always Cooperate, Tit for Two Tats) and its fall to those victims disappearing. Uses timing from the graph.</td><td>A very deadly strain kills its host quickly, so it has less time to spread to new hosts. A milder strain keeps its host alive and infectious for longer, so it spreads more. Same logic as an exploiter running out of victims. (Rabbits also evolved resistance.)</td></tr>
+                <tr><td>🧫 Biofilm</td><td>States the exact threshold from their data. Explains that the cost of the first betrayal is fixed, while the benefit of cooperating with neighbors grows with each encounter. Above the threshold, a small cluster out-earns the freeloaders at its edge.</td><td>Predicts reciprocity would be <b>rare</b> in species that mostly meet strangers (below the threshold), and supports this with their data. Strong answers mention alternatives like kin or reputation.</td></tr>
+                <tr><td>🏛️ Society</td><td colspan="2">Analysis: correctly identifies cooperate and defect and who gains or loses, whether interactions repeat and whether cheaters are visible, plus a rule that changes a specific lever. Final question: a clear position <i>and</i> a real counterargument. Distinguishes <b>motive</b> (why someone helps) from <b>outcome</b> (whether others benefit).</td></tr>
+            </table>
+        </details>
         <div class="note note-teal">
             <b>🛠️ ROSTER COMPILATION ENGINE</b><br>
             Collect your students' strategies here, then run them against each other (and the famous strategies) in the Global Tournament or the Survival Crucible.
@@ -1210,7 +1234,11 @@ function toast(html, kind = '', ms = 4200) {
 
 function openModal(id) { $(id).classList.add('open'); }
 function closeModal(id) { $(id).classList.remove('open'); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open')); });
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+    // Tabs and chapter steps are divs, so make Enter/Space activate them like buttons.
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.tab, .exp-step, .howto div')) { e.preventDefault(); e.target.click(); }
+});
 
 async function copyText(text) {
     try { await navigator.clipboard.writeText(text); toast('📋 Copied to clipboard'); return; } catch (e) { /* fall through */ }
@@ -3042,6 +3070,12 @@ if (!exp.revealed) exp.revealed = {};
 let expT = null;   // chapter 4 tournament (kept in memory; re-run if the page reloads)
 function saveExp() { Store.set('exp', exp); }
 function wordCount(t) { return (String(t || '').trim().match(/\S+/g) || []).length; }
+// Words that count toward a journal requirement: repeated or one-letter filler ("a a a a…") doesn't add up.
+function realWords(t) {
+    const words = (String(t || '').toLowerCase().match(/[a-z0-9'’-]+/g) || []);
+    const distinct = new Set(words.filter(w => w.length >= 2)).size;
+    return Math.min(words.length, Math.floor(distinct * 1.6));
+}
 
 // Library strategies are our own code, so they can run directly on the page during hand play.
 function compileTrusted(code) { return new Function(ENGINE_PARAMS, code); }
@@ -3377,6 +3411,7 @@ function mountTourney(el) {
         <div id="c4-results" style="margin-top: 16px;"></div>`;
     CHAPTERS[3].onWhy();
     if (expT && exp.done.tourney) renderExpTourney();
+    else if (exp.done.tourney) $('c4-results').innerHTML = '<div class="note note-amber">Welcome back! Your results table isn\'t saved between sessions. Press <b>Run the tournament</b> again to see it (the results will be similar, not identical).</div>';
 }
 window.expRunTourney = async () => {
     $('c4-results').innerHTML = '<div class="muted">🏆 Running 136 matchups of 200 rounds each…</div>';
@@ -3556,7 +3591,7 @@ function mountSociety(el) {
 }
 window.expSocietyCheck = () => {
     const a = exp.data.society || {};
-    const missing = ANALYSIS.filter(q => wordCount(a[q.id]) < 10).length + (a.scenario === 'own' && wordCount(a.own) < 4 ? 1 : 0);
+    const missing = ANALYSIS.filter(q => realWords(a[q.id]) < 10).length + (a.scenario === 'own' && realWords(a.own) < 4 ? 1 : 0);
     const st = $('c7-status');
     if (st) st.innerHTML = !a.scenario ? 'Choose a situation to analyze.' : missing ? `Answer each question in at least 10 words (${missing} to go).` : '✅ Analysis complete.';
     if (a.scenario && !missing && !exp.done.society) {
@@ -3579,7 +3614,7 @@ const CHAPTERS = [
             const r = exp.data.roost;
             return `Your roostmate was playing <b>Tit for Tat</b>: it shared on the first night, then copied whatever <i>you</i> did the night before.${r ? ` It shared on ${r.theirShares} of 10 nights. You finished with ${fmtScore(r.sMe)} blood; it finished with ${fmtScore(r.sThem)}.` : ''} Keeping your blood paid off once, then cost you a night of sharing.<br><br>Real vampire bats behave in a similar way: individuals tend to give blood to roostmates that have given to them before (Wilkinson 1984; Carter &amp; Wilkinson 2013). Biologists call help that is paid back later <b>reciprocal altruism</b> (Trivers 1971).${roostMystery()}`;
         },
-        connect: 'Carter and Wilkinson also found that bats share with their <b>relatives</b>, even relatives that rarely share back. Why could evolution favor helping a relative who never repays you? How is that a different reason for helping than the one your roostmate had?',
+        connect: 'In Wilkinson\'s original study, a lot of the blood sharing happened between <b>relatives</b>, especially mothers and their offspring. Why could evolution favor helping a relative, even one who never repays you? How is that a different reason for helping than the one your roostmate had?',
         mount: mountRoost
     },
     {
@@ -3611,7 +3646,7 @@ const CHAPTERS = [
         id: 'tourney', day: 2, icon: '🏆', short: 'The Tournament', place: 'University of Michigan, 1980', title: "Axelrod's Tournament",
         story: `In 1980, political scientist <b>Robert Axelrod</b> invited experts in math, economics, psychology, sociology and political science to send him computer programs that would play this game against each other, 200 rounds per matchup. Some programs were long and very clever. The result surprised almost everyone.<br><br>Your organism is about to enter a tournament against 15 famous strategies. Each one meets every other one.`,
         task: 'Read the 15 strategies, make a hypothesis about which will score the most points, then run the tournament.',
-        onWhy: () => { const b = $('c4-run'); if (b) b.disabled = !(exp.data.predict4 && wordCount(exp.data.why4) >= WHY_WORDS); },
+        onWhy: () => { const b = $('c4-run'); if (b) b.disabled = !(exp.data.predict4 && realWords(exp.data.why4) >= WHY_WORDS); },
         think: 'Compare the <b>Pts / round</b> and <b>Matchups won</b> columns. Find a strategy that wins many matchups but scores poorly, and one that scores well while winning few. Explain how both of those can be true. Then: was your hypothesis right? What assumption did you make?',
         discovery: () => {
             const T = expT;
@@ -3629,7 +3664,7 @@ const CHAPTERS = [
         id: 'generations', day: 2, icon: '🐣', short: 'Generations', place: 'Deep time', title: 'Survival of the… Nicest?',
         story: `Axelrod's next question: <i>what if points were babies?</i> In evolution, organisms that collect more resources leave more offspring. So let each strategy's score decide how many copies of it are born in the next generation. As the population changes, <b>who you meet changes too</b>.`,
         task: 'Make a hypothesis about which strategy will be most common after 300 generations, then let evolution run.',
-        onWhy: () => { const b = $('c5-run'); if (b) b.disabled = !(exp.data.predict5 && wordCount(exp.data.why5) >= WHY_WORDS); },
+        onWhy: () => { const b = $('c5-run'); if (b) b.disabled = !(exp.data.predict5 && realWords(exp.data.why5) >= WHY_WORDS); },
         think: 'Pick one strategy whose line <b>rose and then fell</b>, or one that <b>went extinct</b>. Tell its story: who was it earning its points from, and what happened to them? Use evidence from the graph.',
         discovery: () => {
             const d = exp.data.eco5;
@@ -3642,7 +3677,7 @@ const CHAPTERS = [
         id: 'biofilm', day: 2, icon: '🧫', short: 'The Biofilm', place: 'A petri dish', title: 'Invasion of the Cooperators',
         story: `Bacteria and yeast growing on a surface (a <b>biofilm</b>) can't move around. Each cell interacts with its neighbors, and the most successful cells' offspring take over the space next to them.<br><br>A single <b>mutant</b> with your organism's genes appears in the middle of a dish packed with 🦠 Freeloaders. It interacts with each neighbor several times per generation.`,
         task: 'Find the <b>smallest number of encounters</b> that lets your mutant spread. Make a hypothesis first, then test as many values as you need. Every run goes in your data table.',
-        onWhy: () => { const b = $('c6-run'); if (b && !petri.running) b.disabled = !(exp.data.pred6 && wordCount(exp.data.why6) >= WHY_WORDS); },
+        onWhy: () => { const b = $('c6-run'); if (b && !petri.running) b.disabled = !(exp.data.pred6 && realWords(exp.data.why6) >= WHY_WORDS); },
         think: 'Describe the threshold you found, using your data table. Then explain <b>why</b> a threshold exists: what changes for a cooperator surrounded by freeloaders as the number of encounters goes up? Compare with your hypothesis.',
         discovery: () => {
             const t = biofilmTrials(), lowest = Object.keys(t).map(Number).filter(k => t[k].end > t[k].start).sort((a, b) => a - b)[0];
@@ -3666,7 +3701,7 @@ const CHAPTERS = [
 ];
 
 // ---------- Expedition shell ----------
-function chapterFinished(c) { return !!(exp.done[c.id] && (exp.revealed[c.id] || !c.think) && wordCount(exp.answers[c.id + ':connect']) >= CONNECT_WORDS); }
+function chapterFinished(c) { return !!(exp.done[c.id] && (exp.revealed[c.id] || !c.think) && realWords(exp.answers[c.id + ':connect']) >= CONNECT_WORDS); }
 function expChapterUnlocked(i) { return i === 0 || CHAPTERS.slice(0, i).every(chapterFinished) || exp.unlockAll; }
 function chText(v) { return typeof v === 'function' ? v() : v; }
 
@@ -3676,7 +3711,7 @@ function renderExpRail() {
         if (c.day !== lastDay) { if (lastDay) html += '<div class="exp-divider"></div>'; html += `<div class="exp-day">DAY ${c.day}</div>`; lastDay = c.day; }
         const fin = chapterFinished(c);
         const cls = [fin ? 'done' : '', i === exp.cur ? 'cur' : '', expChapterUnlocked(i) ? '' : 'locked'].join(' ');
-        html += `<div class="exp-step ${cls}" onclick="expGo(${i})"><span class="n">${fin ? '✅' : c.icon}</span><b>${i + 1}. ${c.short}</b></div>`;
+        html += `<div class="exp-step ${cls}" role="button" tabindex="0" aria-label="Chapter ${i + 1}: ${c.short}${fin ? ' (complete)' : ''}" onclick="expGo(${i})"><span class="n">${fin ? '✅' : c.icon}</span><b>${i + 1}. ${c.short}</b></div>`;
     });
     $('exp-rail').innerHTML = html;
 }
@@ -3706,7 +3741,7 @@ function renderExpedition() {
         <div class="exp-nav">
             <button class="secondary" ${i === 0 ? 'disabled' : ''} onclick="expGo(${i - 1})">← Back</button>
             <button class="ghost" onclick="expReset()">↺ Start the expedition over</button>
-            ${last ? `<button class="green big" onclick="generateJournal()">🖨️ Print my Expedition Journal</button>`
+            ${last ? `<button class="green big" onclick="if (!studentName()) { toast('Type your name at the top of the Expedition first, so your teacher knows whose journal this is.', 'warn'); $('exp-name').focus(); return; } generateJournal()">🖨️ Print my Expedition Journal</button>`
                    : `<button class="big" id="exp-next" disabled onclick="expGo(${i + 1})">Next chapter →</button>`}
         </div>`;
     c.mount($('exp-widget'));
@@ -3720,8 +3755,8 @@ function expStage() {
     if (thinkBox) {
         thinkBox.classList.toggle('hidden', !done);
         if (done) $('exp-think-q').innerHTML = chText(c.think);
-        const w = wordCount(exp.answers[c.id + ':think']);
-        $('exp-think-count').innerText = exp.revealed[c.id] ? '' : (w >= THINK_WORDS ? '' : `${w} / ${THINK_WORDS} words to unlock the discovery`);
+        const w = realWords(exp.answers[c.id + ':think']);
+        $('exp-think-count').innerText = exp.revealed[c.id] ? '' : (w >= THINK_WORDS ? '' : `${w} / ${THINK_WORDS} words to unlock the discovery (repeated words don't count)`);
         $('exp-reveal').classList.toggle('hidden', !!exp.revealed[c.id]);
         $('exp-reveal').disabled = w < THINK_WORDS;
     }
@@ -3729,7 +3764,7 @@ function expStage() {
     const after = $('exp-after');
     if (showAfter && after.classList.contains('hidden')) $('exp-discovery').innerHTML = `<b>💡 DISCOVERY</b>${chText(c.discovery)}`;
     after.classList.toggle('hidden', !showAfter);
-    const cw = wordCount(exp.answers[c.id + ':connect']);
+    const cw = realWords(exp.answers[c.id + ':connect']);
     $('exp-connect-count').innerText = cw >= CONNECT_WORDS ? '' : `${cw} / ${CONNECT_WORDS} words to continue`;
     const next = $('exp-next');
     if (next) next.disabled = !chapterFinished(c);
@@ -3738,7 +3773,7 @@ function expStage() {
 
 function expReveal() {
     const c = CHAPTERS[exp.cur];
-    if (wordCount(exp.answers[c.id + ':think']) < THINK_WORDS) return;
+    if (realWords(exp.answers[c.id + ':think']) < THINK_WORDS) return;
     exp.revealed[c.id] = true; saveExp();
     expStage();
     setTimeout(() => $('exp-after').scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
@@ -3801,7 +3836,8 @@ function generateJournal() {
 function init() {
     Runner.start();
     $('student-name').value = Store.get('studentName', '');
-    $('student-name').addEventListener('input', e => Store.set('studentName', e.target.value));
+    $('student-name').addEventListener('input', e => { Store.set('studentName', e.target.value); $('exp-name').value = e.target.value; });
+    $('exp-name').value = $('student-name').value;
     document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
     $('add-roster-emoji').innerHTML = EMOJIS.map(e => `<option>${e}</option>`).join('');
     $('ai-prompt').textContent = `Act as a JavaScript tutor. I'm in a game-theory tournament based on Robert Axelrod's Iterated Prisoner's Dilemma. I need the BODY of a JavaScript function (no function wrapper) that decides my next move.
