@@ -2737,7 +2737,7 @@ function renderGuide() {
             <div class="lesson"><b>🔍 Be clear</b>Simple, predictable behaviour lets partners learn that cooperating with you pays.</div>
             <div class="lesson"><b>🚫 Don't be envious</b>You don't need to score more than your partner. Tit for Tat <i>never</i> outscores anyone in a single game — it can at best tie — yet it wins tournaments.</div>
         </div>
-        <p>The tournament leaderboard checks the first three traits for every entrant automatically, so you can test whether Axelrod's advice holds in <i>your</i> class's ecosystem.</p>
+        <p>The tournament leaderboard checks the first three (nice, retaliatory, forgiving) for every entrant automatically, so you can test whether Axelrod's advice holds in <i>your</i> class's ecosystem.</p>
     </section>
 
     <section id="g-shadow">
@@ -3691,11 +3691,16 @@ const CHAPTERS = [
         think: 'Your organism passed both trials, but it isn\'t perfect. Describe a kind of partner it would do <b>badly</b> against, and explain why. Why did you accept that weakness instead of designing it away?',
         discovery: () => {
             const t = genomeTraits(genes());
-            return `Political scientist Robert Axelrod studied which strategies succeed, and described the winners with three traits. Your organism is:<br>
-                • <b>${t.nice ? 'Nice' : 'Not nice'}</b>: ${t.nice ? 'it is never the first to defect.' : 'it sometimes defects first.'}<br>
-                • <b>${t.retaliatory ? 'Retaliatory' : 'Not retaliatory'}</b>: ${t.retaliatory ? 'it responds to cheating.' : 'it lets cheaters get away with it.'}<br>
-                • <b>${t.forgiving ? 'Forgiving' : 'Unforgiving'}</b>: ${t.forgiving ? 'it goes back to cooperating once its partner does.' : 'it holds past cheating against its partner.'}<br><br>
-                The Freeloader trial tests whether you retaliate. The Partnership trial tests whether you're nice. Every design is a <b>trade-off</b>: more forgiveness helps you recover from misunderstandings but costs you against cheaters. There's no single perfect genome, which is part of why nature contains so many different strategies.`;
+            const row = (ok, name, meaning, yes, no) => `<tr><td><b>${name}</b></td><td>${meaning}</td><td>${ok ? '✅ ' + yes : '❌ ' + no}</td></tr>`;
+            return `Political scientist Robert Axelrod studied the winning strategies from his tournaments and found that the most successful ones shared <b>four properties</b>:
+                <table style="margin: 10px 0; background: #fff;">
+                    <tr><th>Property</th><th>What it means</th><th>Your organism</th></tr>
+                    ${row(t.nice, '😇 Nice', 'Never the first to defect', 'Yes', 'No, it sometimes defects first')}
+                    ${row(t.retaliatory, '🛡️ Retaliatory', 'Strikes back when it is cheated (Axelrod called this "provocable")', 'Yes', 'No, cheaters get away with it')}
+                    ${row(t.forgiving, '🕊️ Forgiving', 'Goes back to cooperating once its partner does', 'Yes', 'No, it holds past cheating against its partner')}
+                    <tr><td><b>🔍 Clear</b></td><td>Simple enough that partners can figure out how it behaves</td><td>Four genes keep any design fairly clear</td></tr>
+                </table>
+                Your two trials tested the first two: the Freeloader trial checks whether you <b>retaliate</b>, and the Partnership trial checks whether you're <b>nice</b>. Every design is a <b>trade-off</b>: more forgiveness helps you recover from misunderstandings but costs you against cheaters. There's no single perfect genome, which is part of why nature contains so many different strategies.`;
         },
         connect: 'In the "Ultimatum Game," psychologists give one person money to split with a stranger. If the stranger rejects the offer, <b>both get nothing</b>. Many people reject unfair offers (like 20%), even though that leaves them with less. Is that irrational? Or could a "punish unfairness" instinct be adaptive? Connect your answer to Gene 3.',
         mount: mountGenome
