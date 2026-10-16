@@ -24,6 +24,10 @@ one task, a discovery, and a journal question. Students print their answers as o
 
 The Teacher tab has a suggested lesson plan.
 
+## Standards
+
+The Teacher tab maps the activities to the Georgia CTAE **Engineering Applications (TEH7)** and **Engineering Concepts (TEH8)** AKS (April 2026 revision), marking each link as strong or partial and listing what isn't covered. It also notes NGSS HS-LS2-8 and HS-LS4-4.
+
 ## Open Lab (free play and extension)
 
 | Tab | What students do |
