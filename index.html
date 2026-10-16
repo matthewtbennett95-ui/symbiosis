@@ -335,6 +335,8 @@
         .gene-label b { display: block; font-size: 15px; }
         .gene-label span { font-size: 13px; color: var(--text-muted); }
         .gene .pick-row { margin: 0; }
+        .gene-off { opacity: .45; }
+        .gene-off .pick-row, .gene-off input { pointer-events: none; }
         .gene .pick { font-size: 14px; padding: 9px 13px; }
         .goal { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; background: #fef2f2; border: 1px solid #fecaca; }
         .goal.pass { background: #f0fdf4; border-color: #86efac; }
@@ -476,6 +478,7 @@
     <div id="tab-expedition" class="tab-content active">
         <div class="exp-intro"><span style="font-size: 28px;">🧭</span><div style="flex: 1;"><b>How does cooperation evolve in a selfish world?</b> In 1980, Robert Axelrod ran a famous contest to find out. In this expedition you'll play as real organisms, design your own, and watch evolution decide who survives.</div>
             <label class="tech-label" style="flex-direction: column; align-items: flex-start; gap: 4px;">Your name (for your journal)<input type="text" id="exp-name" placeholder="First and last name" style="width: 190px;" oninput="$('student-name').value = this.value; Store.set('studentName', this.value);"></label></div>
+        <div id="teacher-banner" class="note note-teal hidden" style="margin-bottom: 14px;"></div>
         <div class="exp-rail" id="exp-rail"></div>
         <div id="exp-body"></div>
     </div>
@@ -745,7 +748,12 @@
 
     <!-- =================== TAB: PETRI DISH =================== -->
     <div id="tab-petri" class="tab-content">
-        <div class="note note-purple">
+        <div class="note note-purple" id="petri-model-note-roam">
+            <b>🦠 FREE-ROAMING MECHANICS</b><br>
+            Organisms drift around the dish. When two bump into each other, they have an encounter. Cooperating together <b>gains energy</b>, defecting together <b>loses energy</b>, and exploiting a cooperator feeds the exploiter at the victim's expense. Living costs a little energy too.
+            Organisms with enough energy <b>split in two</b>; organisms that run out <b>starve</b> 💀. Bigger glow = more energy.
+        </div>
+        <div class="note note-purple hidden" id="petri-model-note-grid">
             <b>🧬 SPATIAL TAKEOVER MECHANICS</b><br>
             Each cell is an organism living in a fixed spot, like bacteria on a plate or plants in a field. Every generation, each cell has an encounter with its 8 neighbors.
             Then every cell is <b>overwritten</b> by whichever neighbor (or itself) scored highest — successful behaviors spread. Watch for clusters: neighbors who cooperate protect each other.
@@ -754,6 +762,13 @@
         <div class="species-grid" id="species-grid"></div>
 
         <div class="controls" style="margin-top: 16px;">
+            <div class="control-group">
+                <label>Model</label>
+                <select id="petri-model" onchange="setCrucibleModel(this.value)">
+                    <option value="roam">🦠 Free-roaming (organisms move and bump)</option>
+                    <option value="grid">🧫 Grid (cells stay in place)</option>
+                </select>
+            </div>
             <div class="control-group">
                 <label>Starting layout</label>
                 <select id="petri-layout">
@@ -774,7 +789,7 @@
                 <input type="range" id="petri-mut" min="0" max="50" value="0" oninput="$('petri-mut-val').innerText = (this.value/10) + '%'">
             </div>
             <div class="control-group">
-                <label>Dish size</label>
+                <label id="petri-size-label">Population size</label>
                 <select id="petri-size"><option value="24x15">Small</option><option value="36x22" selected>Medium</option><option value="54x33">Large</option></select>
                 <label>Speed</label>
                 <select id="petri-speed"><option value="400">Slow</option><option value="150" selected>Normal</option><option value="40">Fast</option></select>
@@ -794,7 +809,7 @@
             </div>
             <div class="stats-panel">
                 <h3 style="margin: 0; padding-bottom: 5px; color: var(--accent-purple);">POPULATION CENSUS</h3>
-                <div class="row" style="justify-content: space-between;"><span class="muted" style="font-size: 12px; font-weight: 600;">GENERATION</span><span class="gen-counter" id="petri-gen">0</span></div>
+                <div class="row" style="justify-content: space-between;"><span class="muted" style="font-size: 12px; font-weight: 600;" id="petri-gen-label">TIME</span><span class="gen-counter" id="petri-gen">0</span></div>
                 <div style="font-size: 12px; color: var(--text-muted);" id="start-conditions"><i>Inject a population to capture starting conditions.</i></div>
                 <div id="petri-census"></div>
                 <div class="field-notes" id="petri-notes" style="padding: 12px 14px; font-size: 13px;"><h3>📓 NOTES</h3><div class="muted">Observations appear when the dish settles.</div></div>
@@ -837,10 +852,16 @@
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>📋 SUGGESTED LESSON PLAN (two ~50-minute periods)</h3>
             <div class="grid" style="gap: 16px; font-size: 14px;">
-                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows the first 2:10 of a Veritasium video on the Prisoner's Dilemma, then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a four-gene organism through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
+                <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows a 2½-minute edited clip of Veritasium's Prisoner's Dilemma video (three sections, played back to back), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a organism from genes (brain type, testing, reactions, memory) through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
+        </div>
+        <div class="card soft" style="margin-bottom: 20px;">
+            <h3>👩‍🏫 TEACHER MODE</h3>
+            <p style="font-size: 14px; margin-top: 0;">Preview or demo the Expedition without writing the journal entries: all writing requirements are skipped and every chapter is unlocked. It only affects <b>this device</b> and needs the teacher code (see the README).</p>
+            <div class="row"><span>Status: <span id="teacher-mode-state">Off</span></span><span class="spacer"></span>
+                <button class="teal small" onclick="setTeacherMode(true)">Turn on</button><button class="secondary small" onclick="setTeacherMode(false)">Turn off</button></div>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>🎯 STANDARDS ALIGNMENT: GEORGIA CTAE ENGINEERING AKS</h3>
@@ -859,7 +880,7 @@
                 <tr><th style="width: 18%;">Chapter</th><th>🤔 Think: look for…</th><th>🔗 Connect: look for…</th></tr>
                 <tr><td>🦇 Roost</td><td>A rule close to "share on the first night, then do what I did last night" (Tit for Tat), backed by a specific night: the night after they kept their blood, the roostmate kept its blood too. Bonus: noticing they can't be sure if they never kept.</td><td><b>Kin selection:</b> relatives share genes, so helping a relative helps copies of your own genes, even without repayment. Contrast with the roostmate's reason: <b>reciprocity</b> (expected future payback).</td></tr>
                 <tr><td>🌱 Nodules</td><td>The plant senses each nodule's <i>output</i> (nitrogen) chemically and responds locally by cutting a resource (oxygen, sugar). No memory or "decision" is needed, just a response to current conditions.</td><td>Freeloaders skip the cost of fixing nitrogen, so they reproduce faster and spread through the soil. The plants then get less nitrogen and grow poorly; the mutualism could collapse. This creates selection pressure for plants that sanction.</td></tr>
-                <tr><td>🧬 Genome</td><td>A specific weakness tied to a gene, e.g. strike-back designs get stuck in revenge loops after a mistake; forgiving designs get exploited by freeloaders. A <b>trade-off</b> argument for why they accepted it.</td><td>Rejecting an unfair offer is costly now, but a reputation for punishing unfairness deters exploitation in <b>repeated</b> interactions, as in small ancestral groups. Links "anger at unfairness" to Gene 3 (retaliation).</td></tr>
+                <tr><td>🧬 Genome</td><td>A specific weakness tied to a gene, e.g. strike-back designs get stuck in revenge loops after a mistake; forgiving designs get exploited by freeloaders. A <b>trade-off</b> argument for why they accepted it.</td><td>Rejecting an unfair offer is costly now, but a reputation for punishing unfairness deters exploitation in <b>repeated</b> interactions, as in small ancestral groups. Links "anger at unfairness" to the "After they defect" gene (retaliation).</td></tr>
                 <tr><td>🏆 Tournament</td><td>Exploiters (Always Defect, Alternator, Joss…) win matchups because they're never out-scored, but earn little because partners stop cooperating. Tit for Tat-like strategies win few matchups but score high through mutual cooperation. An honest look at their own hypothesis.</td><td>A real mutualism or partnership where both sides gain more together, e.g. pollinators and flowers, cleaner fish and clients, teammates, trading partners. Must name what <i>each</i> side gains.</td></tr>
                 <tr><td>🐣 Generations</td><td>Names a strategy that rose then fell (often an exploiter) and links its rise to feeding on pushovers (Always Cooperate, Tit for Two Tats) and its fall to those victims disappearing. Uses timing from the graph.</td><td>A very deadly strain kills its host quickly, so it has less time to spread to new hosts. A milder strain keeps its host alive and infectious for longer, so it spreads more. Same logic as an exploiter running out of victims. (Rabbits also evolved resistance.)</td></tr>
                 <tr><td>🧫 Biofilm</td><td>States the exact threshold from their data. Explains that the cost of the first betrayal is fixed, while the benefit of cooperating with neighbors grows with each encounter. Above the threshold, a small cluster out-earns the freeloaders at its edge.</td><td>Predicts reciprocity would be <b>rare</b> in species that mostly meet strangers (below the threshold), and supports this with their data. Strong answers mention alternatives like kin or reputation.</td></tr>
@@ -1607,7 +1628,7 @@ function getPool() {
     const out = [];
     LIBRARY.forEach(s => out.push({ id: 'lib:' + s.key, group: 'Famous', name: s.name, emoji: s.emoji, code: s.code, lib: s }));
     state.my.forEach(s => out.push({ id: 'my:' + s.id, group: 'Mine', name: s.name, emoji: s.emoji, code: strategyCode(s), author: s.author, mine: true, rec: s }));
-    out.push({ id: 'draft', group: 'Mine', name: 'Lab draft: ' + (draft.name.trim() || 'untitled'), emoji: draft.emoji, code: strategyCode(draft), mine: true, draft: true });
+    if (draftInUse()) out.push({ id: 'draft', group: 'Mine', name: 'Lab draft: ' + (draft.name.trim() || 'untitled'), emoji: draft.emoji, code: strategyCode(draft), mine: true, draft: true });
     state.roster.forEach(s => out.push({ id: 'class:' + s.id, group: 'Class', name: s.name, emoji: s.emoji, code: s.code, author: s.author, rec: s }));
     return out;
 }
@@ -1625,10 +1646,17 @@ function poolOptions(selected, { includeEmpty = false } = {}) {
     return html;
 }
 
-function defaultMineId() { return state.my.length ? 'my:' + state.my[0].id : 'draft'; }
+function draftInUse() { return !!(draft.dirty || draft.name.trim() || draft.id); }
+// The student's own organism if they have one, otherwise the Lab draft, otherwise Tit for Tat.
+function defaultMineId() { return state.my.length ? 'my:' + state.my[0].id : draftInUse() ? 'draft' : 'lib:tft'; }
 
 function refreshSelects() {
-    const keep = (id, fallback) => { const el = $(id); const v = el.value; el.innerHTML = poolOptions(findStrategy(v) ? v : fallback); };
+    // A list the student hasn't touched follows the default, so a newly released organism appears in it.
+    const keep = (id, fallback) => {
+        const el = $(id), v = el.value, auto = el.dataset.auto !== '0';
+        el.innerHTML = poolOptions(!auto && findStrategy(v) ? v : fallback);
+        if (!el.dataset.bound) { el.dataset.bound = '1'; el.addEventListener('change', () => { el.dataset.auto = '0'; }); }
+    };
     keep('duel-a', defaultMineId());
     keep('duel-b', 'lib:tft');
     renderSpeciesSlots();
@@ -1916,6 +1944,7 @@ async function labQuickTest() {
 function labToDuel() {
     refreshSelects();
     $('duel-a').value = draft.id && !draft.dirty ? 'my:' + draft.id : 'draft';
+    $('duel-a').dataset.auto = '0';
     switchTab('tab-1v1');
 }
 
@@ -2413,12 +2442,17 @@ let speciesSel = null;
 const petri = { running: false, timer: null };
 
 function renderSpeciesSlots() {
-    if (!speciesSel) speciesSel = [defaultMineId(), 'lib:tft', 'lib:alld', 'lib:allc', '', ''].map(id => ({ id, share: 25 }));
+    if (!speciesSel) speciesSel = [defaultMineId(), 'lib:tft', 'lib:alld', 'lib:allc', '', ''].map((id, k) => ({ id, share: 25, auto: k === 0 }));
+    if (speciesSel[0].auto) {
+        // Species 1 follows the student's newest organism until they pick something else.
+        const d = defaultMineId();
+        speciesSel[0].id = d === 'lib:tft' ? 'lib:pavlov' : d;
+    }
     speciesSel.forEach(s => { if (s.id && !findStrategy(s.id)) s.id = ''; });
     $('species-grid').innerHTML = speciesSel.map((s, k) => `
         <div class="species-slot" style="border-left-color: ${SPECIES_COLORS[k]}">
             <div class="row"><span style="color: ${SPECIES_COLORS[k]}">● Species ${k + 1}${k === 0 ? ' (invader)' : ''}</span><span class="spacer"></span>Share <input type="number" min="1" max="100" value="${s.share}" onchange="speciesSel[${k}].share = clampInt(this.value, 1, 100)"></div>
-            <select onchange="speciesSel[${k}].id = this.value">${poolOptions(s.id, { includeEmpty: true })}</select>
+            <select onchange="speciesSel[${k}].id = this.value; speciesSel[${k}].auto = false">${poolOptions(s.id, { includeEmpty: true })}</select>
         </div>`).join('');
 }
 
@@ -2437,6 +2471,12 @@ async function startPetri() {
     if (chosen.length < 2) { toast('Choose at least two different species.', 'warn'); return; }
     const layout = $('petri-layout').value;
     if (layout === 'invasion' && chosen[0].slot !== 0) { toast('Invasion layout needs Species 1 filled in — that is the invader.', 'warn'); return; }
+    if ($('petri-model').value === 'roam') {
+        const cap = { '24x15': 80, '36x22': 130, '54x33': 200 }[$('petri-size').value] || 130;
+        await launchRoam({ species: chosen, layout, cap, rounds: parseInt($('petri-rounds').value, 10), noise: parseInt($('petri-noise').value, 10) / 100, mut: parseInt($('petri-mut').value, 10) / 1000 });
+        return;
+    }
+    stopRoam(); crucibleModel = 'grid';
     const [W, H] = $('petri-size').value.split('x').map(Number);
     await launchPetri({
         species: chosen, layout, W, H, rounds: parseInt($('petri-rounds').value, 10),
@@ -2446,7 +2486,7 @@ async function startPetri() {
 
 // Runs a dish into the given view. Only one dish runs at a time; starting a new one stops the old one.
 async function launchPetri(cfg, view) {
-    stopPetriTimer();
+    stopPetriTimer(); stopRoam();
     if (petri.view && petri.view !== view) { if (petri.view.pause) petri.view.pause.disabled = true; if (petri.view.step) petri.view.step.disabled = true; }
     Object.assign(petri, { running: false, finished: false, view });
     const setNotes = html => { if (view.notes) view.notes.innerHTML = html; };
@@ -2515,6 +2555,7 @@ function schedulePetri() {
     petri.timer = setTimeout(() => { stepPetri(); schedulePetri(); }, petri.view && petri.view.speed ? petri.view.speed() : 150);
 }
 function togglePetri() {
+    if (crucibleModel === 'roam' && roam.species) { toggleRoam(); return; }
     if (!petri.grid || petri.finished) return;
     petri.running = !petri.running;
     const btn = petri.view.pause;
@@ -2524,6 +2565,7 @@ function togglePetri() {
 }
 
 function stepPetri() {
+    if (crucibleModel === 'roam' && roam.species) { stepRoam(); return; }
     if (!petri.grid || petri.finished) return;
     const { W, H, grid, M, k } = petri;
     const score = new Float64Array(W * H);
@@ -2637,6 +2679,246 @@ function petriNotes() {
     if (petri.layout === 'invasion') notes.push(final[0] > start[0] ? `🧫 The invader grew from ${start[0]} to ${final[0]} cells.` : `🧫 The invader shrank from ${start[0]} to ${final[0]} cells.`);
     petri.notes = notes;
     if (petri.view.notes) petri.view.notes.innerHTML = `<h3>📓 NOTES</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+}
+
+
+// ---------- Free-roaming mode: organisms drift, bump into each other, gain or lose energy ----------
+// Each bump is an encounter. Energy changes by how far the encounter beat "break-even" (halfway between
+// mutual cooperation and mutual defection), so mutualism feeds both partners, mutual defection drains both,
+// and exploiting a cooperator feeds the exploiter at the victim's expense. Living costs a little energy.
+// Enough energy: split in two (in a full dish the baby takes a random organism's place). No energy: die.
+const ROAM = { r: 11, speed: 1.6, cooldown: 30, e0: 8, birth: 16, k: 2, metabolism: 0.004, barrier: 150, maxFrames: 3600 };
+const roam = { running: false, raf: null, species: null };
+let crucibleModel = 'roam';
+
+function roamRand() { return Math.random(); }
+function roamZone(s) {
+    const W = 720, H = 440, k = roam.k;
+    if (k === 4) { const q = [[0, 0], [1, 0], [1, 1], [0, 1]][s]; return { x0: q[0] * W / 2, x1: q[0] * W / 2 + W / 2, y0: q[1] * H / 2, y1: q[1] * H / 2 + H / 2 }; }
+    const tot = roam.species.reduce((t, c) => t + c.share, 0);
+    let x0 = 0;
+    for (let i = 0; i < s; i++) x0 += roam.species[i].share / tot * W;
+    return { x0, x1: x0 + roam.species[s].share / tot * W, y0: 0, y1: H };
+}
+function roamSpawn(s, x, y) {
+    const a = roamRand() * Math.PI * 2;
+    return { x, y, vx: Math.cos(a) * ROAM.speed, vy: Math.sin(a) * ROAM.speed, s, e: ROAM.e0, cd: ROAM.cooldown, age: 0 };
+}
+
+async function launchRoam(cfg) {
+    stopRoam(); stopPetriTimer(); petri.running = false;
+    const view = labPetriView();
+    view.notes.innerHTML = '<h3>📓 NOTES</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>';
+    let res;
+    try {
+        res = await Runner.run('tournament', { entries: cfg.species.map(c => ({ code: c.code })), rounds: cfg.rounds, noise: cfg.noise, repeats: 6, selfPlay: true, payoff: state.payoff, seed: newSeed(), keepGames: false }, 10000);
+    } catch (e) {
+        view.notes.innerHTML = `<h3>📓 NOTES</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`;
+        return;
+    }
+    const P = state.payoff, k = cfg.species.length;
+    Object.assign(roam, {
+        species: cfg.species, k, M: res.avg.map(row => row.map(v => v / cfg.rounds)), base: (P.R + P.P) / 2,
+        cap: cfg.cap, layout: cfg.layout, rounds: cfg.rounds, noise: cfg.noise, mut: cfg.mut, frame: 0,
+        ents: [], fx: [], history: [], finished: false, banner: null, view, result: null, notes: null
+    });
+    crucibleModel = 'roam';
+    const W = 720, H = 440, r = ROAM.r, startN = Math.round(cfg.cap * 0.6);
+    const tot = cfg.species.reduce((t, c) => t + c.share, 0);
+    const place = (s, zone) => roamSpawn(s, zone.x0 + r + roamRand() * (zone.x1 - zone.x0 - 2 * r), zone.y0 + r + roamRand() * (zone.y1 - zone.y0 - 2 * r));
+    const all = { x0: 0, x1: W, y0: 0, y1: H };
+    if (cfg.layout === 'invasion') {
+        const invaders = Math.max(4, Math.round(startN / 20));
+        for (let i = 0; i < invaders; i++) { const a = roamRand() * 6.283, d = roamRand() * 34; roam.ents.push(roamSpawn(0, W / 2 + Math.cos(a) * d, H / 2 + Math.sin(a) * d)); }
+        const restTot = tot - cfg.species[0].share;
+        cfg.species.forEach((c, s) => { if (s) for (let i = 0; i < Math.round((startN - invaders) * c.share / restTot); i++) roam.ents.push(place(s, all)); });
+    } else {
+        cfg.species.forEach((c, s) => { for (let i = 0; i < Math.round(startN * c.share / tot); i++) roam.ents.push(place(s, cfg.layout === 'territories' ? roamZone(s) : all)); });
+    }
+    roam.start = roamCounts();
+    roam.history.push(roam.start.slice());
+    view.start.innerHTML = `<b>STARTING (free-roaming, ${cfg.layout}, ${cfg.rounds} round${cfg.rounds === 1 ? '' : 's'}/encounter${cfg.noise ? ', ' + pct(cfg.noise) + ' noise' : ''}):</b><br>` + cfg.species.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${roam.start[i]}`).join(' · ');
+    view.notes.innerHTML = '<h3>📓 NOTES</h3><div class="muted">Bigger glow = more energy. 💀 = starved. Observations appear when the run ends.</div>';
+    view.pause.disabled = false; view.step.disabled = false; view.pause.innerText = 'Pause'; view.pause.className = 'secondary';
+    roam.running = true;
+    renderRoamCensus(); roamLoop();
+}
+
+function roamCounts() { const c = Array(roam.k).fill(0); roam.ents.forEach(o => c[o.s]++); return c; }
+function stopRoam() { roam.running = false; if (roam.raf) cancelAnimationFrame(roam.raf); roam.raf = null; }
+
+function roamStep() {
+    const W = 720, H = 440, r = ROAM.r, ents = roam.ents;
+    const barrier = roam.layout === 'territories' && roam.frame < ROAM.barrier;
+    for (const o of ents) {
+        o.x += o.vx; o.y += o.vy; o.age++;
+        const z = barrier ? roamZone(o.s) : { x0: 0, x1: W, y0: 0, y1: H };
+        if (o.x < z.x0 + r) { o.x = z.x0 + r; o.vx *= -1; }
+        if (o.x > z.x1 - r) { o.x = z.x1 - r; o.vx *= -1; }
+        if (o.y < z.y0 + r) { o.y = z.y0 + r; o.vy *= -1; }
+        if (o.y > z.y1 - r) { o.y = z.y1 - r; o.vy *= -1; }
+        if (o.cd > 0) o.cd--;
+        o.e -= ROAM.metabolism;
+    }
+    for (let i = 0; i < ents.length; i++) {
+        const a = ents[i];
+        if (a.cd) continue;
+        for (let j = i + 1; j < ents.length; j++) {
+            const b = ents[j];
+            if (b.cd || (a.x - b.x) ** 2 + (a.y - b.y) ** 2 >= 4 * r * r) continue;
+            a.e += ROAM.k * (roam.M[a.s][b.s] - roam.base);
+            b.e += ROAM.k * (roam.M[b.s][a.s] - roam.base);
+            [a.vx, b.vx] = [b.vx, a.vx]; [a.vy, b.vy] = [b.vy, a.vy];
+            a.cd = b.cd = ROAM.cooldown;
+            break;
+        }
+    }
+    const born = [];
+    for (const o of ents) {
+        if (o.e < ROAM.birth) continue;
+        o.e /= 2;
+        const s = roam.mut > 0 && roamRand() < roam.mut ? Math.floor(roamRand() * roam.k) : o.s;
+        const c = roamSpawn(s, o.x, o.y); c.e = o.e;
+        born.push(c);
+        roam.fx.push({ type: 'birth', x: o.x, y: o.y, t: 0 });
+    }
+    roam.ents = ents.filter(o => {
+        if (o.e > 0) return true;
+        roam.fx.push({ type: 'death', x: o.x, y: o.y, t: 0 });
+        return false;
+    });
+    for (const c of born) {
+        if (roam.ents.length >= roam.cap) roam.ents.splice(Math.floor(roamRand() * roam.ents.length), 1);
+        roam.ents.push(c);
+    }
+    roam.frame++;
+    if (roam.frame % 20 === 0) roam.history.push(roamCounts());
+}
+
+function roamLoop() {
+    if (!roam.running) return;
+    const steps = { 400: 1, 150: 2, 40: 4 }[$('petri-speed').value] || 2;
+    for (let i = 0; i < steps && !roam.finished; i++) {
+        roamStep();
+        const c = roamCounts(), alive = c.filter(n => n > 0).length;
+        if (alive <= 1 && roam.frame > ROAM.barrier) { finishRoam(alive ? 'dominated' : 'extinct'); break; }
+        if (roam.frame >= ROAM.maxFrames) { finishRoam('limit'); break; }
+    }
+    drawRoam();
+    if (roam.frame % 10 < steps) renderRoamCensus();
+    if (roam.running) roam.raf = requestAnimationFrame(roamLoop);
+}
+
+function drawRoam() {
+    const { ctx, w, h } = setupCanvas($('eco-canvas'));
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+    if (roam.layout === 'territories' && roam.frame < ROAM.barrier) {
+        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 4; ctx.beginPath();
+        for (let s = 0; s < roam.k; s++) { const z = roamZone(s); ctx.rect(z.x0, z.y0, z.x1 - z.x0, z.y1 - z.y0); }
+        ctx.stroke();
+        ctx.fillStyle = '#64748b'; ctx.font = 'bold 14px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText(`ISOLATION PHASE: ${Math.ceil((ROAM.barrier - roam.frame) / 60)}s`, w / 2, 8);
+    }
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (const o of roam.ents) {
+        const sp = roam.species[o.s], grow = Math.min(1, o.age / 12);
+        ctx.globalAlpha = 0.22;
+        ctx.fillStyle = sp.color;
+        ctx.beginPath(); ctx.arc(o.x, o.y, (ROAM.r + 1 + Math.max(0, o.e) / 3) * grow, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.font = `${Math.round(15 * grow)}px Arial`;
+        ctx.fillText(sp.emoji, o.x, o.y + 1);
+    }
+    roam.fx = roam.fx.filter(f => f.t++ < 40);
+    for (const f of roam.fx) {
+        if (f.type !== 'death') continue;
+        ctx.globalAlpha = 1 - f.t / 40;
+        ctx.font = '13px Arial';
+        ctx.fillText('💀', f.x, f.y - f.t / 3);
+    }
+    ctx.globalAlpha = 1;
+    if (roam.banner) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.88)'; ctx.fillRect(0, h / 2 - 30, w, 60);
+        ctx.fillStyle = roam.result.reason === 'dominated' ? roam.species[roam.result.lead].color : '#1e293b';
+        ctx.font = 'bold 20px monospace';
+        ctx.fillText(roam.banner, w / 2, h / 2);
+    }
+}
+
+function renderRoamCensus() {
+    const counts = roamCounts(), n = roam.ents.length || 1, v = roam.view;
+    v.gen.innerText = Math.floor(roam.frame / 60) + 's';
+    v.census.innerHTML = roam.species.map((s, i) => `<div class="stat-row"><span style="color: ${s.color};">${esc(s.emoji)} ${esc(s.name)}</span><span>${counts[i]} <span class="muted" style="font-size: 11px;">${pct(counts[i] / n)}</span></span></div>`).join('')
+        + `<div class="muted" style="font-size: 12px;">Population ${roam.ents.length} of ${roam.cap} spaces</div>`;
+    drawLineChart(v.chart, roam.species.map((s, i) => ({ name: s.name, color: s.color, values: roam.history.map(c => c[i] / roam.cap), width: 2.4 })), { yMax: 1, percent: true, xLabel: 'Time (share of dish capacity)' });
+}
+
+function toggleRoam() {
+    if (!roam.species || roam.finished) return;
+    roam.running = !roam.running;
+    const btn = roam.view.pause;
+    if (roam.running) { btn.innerText = 'Pause'; btn.className = 'secondary'; roamLoop(); }
+    else { btn.innerText = 'Resume'; btn.className = 'red'; if (roam.raf) cancelAnimationFrame(roam.raf); }
+}
+function stepRoam() {
+    if (!roam.species || roam.finished) return;
+    for (let i = 0; i < 30; i++) roamStep();
+    drawRoam(); renderRoamCensus();
+}
+
+function finishRoam(reason) {
+    roam.finished = true; stopRoam();
+    roam.view.pause.disabled = true; roam.view.step.disabled = true;
+    const counts = roamCounts(), lead = counts.indexOf(Math.max(...counts)), sp = roam.species[lead];
+    roam.result = { reason, lead };
+    roam.banner = reason === 'dominated' ? `🏆 ${sp.emoji} ${sp.name.toUpperCase()} DOMINATED THE ECOSYSTEM`
+        : reason === 'extinct' ? '💀 EVERY SPECIES STARVED' : '⏳ OBSERVATION PERIOD ENDED';
+    drawRoam(); renderRoamCensus();
+    roamNotes();
+    checkRoamMissions();
+}
+
+function roamNotes() {
+    const P = state.payoff, { species, history, cap, rounds } = roam;
+    const final = history[history.length - 1], start = history[0];
+    const totalStart = start.reduce((a, b) => a + b, 0), totalEnd = final.reduce((a, b) => a + b, 0);
+    const peak = species.map((s, i) => Math.max(...history.map(c => c[i])));
+    const lead = roam.result.lead, notes = [];
+    if (roam.result.reason === 'dominated') notes.push(`<b>${esc(species[lead].emoji)} ${esc(species[lead].name)}</b> is the only species left after ${Math.floor(roam.frame / 60)} seconds.`);
+    else if (roam.result.reason === 'extinct') notes.push('Every organism starved. Nobody could find enough partners to cooperate with.');
+    else notes.push(`After ${Math.floor(roam.frame / 60)} seconds the largest population is <b>${esc(species[lead].emoji)} ${esc(species[lead].name)}</b> (${final[lead]} organisms).`);
+    const extinct = species.filter((s, i) => final[i] === 0 && start[i] > 0);
+    if (extinct.length) notes.push(`💀 Extinct: ${extinct.map(s => esc(s.emoji + ' ' + s.name)).join(', ')}.`);
+    species.forEach((s, i) => {
+        if (peak[i] > start[i] * 1.5 && final[i] < peak[i] * 0.5) {
+            // Did it thrive with its own kind (a cooperator) or by exploiting others?
+            const coopKind = roam.M[i][i] >= roam.base;
+            notes.push(`📈📉 ${esc(s.emoji)} ${esc(s.name)} boomed (up to ${peak[i]}) and then crashed. ${coopKind ? 'It thrived by cooperating with its own kind, then lost ground, either to exploiters or to other species competing for space.' : 'It grew by feeding on others, then ran out of victims.'}`);
+        }
+    });
+    if (totalEnd < totalStart * 0.6) notes.push(`⚠️ The whole ecosystem shrank from ${totalStart} to ${totalEnd} organisms. When exploitation is common, everyone, including the exploiters, ends up with less.${rounds <= 2 ? ` With only ${rounds} round${rounds === 1 ? '' : 's'} per encounter there's no shadow of the future. Try 10+ rounds.` : ''}`);
+    else if (totalEnd >= cap * 0.9) notes.push(`🌿 The dish is full (${totalEnd} of ${cap} spaces): cooperation produced enough energy to support a crowded, thriving population.`);
+    roam.notes = notes;
+    roam.view.notes.innerHTML = `<h3>📓 NOTES</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+}
+
+function checkRoamMissions() {
+    const final = roam.history[roam.history.length - 1], total = final.reduce((a, b) => a + b, 0) || 1;
+    if (roam.layout === 'invasion' && roam.species[0].mine && final[0] / total > 0.5) completeMission('invade');
+    const key = roam.species.map(s => s.id).sort().join('|') + '|roam';
+    const rec = state.petriShadow[key] || {}, winner = roam.species[roam.result.lead].id;
+    if (roam.rounds <= 1) rec.short = winner;
+    if (roam.rounds >= 20) rec.long = winner;
+    state.petriShadow[key] = rec; Store.set('petriShadow', state.petriShadow);
+    if (rec.short && rec.long && rec.short !== rec.long) completeMission('shadow');
+}
+
+function setCrucibleModel(m) {
+    $('petri-model-note-grid').classList.toggle('hidden', m !== 'grid');
+    $('petri-model-note-roam').classList.toggle('hidden', m !== 'roam');
+    $('petri-size-label').innerText = m === 'roam' ? 'Population size' : 'Dish size';
+    $('petri-gen-label').innerText = m === 'roam' ? 'TIME' : 'GENERATION';
 }
 
 // ============================================================================
@@ -3083,6 +3365,23 @@ function generateReport(tabType) {
                 'Did the winner beat its opponents head-to-head? Explain how a strategy can win a tournament without winning matches.',
                 'How did your strategy do? What one change would you make, and why?'
             ])}`;
+    } else if (tabType === 'survival' && crucibleModel === 'roam' && roam.species) {
+        const final = roam.history[roam.history.length - 1], total = final.reduce((a, b) => a + b, 0) || 1;
+        html += reportHeader('ECOSYSTEM SURVIVAL REPORT (FREE-ROAMING)') + `
+            <h3>Initialization Parameters</h3>
+            <p>Layout: <b>${roam.layout}</b> · Dish capacity: ${roam.cap} organisms · Rounds per encounter: <b>${roam.rounds}</b> · Noise: ${pct(roam.noise)} · Mutation: ${fmt(roam.mut * 100, 1)}%</p>
+            <h3>Population Census after ${Math.floor(roam.frame / 60)} seconds</h3>
+            <table><tr><th>Species</th><th>Start</th><th>Final</th><th>Share</th></tr>
+            ${roam.species.map((s, i) => `<tr><td style="text-align: left;">${esc(s.emoji)} ${esc(s.name)}</td><td>${roam.start[i]}</td><td>${final[i]}</td><td>${pct(final[i] / total)}</td></tr>`).join('')}</table>
+            <p><b>Conclusion:</b> ${roam.banner ? esc(roam.banner) : 'Simulation still running.'}</p>
+            <img src="${$('eco-canvas').toDataURL('image/png')}" alt="Free-roaming dish">
+            <img src="${$('petri-chart').toDataURL('image/png')}" alt="Population over time">
+            ${roam.notes ? `<h3>Notes</h3><ul>${roam.notes.map(n => `<li>${n}</li>`).join('')}</ul>` : ''}
+            ${reflection([
+                'Which species thrived, which starved, and why? Use the energy rules to explain.',
+                'Did any species boom and then crash? What was it "eating", and what happened to its food supply?',
+                'How does the number of rounds per encounter change the outcome? Connect this to the "shadow of the future".'
+            ])}`;
     } else if (tabType === 'survival') {
         if (!petri.grid) { toast('Inject a population first.', 'warn'); return; }
         const final = petri.history[petri.history.length - 1], total = petri.W * petri.H;
@@ -3116,6 +3415,10 @@ function generateReport(tabType) {
 // The discovery stays locked until the student has written a real explanation, so it can't be copied from the page.
 
 const THINK_WORDS = 15, CONNECT_WORDS = 12, WHY_WORDS = 6;
+// Teacher mode (per device): writing is optional and every chapter is unlocked, for previewing and demos.
+const TEACHER_CODE = 'symbiosis';   // the code a teacher types to turn teacher mode on
+function teacherOn() { return !!Store.get('teacherMode', false); }
+function need(n) { return teacherOn() ? 0 : n; }
 
 let exp = Object.assign({ cur: 0, done: {}, revealed: {}, answers: {}, data: {}, summary: {} }, Store.get('exp', {}));
 if (!exp.revealed) exp.revealed = {};
@@ -3453,54 +3756,157 @@ function mountNodules(el) {
 }
 
 // ---------- Chapter 3: design a genome ----------
-const DEFAULT_GENES = { first: 'C', afterC: 'C', afterD: 'D', forgive: 10, grudge: false, grudgeN: 3, name: '', emoji: '🧬' };
-function genes() { return exp.data.genes || (exp.data.genes = Object.assign({}, DEFAULT_GENES)); }
-
-function genesToRules(G) {
-    const rules = [{ cond: 'first', act: G.first, p: 100 }];
-    if (G.grudge) rules.push({ cond: 'theyDtotal', n: G.grudgeN, act: 'D', p: 100 });
-    if (G.afterD === 'D') rules.push({ cond: 'theyDlast', act: 'D', p: 100 });
-    else if (G.afterD === 'C') rules.push({ cond: 'theyDlast', act: 'C', p: 100 });
-    else { rules.push({ cond: 'theyDlast', act: 'D', p: 100 - G.forgive }); rules.push({ cond: 'theyDlast', act: 'C', p: 100 }); }
-    rules.push({ cond: 'theyClast', act: G.afterC, p: 100 });
-    return rules;
+// Genes combine into a readable program. Together they can express every strategy in the library
+// (checked by test: the deterministic ones match move for move).
+const DEFAULT_GENES = {
+    brain: 'react', pattern: 'C', first: 'C', probe: false,
+    afterC: 'C', sneak: 0, afterD: 'D', forgive: 10, streakN: 2,
+    memory: 'last', grudgeN: 3, name: '', emoji: '🧬'
+};
+function genes() {
+    const G = exp.data.genes || (exp.data.genes = {});
+    // Older saves used grudge: true/false instead of memory: 'grudge'.
+    if (G.grudge !== undefined && G.memory === undefined) { G.memory = G.grudge ? 'grudge' : 'last'; delete G.grudge; }
+    if (G.probe === true) G.probe = 'detect';
+    for (const k in DEFAULT_GENES) if (G[k] === undefined) G[k] = DEFAULT_GENES[k];
+    return G;
 }
+
+function genesToCode(G) {
+    const L = ['// 🧬 Genome designed in the Expedition (Chapter 3).',
+        "const myLast = myHistory[myHistory.length - 1];",
+        "const theirLast = theirHistory[theirHistory.length - 1];",
+        "const countD = h => h.filter(m => m === 'D').length;", ''];
+    if (G.brain === 'pattern') {
+        L.push('// Brain: fixed pattern. It ignores its partner completely.');
+        L.push({ C: "return 'C';", D: "return 'D';", alt: "return round % 2 === 1 ? 'C' : 'D';   // alternate", random: "return random() < 0.5 ? 'C' : 'D';   // coin flip" }[G.pattern]);
+        return L.join('\n');
+    }
+    if (G.probe === 'tester') {
+        L.push('// Testing (bold): open with a defection. If they ever strike back, apologize once and play normally.',
+            '// If they never strike back, keep exploiting them every other round.');
+        L.push("if (round === 1) return 'D';",
+            "if (!memory.respectful && theirHistory.includes('D')) { memory.respectful = true; return 'C'; }   // apology",
+            "if (!memory.respectful) return round <= 3 ? 'C' : (round % 2 === 0 ? 'D' : 'C');", '');
+    } else {
+        L.push('// First meeting');
+        L.push(`if (round === 1) return ${G.first === 'random' ? "random() < 0.5 ? 'C' : 'D'" : `'${G.first}'`};`);
+    }
+    if (G.probe === 'detect') {
+        L.push('', '// Testing: defect in round 2, cooperate in rounds 3-4, then exploit them if they never struck back');
+        L.push("if (round === 2) return 'D';", "if (round <= 4) return 'C';", "if (!theirHistory.includes('D')) return 'D';");
+    }
+    if (G.brain === 'learn') {
+        L.push('', '// Brain: learns from results (win-stay, lose-shift).', '// If my partner cooperated, last round went well: repeat my move. If not, switch.');
+        L.push("return theirLast === 'C' ? myLast : (myLast === 'C' ? 'D' : 'C');");
+        return L.join('\n');
+    }
+    L.push('');
+    if (G.memory === 'majority') {
+        L.push('// Memory: judge their whole record. Cooperate if they have cooperated at least as often as they defected.');
+        L.push("return countD(theirHistory) * 2 <= theirHistory.length ? 'C' : 'D';");
+        return L.join('\n');
+    }
+    if (G.memory === 'escalate') {
+        L.push('// Memory: escalate. Punish the Nth betrayal with N defections, then offer two cooperations to make peace.');
+        L.push("if (memory.punish === undefined) { memory.betrayals = 0; memory.punish = 0; memory.calm = 0; }",
+            "if (memory.punish > 0) { memory.punish--; if (memory.punish === 0) memory.calm = 2; return 'D'; }",
+            "if (memory.calm > 0) { memory.calm--; return 'C'; }",
+            "if (theirLast === 'D') { memory.betrayals++; memory.punish = memory.betrayals - 1; if (memory.punish === 0) memory.calm = 2; return 'D'; }",
+            "return 'C';");
+        return L.join('\n');
+    }
+    if (G.memory === 'grudge') {
+        L.push(`// Memory: after ${G.grudgeN} betrayal${G.grudgeN === 1 ? '' : 's'} in total, never trust them again`);
+        L.push(`if (countD(theirHistory) >= ${G.grudgeN}) return 'D';`, '');
+    }
+    L.push('// When they defected last round');
+    if (G.afterD === 'D') L.push("if (theirLast === 'D') return 'D';");
+    else if (G.afterD === 'C') L.push("if (theirLast === 'D') return 'C';");
+    else if (G.afterD === 'forgive') L.push(`if (theirLast === 'D') return random() < ${G.forgive / 100} ? 'C' : 'D';   // forgive ${G.forgive}% of the time`);
+    else L.push(`if (theirLast === 'D') return theirHistory.length >= ${G.streakN} && theirHistory.slice(-${G.streakN}).every(m => m === 'D') ? 'D' : 'C';   // only after ${G.streakN} in a row`);
+    L.push('', '// When they cooperated last round');
+    if (G.afterC === 'D') L.push("return 'D';");
+    else if (G.sneak > 0) L.push(`return random() < ${G.sneak / 100} ? 'D' : 'C';   // sneak in a defection ${G.sneak}% of the time`);
+    else L.push("return 'C';");
+    return L.join('\n');
+}
+
 function genomeTraits(G) {
+    if (G.brain === 'pattern') return { nice: G.pattern === 'C', retaliatory: false, forgiving: G.pattern === 'C', holdsGrudge: false };
+    const firstNice = G.first === 'C' && !G.probe;
+    if (G.brain === 'learn') return { nice: firstNice, retaliatory: true, forgiving: true, holdsGrudge: false };
+    const listensToRecord = G.memory === 'majority' || G.memory === 'escalate';
     return {
-        nice: G.first === 'C' && G.afterC === 'C',
-        retaliatory: G.afterD !== 'C' || G.grudge,
-        forgiving: G.afterC === 'C' && !G.grudge,   // goes back to cooperating once the partner does
-        holdsGrudge: G.grudge
+        nice: firstNice && (listensToRecord || (G.afterC === 'C' && G.sneak === 0)),
+        retaliatory: listensToRecord || G.memory === 'grudge' || G.afterD !== 'C',
+        forgiving: listensToRecord || (G.memory !== 'grudge' && G.afterC === 'C'),
+        holdsGrudge: G.memory === 'grudge'
     };
+}
+
+function describeGenes(G) {
+    if (G.brain === 'pattern') return 'Fixed pattern: ' + { C: 'always cooperate', D: 'always defect', alt: 'alternate C and D', random: 'coin flip' }[G.pattern];
+    const parts = G.probe === 'tester' ? [] : [`first meeting ${G.first === 'random' ? 'random' : G.first}`];
+    if (G.probe === 'detect') parts.push('tests partners in round 2');
+    if (G.probe === 'tester') parts.push('opens with a bold test, apologizes if they strike back');
+    if (G.brain === 'learn') parts.push('win-stay, lose-shift');
+    else if (G.memory === 'majority') parts.push("judges the partner's whole record");
+    else if (G.memory === 'escalate') parts.push('escalating punishment');
+    else {
+        parts.push('after cooperation ' + (G.afterC === 'D' ? 'D' : G.sneak ? `C (sneaks D ${G.sneak}%)` : 'C'));
+        parts.push('after defection ' + ({ D: 'D', C: 'C', forgive: `D (forgives ${G.forgive}%)`, streak: `D only after ${G.streakN} in a row` }[G.afterD]));
+        if (G.memory === 'grudge') parts.push(`defects forever after ${G.grudgeN} betrayals`);
+    }
+    return parts.join('; ');
 }
 function genomeRecord() { return exp.data.genomeId ? state.my.find(s => s.id === exp.data.genomeId) : null; }
 
 function mountGenome(el) {
     const G = genes();
     const opt = (gene, val, label) => `<button class="pick ${G[gene] === val ? 'on' : ''}" onclick="expGene('${gene}', ${typeof val === 'string' ? `'${val}'` : val})">${label}</button>`;
+    const slider = (gene, min, max, step, before, after) => `<div class="row" style="margin-top: 8px; font-size: 14px;">${before} <input type="range" min="${min}" max="${max}" step="${step}" value="${G[gene]}" oninput="genes().${gene} = +this.value; this.nextElementSibling.innerText = this.value + '%'; saveExp(); expGenomeDirty()"> <b>${G[gene]}%</b> ${after}</div>`;
+    const reacts = G.brain === 'react', usesRecord = reacts && (G.memory === 'majority' || G.memory === 'escalate');
+    const gene = (title, hint, body, off, offWhy) => `<div class="gene ${off ? 'gene-off' : ''}"><div class="gene-label"><b>${title}</b><span>${off ? offWhy : hint}</span></div><div>${body}</div></div>`;
     el.innerHTML = `
-        <div class="grid" style="grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);">
+        <div class="grid" style="grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);">
             <div class="card">
                 <div class="row" style="margin-bottom: 6px;">
                     <div class="control-group" style="flex: 1;"><label>Name your organism</label><input type="text" id="c3-name" value="${esc(G.name)}" placeholder="e.g., The Loyal Lichen" oninput="genes().name = this.value; saveExp(); expGenomeDirty()"></div>
                     <div class="control-group"><label>Look</label><select id="c3-emoji" style="font-size: 18px;" onchange="genes().emoji = this.value; saveExp(); expGenomeDirty()">${EMOJIS.map(e => `<option ${e === G.emoji ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
                 </div>
-                <div class="gene"><div class="gene-label"><b>Gene 1 · First meeting</b><span>A stranger appears.</span></div>
-                    <div class="pick-row">${opt('first', 'C', '🤝 Cooperate')}${opt('first', 'D', '🗡️ Defect')}</div></div>
-                <div class="gene"><div class="gene-label"><b>Gene 2 · After they cooperate</b><span>Your partner just helped you.</span></div>
-                    <div class="pick-row">${opt('afterC', 'C', '🤝 Cooperate')}${opt('afterC', 'D', '🗡️ Defect')}</div></div>
-                <div class="gene"><div class="gene-label"><b>Gene 3 · After they defect</b><span>Your partner just cheated you.</span></div>
-                    <div><div class="pick-row">${opt('afterD', 'D', '🗡️ Defect')}${opt('afterD', 'forgive', '🎲 Defect, with a chance of cooperating')}${opt('afterD', 'C', '🤝 Cooperate')}</div>
-                    ${G.afterD === 'forgive' ? `<div class="row" style="margin-top: 8px; font-size: 14px;">Cooperate anyway <input type="range" min="5" max="60" step="5" value="${G.forgive}" oninput="genes().forgive = +this.value; $('c3-fv').innerText = this.value + '%'; saveExp(); expGenomeDirty()"> <b id="c3-fv">${G.forgive}%</b> of the time</div>` : ''}</div></div>
-                <div class="gene" style="border-bottom: none;"><div class="gene-label"><b>Gene 4 · Memory</b><span>Does past cheating count forever?</span></div>
-                    <div><div class="pick-row">${opt('grudge', false, '🔄 Only the last move matters')}${opt('grudge', true, '🧠 Defect forever after…')}</div>
-                    ${G.grudge ? `<div class="row" style="margin-top: 8px; font-size: 14px;"><input type="number" min="1" max="20" value="${G.grudgeN}" style="width: 70px;" onchange="genes().grudgeN = clampInt(this.value, 1, 20); saveExp(); expGenomeDirty()"> betrayals in total</div>` : ''}</div></div>
+                ${gene('Brain type', 'How does your organism decide?',
+                    `<div class="pick-row">${opt('brain', 'react', '👀 Reacts to its partner')}${opt('brain', 'learn', '🔁 Learns from results')}${opt('brain', 'pattern', '⚙️ Fixed pattern')}</div>
+                     ${G.brain === 'learn' ? '<div class="muted" style="font-size: 13px; margin-top: 6px;">If the last round went well (partner cooperated), repeat your move. If it went badly, switch.</div>' : ''}
+                     ${G.brain === 'pattern' ? `<div class="pick-row" style="margin-top: 8px;">${opt('pattern', 'C', 'Always cooperate')}${opt('pattern', 'D', 'Always defect')}${opt('pattern', 'alt', 'Alternate C, D, C, D…')}${opt('pattern', 'random', '🎲 Coin flip')}</div>` : ''}`)}
+                ${gene('First meeting', 'A stranger appears.',
+                    `<div class="pick-row">${opt('first', 'C', '🤝 Cooperate')}${opt('first', 'D', '🗡️ Defect')}${opt('first', 'random', '🎲 Coin flip')}</div>`,
+                    G.brain === 'pattern' || G.probe === 'tester', G.brain === 'pattern' ? 'Not used: a fixed pattern ignores everything.' : 'Not used: a bold test always opens with a defection.')}
+                ${gene('Testing', 'Probe new partners for weakness?',
+                    `<div class="pick-row">${opt('probe', false, '🙂 No testing')}${opt('probe', 'detect', '🔍 Sneaky test: defect in round 2; exploit them if they never strike back')}${opt('probe', 'tester', '🔬 Bold test: open with a defection; apologize if they strike back')}</div>`,
+                    G.brain === 'pattern', 'Not used: a fixed pattern ignores everything.')}
+                ${gene('After they cooperate', 'Your partner just helped you.',
+                    `<div class="pick-row">${opt('afterC', 'C', '🤝 Cooperate')}${opt('afterC', 'D', '🗡️ Defect')}</div>
+                     ${G.afterC === 'C' ? slider('sneak', 0, 50, 5, 'Sneak in a defection', 'of the time') : ''}`,
+                    !reacts || usesRecord, !reacts ? 'Not used by this brain type.' : 'Not used: your Memory gene decides instead.')}
+                ${gene('After they defect', 'Your partner just cheated you.',
+                    `<div class="pick-row">${opt('afterD', 'D', '🗡️ Defect')}${opt('afterD', 'forgive', '🎲 Defect, but sometimes forgive')}${opt('afterD', 'streak', '🐘 Only after several in a row')}${opt('afterD', 'C', '🤝 Cooperate')}</div>
+                     ${G.afterD === 'forgive' ? slider('forgive', 5, 60, 5, 'Forgive', 'of the time') : ''}
+                     ${G.afterD === 'streak' ? `<div class="row" style="margin-top: 8px; font-size: 14px;">Strike back only after <input type="number" min="2" max="5" value="${G.streakN}" style="width: 64px;" onchange="genes().streakN = clampInt(this.value, 2, 5); saveExp(); expGenomeDirty()"> defections in a row</div>` : ''}`,
+                    !reacts || usesRecord, !reacts ? 'Not used by this brain type.' : 'Not used: your Memory gene decides instead.')}
+                ${gene('Memory', 'What does it remember about its partner?',
+                    `<div class="pick-row">${opt('memory', 'last', '🔄 Only the last move')}${opt('memory', 'grudge', '🧠 Never trust again after…')}${opt('memory', 'majority', '📊 Their whole record')}${opt('memory', 'escalate', '📈 Punish longer each time')}</div>
+                     ${G.memory === 'grudge' ? `<div class="row" style="margin-top: 8px; font-size: 14px;"><input type="number" min="1" max="20" value="${G.grudgeN}" style="width: 70px;" onchange="genes().grudgeN = clampInt(this.value, 1, 20); saveExp(); expGenomeDirty()"> betrayals in total</div>` : ''}
+                     ${G.memory === 'majority' ? '<div class="muted" style="font-size: 13px; margin-top: 6px;">Cooperate as long as they have cooperated at least as often as they have defected.</div>' : ''}
+                     ${G.memory === 'escalate' ? '<div class="muted" style="font-size: 13px; margin-top: 6px;">1st betrayal: defect once. 2nd: twice. 3rd: three times… Each punishment ends with two cooperations to make peace.</div>' : ''}`,
+                    !reacts, 'Not used by this brain type.')}
+                <details style="margin-top: 10px; font-size: 13px;"><summary style="cursor: pointer; font-weight: 600;">👁 See the program your genes create</summary><pre class="code" style="margin-top: 6px;">${esc(genesToCode(G))}</pre></details>
             </div>
             <div>
                 <div class="card soft">
                     <h3>🧪 SURVIVAL TRIALS</h3>
-                    <p style="font-size: 14px; margin-top: 0;">To be released, your organism must survive two trials (30 encounters each):</p>
-                    <p style="font-size: 14px;">🦠 <b>The Freeloader trial:</b> a partner that never cooperates must not earn double what you earn or more.<br>🪞 <b>The Partnership trial:</b> against a partner that copies your last move, you must average at least <b>${Math.round(0.87 * state.payoff.R * 10) / 10}</b> per encounter (the most possible is ${state.payoff.R}).</p>
+                    <p style="font-size: 14px; margin-top: 0;">Before release, test your organism in two trials (30 encounters each):</p>
+                    <p style="font-size: 14px;">🦠 <b>The Freeloader trial:</b> a partner that never cooperates should not earn double what you earn or more.<br>🪞 <b>The Partnership trial:</b> against a partner that copies your last move, aim to average at least <b>${Math.round(0.87 * state.payoff.R * 10) / 10}</b> per encounter (the most possible is ${state.payoff.R}).</p>
                     <button class="purple" onclick="expGenomeTest()">🧪 Run the trials</button>
                     <div id="c3-goals" style="margin-top: 12px;"></div>
                 </div>
@@ -3513,18 +3919,18 @@ function mountGenome(el) {
     expGenomeDirty();
 }
 
-let genomeTested = null;   // the genome JSON that last passed both trials
+let genomeTested = null;   // { code, passed } for the design that was last put through the trials
 window.expGene = (gene, val) => { genes()[gene] = val; saveExp(); mountGenome($('exp-widget')); };
 window.expGenomeDirty = () => {
-    const rec = genomeRecord(), G = genes();
-    const same = rec && rec.name === G.name.trim() && rec.emoji === G.emoji && JSON.stringify(rec.rules) === JSON.stringify(genesToRules(G));
+    const rec = genomeRecord(), G = genes(), code = genesToCode(G);
+    const same = rec && rec.name === G.name.trim() && rec.emoji === G.emoji && rec.code === code;
     const msg = $('c3-lock-msg');
     if (msg) msg.innerHTML = rec ? (same ? '✅ Released. Change a gene and release again to update it.' : '<span style="color: var(--accent-amber)">You changed your organism. Run the trials and release it again to save.</span>') : '';
     const goals = $('c3-goals');
-    if (goals && genomeTested && genomeTested !== JSON.stringify(genesToRules(G))) goals.innerHTML = '<div class="muted" style="font-size: 13px;">Genes changed. Run the trials again.</div>';
+    if (goals && genomeTested && genomeTested.code !== code) goals.innerHTML = '<div class="muted" style="font-size: 13px;">Genes changed. Run the trials again.</div>';
 };
 window.expGenomeTest = async () => {
-    const rules = genesToRules(genes()), code = generateCode(rules, 'C');
+    const code = genesToCode(genes());
     const opps = [{ key: 'alld', label: '🦠 Freeloader' }, { key: 'tft', label: '🪞 Copier' }, { key: 'allc', label: '🌿 Always-helper' }]
         .map(o => ({ name: o.label, emoji: LIB[o.key].emoji, code: LIB[o.key].code }));
     let res;
@@ -3533,27 +3939,28 @@ window.expGenomeTest = async () => {
     const P = state.payoff, [fr, mi, ho] = res.results;
     const passA = fr.sB < 2 * Math.max(fr.sA, 0.0001);
     const passB = mi.sA / 30 >= Math.round(0.87 * P.R * 10) / 10;
-    genomeTested = passA && passB ? JSON.stringify(rules) : null;
+    genomeTested = { code, passed: passA && passB, failed: [passA ? null : 'Freeloader', passB ? null : 'Partnership'].filter(Boolean) };
     const t = (ok, label, detail) => `<div class="goal ${ok ? 'pass' : ''}"><span class="gi">${ok ? '✅' : '❌'}</span><div><b>${label}</b><br><span class="muted">${detail}</span></div></div>`;
     $('c3-goals').innerHTML =
         t(passA, 'Freeloader trial', `You ${fmtScore(fr.sA)} · Freeloader ${fmtScore(fr.sB)}`) +
         t(passB, 'Partnership trial', `You averaged ${fmt(mi.sA / 30)} per encounter`) +
         `<div class="goal pass" style="background: #fff; border-color: var(--border-color);"><span class="gi">ℹ️</span><div><b>Bonus observation (not a trial)</b><br><span class="muted">Against a partner that always helps: you ${fmtScore(ho.sA)}, them ${fmtScore(ho.sB)}.</span></div></div>` +
-        (passA && passB ? '' : '<div class="muted" style="font-size: 13px;">Not ready yet. Which gene do you think caused the failure? Change one thing at a time, like a real experiment.</div>');
+        (passA && passB ? '' : '<div class="muted" style="font-size: 13px;">Which gene do you think caused the failure? Change one thing at a time, like a real experiment. (You can still release a risky design, but it may struggle in the wild.)</div>');
     exp.data.trialRuns = (exp.data.trialRuns || 0) + 1; saveExp();
 };
 window.expLockGenome = () => {
-    const G = genes(), rules = genesToRules(G);
+    const G = genes(), code = genesToCode(G);
     if (!G.name.trim()) { toast('Give your organism a name first.', 'warn'); $('c3-name').focus(); return; }
-    if (genomeTested !== JSON.stringify(rules)) { toast('Run the trials first. Your organism must pass both before it can be released.', 'warn'); return; }
+    if (!genomeTested || genomeTested.code !== code) { toast('Run the trials on this design first.', 'warn'); return; }
+    if (!genomeTested.passed && !confirm(`Your organism failed the ${genomeTested.failed.join(' and ')} trial${genomeTested.failed.length > 1 ? 's' : ''}. It may struggle in the wild.\n\nRelease it anyway?`)) return;
     const rec = genomeRecord() || { id: uid() };
-    Object.assign(rec, { name: G.name.trim(), emoji: G.emoji, author: studentName(), mode: 'rules', rules, otherwise: 'C', code: generateCode(rules, 'C'), updated: Date.now(), genome: true });
+    Object.assign(rec, { name: G.name.trim(), emoji: G.emoji, author: studentName(), mode: 'code', rules: [], otherwise: 'C', code, updated: Date.now(), genome: true });
     if (!state.my.includes(rec)) state.my.unshift(rec);
     Store.set('my', state.my);
     exp.data.genomeId = rec.id;
     expT = null;   // the organism changed, so later chapters should re-run
     const t = genomeTraits(G);
-    exp.summary.genome = `Designed ${G.emoji} ${G.name.trim()} in ${exp.data.trialRuns || 1} trial run(s). Genes: first meeting ${G.first}; after cooperation ${G.afterC}; after defection ${G.afterD === 'forgive' ? 'D, but C ' + G.forgive + '% of the time' : G.afterD}${G.grudge ? '; defect forever after ' + G.grudgeN + ' betrayals' : ''}. Traits: ${[t.nice ? 'nice' : 'nasty', t.retaliatory ? 'retaliatory' : 'not retaliatory', t.forgiving ? 'forgiving' : 'unforgiving'].join(', ')}.`;
+    exp.summary.genome = `Designed ${G.emoji} ${G.name.trim()} in ${exp.data.trialRuns || 1} trial run(s)${genomeTested.passed ? ', passing both trials' : ', released despite failing the ' + genomeTested.failed.join(' and ') + ' trial'}. Genes: ${describeGenes(G)}. Traits: ${[t.nice ? 'nice' : 'nasty', t.retaliatory ? 'retaliatory' : 'not retaliatory', t.forgiving ? 'forgiving' : 'unforgiving'].join(', ')}.`;
     renderMyList(); refreshSelects();
     completeMission('builder');
     expGenomeDirty();
@@ -3591,7 +3998,7 @@ function mountTourney(el) {
                 ${LIBRARY.map(s => `<div class="case" style="padding: 8px 10px; font-size: 13px;"><b style="margin: 0;">${s.emoji} ${esc(s.name)}</b>${s.behavior}</div>`).join('')}
             </div>
             <div class="row"><label for="c4-pred"><b>Which strategy will score the most points overall?</b></label>
-                <select id="c4-pred" onchange="exp.data.predict4 = this.value; saveExp(); expWhyChanged()"><option value="">Choose…</option>${LIBRARY.map(s => `<option value="lib:${s.key}" ${exp.data.predict4 === 'lib:' + s.key ? 'selected' : ''}>${s.emoji} ${esc(s.name)}</option>`).join('')}<option value="mine" ${exp.data.predict4 === 'mine' ? 'selected' : ''}>My own organism</option></select></div>
+                <select id="c4-pred" onchange="exp.data.predict4 = this.value; saveExp(); expWhyChanged()"><option value="">Choose…</option>${LIBRARY.map(s => `<option value="lib:${s.key}" ${exp.data.predict4 === 'lib:' + s.key ? 'selected' : ''}>${s.emoji} ${esc(s.name)}</option>`).join('')}<option value="mine" ${exp.data.predict4 === 'mine' ? 'selected' : ''}>${esc(genomeRecord().emoji)} ${esc(genomeRecord().name)} (my organism)</option></select></div>
             ${whyBox('why4', 'Why? What will make that strategy beat the others?')}
             <button class="amber big" id="c4-run" style="margin-top: 10px;" onclick="expRunTourney()">▶ Run the tournament</button>
         </div>
@@ -3778,7 +4185,7 @@ function mountSociety(el) {
 }
 window.expSocietyCheck = () => {
     const a = exp.data.society || {};
-    const missing = ANALYSIS.filter(q => realWords(a[q.id]) < 10).length + (a.scenario === 'own' && realWords(a.own) < 4 ? 1 : 0);
+    const missing = ANALYSIS.filter(q => realWords(a[q.id]) < need(10)).length + (a.scenario === 'own' && realWords(a.own) < need(4) ? 1 : 0);
     const st = $('c7-status');
     if (st) st.innerHTML = !a.scenario ? 'Choose a situation to analyze.' : missing ? `Answer each question in at least 10 words (${missing} to go).` : '✅ Analysis complete.';
     if (a.scenario && !missing && !exp.done.society) {
@@ -3825,8 +4232,8 @@ const CHAPTERS = [
     {
         id: 'genome', day: 1, icon: '🧬', short: 'Design an Organism', place: 'The lab', title: 'Design an Organism',
         story: `Bats and soybeans don't sit down and plan each choice. Over millions of years, evolution has shaped their behavior through their <b>genes</b>. Now you get to play evolution: design the genes for a brand-new organism. Once it's released, it has to survive on its own, against partners you can't predict.`,
-        task: 'Design four genes. Run survival trials until your organism passes both, name it, and release it. Treat it like an experiment: if a trial fails, figure out <i>which</i> gene is responsible.',
-        think: 'Your organism passed both trials, but it isn\'t perfect. Describe a kind of partner it would do <b>badly</b> against, and explain why. Why did you accept that weakness instead of designing it away?',
+        task: 'Design your organism\'s genes, run the survival trials, then name it and release it. Treat it like an experiment: if a trial fails, figure out <i>which</i> gene is responsible.',
+        think: 'No design is perfect. Describe a kind of partner it would do <b>badly</b> against, and explain why. Why did you accept that weakness instead of designing it away?',
         discovery: () => {
             const t = genomeTraits(genes());
             const row = (ok, name, meaning, yes, no) => `<tr><td><b>${name}</b></td><td>${meaning}</td><td>${ok ? '✅ ' + yes : '❌ ' + no}</td></tr>`;
@@ -3836,18 +4243,18 @@ const CHAPTERS = [
                     ${row(t.nice, '😇 Nice', 'Never the first to defect', 'Yes', 'No, it sometimes defects first')}
                     ${row(t.retaliatory, '🛡️ Retaliatory', 'Strikes back when it is cheated (Axelrod called this "provocable")', 'Yes', 'No, cheaters get away with it')}
                     ${row(t.forgiving, '🕊️ Forgiving', 'Goes back to cooperating once its partner does', 'Yes', 'No, it holds past cheating against its partner')}
-                    <tr><td><b>🔍 Clear</b></td><td>Simple enough that partners can figure out how it behaves</td><td>Four genes keep any design fairly clear</td></tr>
+                    <tr><td><b>🔍 Clear</b></td><td>Simple enough that partners can figure out how it behaves</td><td>${genes().brain === 'pattern' && genes().pattern === 'random' ? '❌ A coin flip is impossible to read' : genes().probe ? '⚠️ Testing partners makes it harder to read' : '✅ Mostly'}</td></tr>
                 </table>
                 Your two trials tested the first two: the Freeloader trial checks whether you <b>retaliate</b>, and the Partnership trial checks whether you're <b>nice</b>. Every design is a <b>trade-off</b>: more forgiveness helps you recover from misunderstandings but costs you against cheaters. There's no single perfect genome, which is part of why nature contains so many different strategies.`;
         },
-        connect: 'In the "Ultimatum Game," psychologists give one person money to split with a stranger. If the stranger rejects the offer, <b>both get nothing</b>. Many people reject unfair offers (like 20%), even though that leaves them with less. Is that irrational? Or could a "punish unfairness" instinct be adaptive? Connect your answer to Gene 3.',
+        connect: 'In the "Ultimatum Game," psychologists give one person money to split with a stranger. If the stranger rejects the offer, <b>both get nothing</b>. Many people reject unfair offers (like 20%), even though that leaves them with less. Is that irrational? Or could a "punish unfairness" instinct be adaptive? Connect your answer to your organism\'s "After they defect" gene.',
         mount: mountGenome
     },
     {
         id: 'tourney', day: 2, icon: '🏆', short: 'The Tournament', place: 'University of Michigan, 1980', title: "Axelrod's Tournament",
         story: `In 1980, political scientist <b>Robert Axelrod</b> invited experts in math, economics, psychology, sociology and political science to send him computer programs that would play this game against each other, 200 rounds per matchup. Some programs were long and very clever. The result surprised almost everyone.<br><br>Your organism is about to enter a tournament against 15 famous strategies. Each one meets every other one.`,
         task: 'Read the 15 strategies, make a hypothesis about which will score the most points, then run the tournament.',
-        onWhy: () => { const b = $('c4-run'); if (b) b.disabled = !(exp.data.predict4 && realWords(exp.data.why4) >= WHY_WORDS); },
+        onWhy: () => { const b = $('c4-run'); if (b) b.disabled = !(exp.data.predict4 && realWords(exp.data.why4) >= need(WHY_WORDS)); },
         think: 'Compare the <b>Pts / round</b> and <b>Matchups won</b> columns. Find a strategy that wins many matchups but scores poorly, and one that scores well while winning few. Explain how both of those can be true. Then: was your hypothesis right? What assumption did you make?',
         discovery: () => {
             const T = expT;
@@ -3865,7 +4272,7 @@ const CHAPTERS = [
         id: 'generations', day: 2, icon: '🐣', short: 'Generations', place: 'Deep time', title: 'Survival of the… Nicest?',
         story: `Axelrod's next question: <i>what if points were babies?</i> In evolution, organisms that collect more resources leave more offspring. So let each strategy's score decide how many copies of it are born in the next generation. As the population changes, <b>who you meet changes too</b>.`,
         task: 'Make a hypothesis about which strategy will be most common after 300 generations, then let evolution run.',
-        onWhy: () => { const b = $('c5-run'); if (b) b.disabled = !(exp.data.predict5 && realWords(exp.data.why5) >= WHY_WORDS); },
+        onWhy: () => { const b = $('c5-run'); if (b) b.disabled = !(exp.data.predict5 && realWords(exp.data.why5) >= need(WHY_WORDS)); },
         think: 'Pick one strategy whose line <b>rose and then fell</b>, or one that <b>went extinct</b>. Tell its story: who was it earning its points from, and what happened to them? Use evidence from the graph.',
         discovery: () => {
             const d = exp.data.eco5;
@@ -3878,7 +4285,7 @@ const CHAPTERS = [
         id: 'biofilm', day: 2, icon: '🧫', short: 'The Biofilm', place: 'A petri dish', title: 'Invasion of the Cooperators',
         story: `Bacteria and yeast growing on a surface (a <b>biofilm</b>) can't move around. Each cell interacts with its neighbors, and the most successful cells' offspring take over the space next to them.<br><br>A single <b>mutant</b> with your organism's genes appears in the middle of a dish packed with 🦠 Freeloaders. It interacts with each neighbor several times per generation.`,
         task: 'Find the <b>smallest number of encounters</b> that lets your mutant spread. Make a hypothesis first, then test as many values as you need. Every run goes in your data table.',
-        onWhy: () => { const b = $('c6-run'); if (b && !petri.running) b.disabled = !(exp.data.pred6 && realWords(exp.data.why6) >= WHY_WORDS); },
+        onWhy: () => { const b = $('c6-run'); if (b && !petri.running) b.disabled = !(exp.data.pred6 && realWords(exp.data.why6) >= need(WHY_WORDS)); },
         think: 'Describe the threshold you found, using your data table. Then explain <b>why</b> a threshold exists: what changes for a cooperator surrounded by freeloaders as the number of encounters goes up? Compare with your hypothesis.',
         discovery: () => {
             const t = biofilmTrials(), lowest = Object.keys(t).map(Number).filter(k => t[k].end > t[k].start).sort((a, b) => a - b)[0];
@@ -3908,9 +4315,9 @@ function chLabel(i) { return CHAPTERS[i].id === 'briefing' ? 'Briefing' : `Chapt
 function chapterFinished(c) {
     // Students who started before the briefing existed shouldn't be sent back to it.
     if (c.id === 'briefing' && exp.done.roost) return true;
-    return !!(exp.done[c.id] && (exp.revealed[c.id] || !c.think) && realWords(exp.answers[c.id + ':connect']) >= CONNECT_WORDS);
+    return !!(exp.done[c.id] && (exp.revealed[c.id] || !c.think || teacherOn()) && realWords(exp.answers[c.id + ':connect']) >= need(CONNECT_WORDS));
 }
-function expChapterUnlocked(i) { return i === 0 || CHAPTERS.slice(0, i).every(chapterFinished) || exp.unlockAll; }
+function expChapterUnlocked(i) { return i === 0 || CHAPTERS.slice(0, i).every(chapterFinished) || exp.unlockAll || teacherOn(); }
 function chText(v) { return typeof v === 'function' ? v() : v; }
 
 function renderExpRail() {
@@ -3924,7 +4331,26 @@ function renderExpRail() {
     $('exp-rail').innerHTML = html;
 }
 
+function renderTeacherBanner() {
+    const b = $('teacher-banner');
+    b.classList.toggle('hidden', !teacherOn());
+    b.innerHTML = `<div class="row"><span>👩‍🏫 <b>Teacher mode is on</b> on this device: writing is optional and every chapter is unlocked.</span><span class="spacer"></span><button class="small secondary" onclick="setTeacherMode(false)">Turn off</button></div>`;
+    const st = $('teacher-mode-state');
+    if (st) st.innerHTML = teacherOn() ? '<b style="color: #0f766e;">ON</b> on this device' : 'Off';
+}
+function setTeacherMode(on) {
+    if (on) {
+        const code = prompt('Teacher mode skips all writing and unlocks every chapter on this device.\n\nEnter the teacher code:');
+        if (code === null) return;
+        if (code.trim().toLowerCase() !== TEACHER_CODE) { toast('That code is not correct.', 'warn'); return; }
+    }
+    Store.set('teacherMode', !!on);
+    toast(on ? '👩‍🏫 Teacher mode on. Writing is optional and all chapters are unlocked.' : 'Teacher mode off.');
+    renderExpedition();
+}
+
 function renderExpedition() {
+    renderTeacherBanner();
     renderExpRail();
     const i = exp.cur, c = CHAPTERS[i], last = i === CHAPTERS.length - 1;
     $('exp-body').innerHTML = `
@@ -3964,24 +4390,24 @@ function expStage() {
         thinkBox.classList.toggle('hidden', !done);
         if (done) $('exp-think-q').innerHTML = chText(c.think);
         const w = realWords(exp.answers[c.id + ':think']);
-        $('exp-think-count').innerText = exp.revealed[c.id] ? '' : (w >= THINK_WORDS ? '' : `${w} / ${THINK_WORDS} words to unlock the discovery (repeated words don't count)`);
+        $('exp-think-count').innerText = exp.revealed[c.id] ? '' : (w >= need(THINK_WORDS) ? '' : `${w} / ${THINK_WORDS} words to unlock the discovery (repeated words don't count)`);
         $('exp-reveal').classList.toggle('hidden', !!exp.revealed[c.id]);
-        $('exp-reveal').disabled = w < THINK_WORDS;
+        $('exp-reveal').disabled = w < need(THINK_WORDS);
     }
-    const showAfter = done && (exp.revealed[c.id] || !c.think);
+    const showAfter = done && (exp.revealed[c.id] || !c.think || teacherOn());
     const after = $('exp-after');
     if (showAfter && after.classList.contains('hidden')) $('exp-discovery').innerHTML = `<b>💡 DISCOVERY</b>${chText(c.discovery)}`;
     after.classList.toggle('hidden', !showAfter);
     const cw = realWords(exp.answers[c.id + ':connect']);
-    $('exp-connect-count').innerText = cw >= CONNECT_WORDS ? '' : `${cw} / ${CONNECT_WORDS} words to continue`;
+    $('exp-connect-count').innerText = cw >= need(CONNECT_WORDS) ? '' : `${cw} / ${CONNECT_WORDS} words to continue`;
     const next = $('exp-next');
-    if (next) next.disabled = !chapterFinished(c);
+    if (next) next.disabled = !(chapterFinished(c) || teacherOn());
     renderExpRail();
 }
 
 function expReveal() {
     const c = CHAPTERS[exp.cur];
-    if (realWords(exp.answers[c.id + ':think']) < THINK_WORDS) return;
+    if (realWords(exp.answers[c.id + ':think']) < need(THINK_WORDS)) return;
     exp.revealed[c.id] = true; saveExp();
     expStage();
     setTimeout(() => $('exp-after').scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
@@ -4016,7 +4442,7 @@ function generateJournal() {
     const name = studentName();
     const ans = t => t ? `<p style="white-space: pre-wrap; border-left: 3px solid #999; padding-left: 10px;">${esc(t)}</p>` : '<div class="lines"></div><div class="lines"></div>';
     const strip = h => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent; };
-    let html = `<div class="print-report-container"><h2>EXPEDITION JOURNAL</h2>
+    let html = `<div class="print-report-container"><h2>EXPEDITION JOURNAL${teacherOn() ? ' (TEACHER PREVIEW)' : ''}</h2>
         <p><b>Name:</b> ${name ? esc(name) : '____________________'} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()} &nbsp; <b>Chapters completed:</b> ${CHAPTERS.filter(chapterFinished).length} of ${CHAPTERS.length}</p>`;
     const whys = { tourney: 'why4', generations: 'why5', biofilm: 'why6' };
     CHAPTERS.forEach((c, i) => {
