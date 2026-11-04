@@ -79,17 +79,15 @@
 
         /* ---------- Callouts ---------- */
         .note { padding: 15px 18px; font-size: 14px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid; }
-        .note-blue { background: rgba(59,130,246,.08); border-color: var(--accent-blue); color: #1d4ed8; }
-        .note-purple { background: rgba(168,85,247,.1); border-color: var(--accent-purple); color: #7e22ce; }
-        .note-amber { background: rgba(245,158,11,.1); border-color: var(--accent-amber); color: #b45309; }
-        .note-teal { background: rgba(20,184,166,.1); border-color: var(--accent-teal); color: #0f766e; }
-        .note-green { background: rgba(34,197,94,.1); border-color: var(--accent-green); color: #15803d; }
+        /* One neutral "info" look for explanations; amber = caution; red = error. */
+        .note-blue, .note-purple, .note-teal, .note-green { background: #f1f5f9; border-color: #94a3b8; color: var(--text-main); }
+        .note-amber { background: rgba(245,158,11,.1); border-color: var(--accent-amber); color: #92400e; }
         .note-red { background: rgba(239,68,68,.08); border-color: var(--accent-red); color: #b91c1c; }
         .note b:first-child { letter-spacing: .5px; }
 
         /* ---------- Controls ---------- */
         .controls { display: flex; justify-content: space-between; align-items: flex-end; background: var(--soft); padding: 15px 22px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px; gap: 15px 22px; flex-wrap: wrap; }
-        .control-group { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; min-width: 0; }
+        .control-group { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0; min-width: 0; }
         .control-group label { color: var(--text-main); }
         .control-group .hint { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text-muted); font-size: 12px; }
         .checkline { display: flex; align-items: center; gap: 6px; font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 13px; cursor: pointer; }
@@ -101,7 +99,7 @@
 
         /* ---------- Buttons ---------- */
         .btn-group { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; align-items: center; }
-        button { background: var(--accent-blue); color: #ffffff; border: none; padding: 11px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3); font-family: inherit; }
+        button { background: var(--accent-blue); color: #ffffff; border: none; padding: 11px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3); font-family: inherit; }
         button:hover { filter: brightness(1.08); transform: translateY(-1px); }
         button.secondary { background: var(--soft-2); color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
         button.secondary:hover { background: var(--border-color); }
@@ -125,7 +123,7 @@
         .card { background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
         .card.soft { background: var(--soft); }
         h3 { font-size: 15px; font-weight: 600; margin: 0 0 10px 0; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; letter-spacing: .3px; }
-        h4 { font-size: 13px; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); }
+        h4 { font-size: 14px; margin: 14px 0 6px; letter-spacing: 0; color: var(--text-muted); }
         .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .spacer { flex: 1; }
         textarea.code { width: 100%; height: 340px; background: #1e293b; color: #34d399; font-family: var(--mono); font-size: 13px; line-height: 1.45; border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; resize: vertical; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); tab-size: 4; }
@@ -134,7 +132,7 @@
         /* ---------- Tables ---------- */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 8px 10px; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 13px; vertical-align: middle; }
-        th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; background: var(--soft); }
+        th { color: var(--text-muted); font-weight: 600; letter-spacing: 0; font-size: 12px; background: var(--soft); }
         .scroll-box { max-height: 520px; overflow: auto; }
         .scroll-box thead th { position: sticky; top: 0; z-index: 1; }
 
@@ -156,7 +154,7 @@
         .clone { font-size: 15px; margin: 1px; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; transform: scale(0); line-height: 1; }
         .bioreactor.dense .clone { font-size: 9px; margin: 0; }
         @keyframes popIn { to { transform: scale(1); } }
-        .score-board { margin-top: 14px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+        .score-board { margin-top: 14px; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-align: center; }
         .score-val { font-size: 26px; font-weight: 700; font-family: 'Courier New', monospace; }
         .move-indicator { font-size: 15px; font-weight: 700; margin-bottom: 12px; height: 22px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .move-indicator.c { color: var(--accent-green); } .move-indicator.d { color: var(--accent-red); }
@@ -230,7 +228,7 @@
         .species-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .species-slot { background: #fff; border: 1px solid var(--border-color); border-left: 5px solid; border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
         .species-slot select { width: 100%; font-size: 13px; padding: 5px 6px; }
-        .species-slot .row { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); }
+        .species-slot .row { font-size: 12px; font-weight: 600; color: var(--text-muted); }
         .species-slot input[type=number] { width: 62px; padding: 4px 6px; font-size: 13px; }
         .gen-counter { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--accent-purple); }
 
@@ -306,19 +304,45 @@
         .exp-story { font-size: 16px; line-height: 1.6; }
         .exp-emoji { font-size: 92px; text-align: center; line-height: 1; filter: drop-shadow(0 6px 10px rgba(0,0,0,.12)); }
         .exp-task { background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 12px; padding: 14px 18px; font-size: 16px; margin: 18px 0; }
-        .exp-task b:first-child { color: #1d4ed8; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 2px; }
+        .exp-task b:first-child { color: #1d4ed8; font-size: 15px; display: block; margin-bottom: 2px; }
         .exp-discovery { background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 14px 18px; font-size: 15px; margin-top: 20px; animation: fadeIn .4s ease; }
-        .exp-discovery b:first-child { color: #15803d; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 4px; }
+        .exp-discovery b:first-child { color: #15803d; font-size: 15px; display: block; margin-bottom: 4px; }
         .exp-think { background: #fff7ed; border: 2px solid #fdba74; border-radius: 12px; padding: 14px 18px; margin-top: 20px; animation: fadeIn .4s ease; }
-        .exp-think > b:first-child { color: #c2410c; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 6px; }
+        .exp-think > b:first-child { color: #c2410c; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-think label { font-size: 15px; display: block; margin-bottom: 8px; }
         .exp-think textarea { width: 100%; min-height: 100px; padding: 12px; border: 1px solid #fdba74; border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; margin-bottom: 6px; }
-        .exp-connect { background: #f5f3ff; border: 2px solid #c4b5fd; border-radius: 12px; padding: 14px 18px; }
-        .exp-connect > b:first-child { color: #6d28d9; letter-spacing: 1px; font-size: 13px; display: block; margin-bottom: 6px; }
+        .exp-connect { background: #fff7ed; border: 2px solid #fdba74; border-radius: 12px; padding: 14px 18px; }
+        .exp-connect > b:first-child { color: #c2410c; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-connect label { font-weight: 400 !important; }
         .video-frame { position: relative; padding-top: 56.25%; border-radius: 10px; overflow: hidden; background: #0f172a; }
         .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
         .video-frame.blocked { padding: 34px 20px; color: #e2e8f0; text-align: center; font-size: 15px; }
+        .exp-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: -6px 0 16px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+        .exp-stepdot { padding: 3px 10px; border-radius: 999px; background: var(--soft-2); }
+        .exp-stepdot.cur { background: #dbeafe; color: #1d4ed8; }
+        .exp-stepdot.ok { background: #dcfce7; color: #15803d; }
+        .exp-steparrow { color: #cbd5e1; }
+        .exp-complete { flex-basis: 100%; order: -1; background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 12px 16px; font-size: 16px; text-align: center; margin-bottom: 4px; }
+        .exp-complete.pop { animation: celebrate .5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes celebrate { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .term { background: none; border: none; box-shadow: none; padding: 0; margin: 0; font: inherit; color: inherit; text-transform: none; letter-spacing: inherit; border-bottom: 2px dotted #60a5fa; border-radius: 0; cursor: help; }
+        .term:hover { transform: none; filter: none; background: #eff6ff; }
+        #term-pop { position: absolute; z-index: 1500; max-width: 300px; background: var(--text-main); color: #fff; font-size: 14px; line-height: 1.45; padding: 10px 14px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,.25); }
+        #term-pop b { display: block; color: #93c5fd; margin-bottom: 2px; }
+        details.explain > summary { cursor: pointer; list-style: none; }
+        details.explain > summary::-webkit-details-marker { display: none; }
+        details.explain > summary::before { content: '▸ '; color: var(--text-muted); }
+        details.explain[open] > summary::before { content: '▾ '; }
+        details.explain[open] > summary .muted { display: none; }
+        details.explain[open] > summary { margin-bottom: 6px; }
+        details.entrants { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+        details.entrants > summary { cursor: pointer; font-size: 15px; }
+        details.guide-sec { border-bottom: 1px solid var(--border-color); padding: 6px 0 14px; margin-bottom: 14px; }
+        details.guide-sec > summary { cursor: pointer; list-style: none; }
+        details.guide-sec > summary::-webkit-details-marker { display: none; }
+        details.guide-sec > summary h2 { display: inline-block; margin: 6px 0; }
+        details.guide-sec > summary::after { content: ' ▸'; color: var(--text-muted); font-size: 18px; }
+        details.guide-sec[open] > summary::after { content: ' ▾'; }
         .exp-journal { margin-top: 16px; }
         .exp-journal label { font-weight: 700; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-journal textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; }
@@ -362,7 +386,7 @@
         .nodule-tabs { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
         .exp-dish { display: grid; grid-template-columns: 1fr 240px; gap: 16px; margin-top: 14px; }
         .result-pill { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 14px; margin: 4px 6px 4px 0; }
-        .story-quote { border-left: 4px solid var(--accent-amber); background: #fffbeb; padding: 10px 16px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 15px; }
+        .story-quote { border-left: 4px solid #94a3b8; background: #f8fafc; padding: 10px 16px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 15px; }
         .tab-sep { align-self: center; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-muted); padding: 0 0 6px; }
 
         .tab-sep { white-space: nowrap; }
@@ -502,17 +526,16 @@
 
     <!-- =================== TAB: STRATEGY LAB =================== -->
     <div id="tab-lab" class="tab-content">
-        <div class="note note-blue">
-            <b>🧬 GENETIC ENGINEERING BAY</b><br>
+        <details class="note note-blue explain"><summary><b>🧬 How the Strategy Lab works</b> <span class="muted">(tap to read)</span></summary>
             Your strategy is a set of instructions that runs <i>every round</i> of an encounter. It can see everything that has happened so far between you and your partner, and must answer with <b>C</b> (cooperate) or <b>D</b> (defect).
             Use the <b>Rule Builder</b> to snap rules together, or switch to <b>Code</b> to write JavaScript. Every famous strategy can be remixed.
-        </div>
+        </details>
 
         <div class="grid-lab">
             <!-- Left: my strategies -->
             <div>
                 <div class="card soft">
-                    <h3>MY STRATEGIES</h3>
+                    <h3>My strategies</h3>
                     <div class="strategy-list" id="my-strategy-list"></div>
                     <div class="btn-group" style="margin-top: 14px;">
                         <button class="small" onclick="labNew()">＋ New</button>
@@ -605,7 +628,7 @@
     <!-- =================== TAB: 1v1 =================== -->
     <div id="tab-1v1" class="tab-content">
         <div class="note note-green">
-            <b>⚔️ HEAD-TO-HEAD</b><br>
+            <b>⚔️ Head-to-head</b><br>
             Put any two strategies in a ring and watch them play round by round. Use it to check that your strategy does what you think it does, or to figure out how a classmate's strategy behaves.
         </div>
         <div class="controls">
@@ -671,7 +694,7 @@
 
         <div class="grid">
             <div>
-                <h3 id="opp-header">ENVIRONMENT SCRIPT</h3>
+                <h3 id="opp-header">Opponent</h3>
                 <div id="opp-desc" class="card soft" style="font-size: 13px; line-height: 1.55; min-height: 260px;"></div>
                 <div class="btn-group">
                     <button class="green" onclick="startDuel()">▶ Run Incubation Sequence</button>
@@ -681,7 +704,7 @@
             </div>
             <div>
                 <div class="field-notes" id="duel-notes">
-                    <h3>📓 FIELD NOTES</h3>
+                    <h3>📓 Field notes</h3>
                     <div class="muted">After each incubation, your lab assistant will write up what happened and why.</div>
                 </div>
             </div>
@@ -690,16 +713,12 @@
 
     <!-- =================== TAB: TOURNAMENT =================== -->
     <div id="tab-tournament" class="tab-content">
-        <div class="note note-amber">
-            <b>🏆 ROUND-ROBIN TOURNAMENT</b><br>
+        <details class="note note-blue explain"><summary><b>🏆 How the tournament works</b> <span class="muted">(tap to read)</span></summary>
             Every entrant meets every other entrant. Points from every encounter are added up. This is exactly how Axelrod ran his 1980 contest (200 rounds per encounter, and each program also played a copy of itself).
             Pay attention to the <b>Wins</b> column — the champion often wins surprisingly few head-to-head matches.
-        </div>
+        </details>
 
-        <h3>ENTRANTS</h3>
-        <div class="picker" id="tourney-picker"></div>
-
-        <div class="controls" style="margin-top: 18px;">
+        <div class="controls" style="margin-top: 0;">
             <div class="control-group">
                 <label>Rounds per encounter: <span class="val" id="tourney-round-val">200</span></label>
                 <input type="range" id="tourney-rounds-slider" min="10" max="500" value="200" oninput="$('tourney-round-val').innerText = this.value">
@@ -721,7 +740,11 @@
             </div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 18px; font-weight: bold; color: var(--accent-purple);" id="tourney-status">AWAITING INITIALIZATION</div>
+        <details class="entrants" id="tourney-entrants"><summary>👥 <b>Entrants: <span id="tourney-count">0</span> selected</b> <span class="muted">(tap to change)</span></summary>
+            <div class="picker" id="tourney-picker" style="margin-top: 12px;"></div>
+        </details>
+
+        <div style="text-align: center; margin-bottom: 18px; font-weight: bold; color: var(--accent-purple);" id="tourney-status">Ready when you are</div>
 
         <div class="grid" style="grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px;">
             <div class="card scroll-box" style="padding: 0 0 6px;">
@@ -734,14 +757,14 @@
             </div>
             <div>
                 <div class="field-notes" id="tourney-notes">
-                    <h3>📓 TOURNAMENT DEBRIEF</h3>
+                    <h3>📓 Tournament debrief</h3>
                     <div class="muted">Results analysis will appear here.</div>
                 </div>
             </div>
         </div>
 
         <div class="card" style="margin-top: 20px;">
-            <h3 class="row" style="justify-content: space-between;"><span>PAYOFF MATRIX <span class="muted" style="font-weight: 400; font-size: 12px;">— average points per round, row vs column. Click any cell to replay that encounter.</span></span></h3>
+            <h3 class="row" style="justify-content: space-between;"><span>Payoff matrix <span class="muted" style="font-weight: 400; font-size: 12px;">— average points per round, row vs column. Click any cell to replay that encounter.</span></span></h3>
             <div class="scroll-box" style="max-height: 460px;">
                 <table class="matrix" id="matrix-table" style="margin-top: 0;">
                     <thead id="matrix-head"></thead>
@@ -751,7 +774,7 @@
         </div>
 
         <div class="card" style="margin-top: 20px;">
-            <h3>🌱 ECOLOGICAL SIMULATION <span class="muted" style="font-weight: 400; font-size: 12px;">— Axelrod's "what if they reproduced?" experiment</span></h3>
+            <h3>🌱 Ecological simulation <span class="muted" style="font-weight: 400; font-size: 12px;">— Axelrod's "what if they reproduced?" experiment</span></h3>
             <div style="font-size: 14px; margin-bottom: 12px;">Start with an equal population of every entrant. Each generation, strategies that scored well against <i>the current population</i> leave more offspring. Watch who survives once the easy prey is gone.</div>
             <div class="row" style="margin-bottom: 12px;">
                 <label class="control-group" style="flex-direction: row; align-items: center; gap: 8px;">Generations <select id="eco-gens"><option>100</option><option selected>300</option><option>1000</option></select></label>
@@ -759,23 +782,21 @@
             </div>
             <div class="grid" style="grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px;">
                 <div class="chart-box"><canvas id="eco-chart" width="760" height="320"></canvas><div class="chart-legend" id="eco-legend"></div></div>
-                <div class="field-notes" id="eco-notes"><h3>📓 ECOLOGY NOTES</h3><div class="muted">Run a tournament, then run the ecology.</div></div>
+                <div class="field-notes" id="eco-notes"><h3>📓 Ecology notes</h3><div class="muted">Run a tournament, then run the ecology.</div></div>
             </div>
         </div>
     </div>
 
     <!-- =================== TAB: PETRI DISH =================== -->
     <div id="tab-petri" class="tab-content">
-        <div class="note note-purple" id="petri-model-note-roam">
-            <b>🦠 FREE-ROAMING MECHANICS</b><br>
+        <details class="note note-purple explain" id="petri-model-note-roam"><summary><b>🦠 How free-roaming works</b> <span class="muted">(tap to read)</span></summary>
             Organisms drift around the dish. When two bump into each other, they have an encounter. Cooperating together <b>gains energy</b>, defecting together <b>loses energy</b>, and exploiting a cooperator feeds the exploiter at the victim's expense. Living costs a little energy too.
             Organisms with enough energy <b>split in two</b>; organisms that run out <b>starve</b> 💀. Bigger glow = more energy.
-        </div>
-        <div class="note note-purple hidden" id="petri-model-note-grid">
-            <b>🧬 SPATIAL TAKEOVER MECHANICS</b><br>
+        </details>
+        <details class="note note-purple hidden explain" id="petri-model-note-grid"><summary><b>🧬 How the grid works</b> <span class="muted">(tap to read)</span></summary>
             Each cell is an organism living in a fixed spot, like bacteria on a plate or plants in a field. Every generation, each cell has an encounter with its 8 neighbors.
             Then every cell is <b>overwritten</b> by whichever neighbor (or itself) scored highest — successful behaviors spread. Watch for clusters: neighbors who cooperate protect each other.
-        </div>
+        </details>
 
         <div class="species-grid" id="species-grid"></div>
 
@@ -827,21 +848,20 @@
                 <div class="chart-box" style="margin-top: 14px;"><canvas id="petri-chart" width="720" height="170"></canvas></div>
             </div>
             <div class="stats-panel">
-                <h3 style="margin: 0; padding-bottom: 5px; color: var(--accent-purple);">POPULATION CENSUS</h3>
+                <h3 style="margin: 0; padding-bottom: 5px; color: var(--accent-purple);">Population census</h3>
                 <div class="row" style="justify-content: space-between;"><span class="muted" style="font-size: 12px; font-weight: 600;" id="petri-gen-label">TIME</span><span class="gen-counter" id="petri-gen">0</span></div>
                 <div style="font-size: 12px; color: var(--text-muted);" id="start-conditions"><i>Inject a population to capture starting conditions.</i></div>
                 <div id="petri-census"></div>
-                <div class="field-notes" id="petri-notes" style="padding: 12px 14px; font-size: 13px;"><h3>📓 NOTES</h3><div class="muted">Observations appear when the dish settles.</div></div>
+                <div class="field-notes" id="petri-notes" style="padding: 12px 14px; font-size: 13px;"><h3>📓 Notes</h3><div class="muted">Observations appear when the dish settles.</div></div>
             </div>
         </div>
     </div>
 
     <!-- =================== TAB: MISSIONS =================== -->
     <div id="tab-missions" class="tab-content">
-        <div class="note note-green">
-            <b>🎯 RESEARCH MISSIONS</b><br>
+        <details class="note note-green explain"><summary><b>🎯 About missions</b> <span class="muted">(tap to read)</span></summary>
             Each mission is an experiment. Completing one unlocks a <b>discovery</b> that explains what you just saw. Missions are saved in this browser.
-        </div>
+        </details>
         <div class="row"><b id="mission-summary"></b><span class="spacer"></span><button class="ghost" onclick="resetMissions()">Reset progress</button></div>
         <div class="progress"><div id="mission-bar" style="width: 0%"></div></div>
         <div class="mission-grid" id="mission-grid"></div>
@@ -869,7 +889,7 @@
     <!-- =================== TAB: CLASS ARENA =================== -->
     <div id="tab-class" class="tab-content">
         <div class="card soft" style="margin-bottom: 20px;">
-            <h3>📋 SUGGESTED LESSON PLAN (two ~50-minute periods)</h3>
+            <h3>📋 Suggested lesson plan (two ~50-minute periods)</h3>
             <div class="grid" style="gap: 16px; font-size: 14px;">
                 <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows a 2½-minute edited clip of Veritasium's Prisoner's Dilemma video (three sections, played back to back), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a organism from genes (brain type, testing, reactions, memory) through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
@@ -877,23 +897,23 @@
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
-            <h3>🔗 CLASSROOM LINK</h3>
+            <h3>🔗 Classroom link</h3>
             <p style="font-size: 14px; margin-top: 0;">Share this link with students to keep them focused on the Expedition. On it, the <b>Open Lab</b> and this <b>Teacher</b> tab (with the answer guide) are hidden. Each student's Open Lab unlocks automatically once they finish the Expedition. The normal link shows everything.</p>
             <div class="row"><input type="text" id="class-link" readonly style="flex: 1; min-width: 220px; font-family: var(--mono); font-size: 13px;" onclick="this.select()"><button class="teal small" onclick="copyText($('class-link').value)">📋 Copy link</button></div>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
-            <h3>⚙️ ENVIRONMENT PAYOFFS</h3>
+            <h3>⚙️ Environment payoffs</h3>
             <p style="font-size: 14px; margin-top: 0;">Change how many points each outcome is worth on this device (for demos or extension activities). Leave it on <b>Classic</b> during the Expedition, so results match the chapter text and classmates' results.</p>
             <button class="secondary small" onclick="openEnvModal()">⚙️ Open payoff settings</button>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
-            <h3>👩‍🏫 TEACHER MODE</h3>
+            <h3>👩‍🏫 Teacher mode</h3>
             <p style="font-size: 14px; margin-top: 0;">Preview or demo the Expedition without writing the journal entries: all writing requirements are skipped and every chapter is unlocked. It only affects <b>this device</b> and needs the teacher code (see the README).</p>
             <div class="row"><span>Status: <span id="teacher-mode-state">Off</span></span><span class="spacer"></span>
                 <button class="teal small" onclick="setTeacherMode(true)">Turn on</button><button class="secondary small" onclick="setTeacherMode(false)">Turn off</button></div>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
-            <h3>🎯 STANDARDS ALIGNMENT: GEORGIA CTAE ENGINEERING AKS</h3>
+            <h3>🎯 Standards alignment: Georgia CTAE Engineering AKS</h3>
             <p style="font-size: 13px; margin-top: 0;" class="muted">From the current Engineering Applications (TEH7) and Engineering Concepts (TEH8) AKS (last revised April 2026). <b>Strong</b> = students directly practice it. <b>Partial</b> = the activity supports it but doesn't cover the whole standard.</p>
             <h4 style="margin-top: 6px;">Engineering Applications (TEH7)</h4>
             <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2 (c, e, f)</td><td>Apply the engineering design process: develop solutions to criteria and constraints, optimize with modeling, test and evaluate to identify improvements</td><td>Ch. 3 design cycle with two survival trials as constraints; Ch. 4 and 6 test the design and refine it from results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.N.14.d</td><td>Integrate mathematical modeling and simulations to optimize designs and predict performance under various constraints</td><td>Payoff model, tournament and ecology simulations; Ch. 6 invasion-threshold experiment</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.H.8.a</td><td>Analyze the concept of models and types of models (physical, virtual, mathematical)</td><td>The whole game is a virtual and mathematical model of evolution; the Briefing builds the payoff model</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.h</td><td>Communicate data, observations, processes and results of the design process</td><td>Think and Connect journal entries cite the student's own data; Class Championship</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.C.3.a</td><td>Record all stages of the design process: problem definition, testing, iterations, reflections</td><td>The Expedition Journal records hypotheses, tests and reflections (no dated or signed entries)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.L.12 (a, b)</td><td>Design, program and simulate autonomous systems that use feedback loops</td><td>Strategies are autonomous decision programs that sense the partner's last move and respond: feedback-loop logic in simulation, no hardware</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.d</td><td>Research, select, then safely and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper, with the rule that students must be able to explain every line</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
@@ -917,14 +937,14 @@
             </table>
         </details>
         <div class="note note-teal">
-            <b>🛠️ ROSTER COMPILATION ENGINE</b><br>
+            <b>🛠️ Class roster</b><br>
             Collect your students' strategies here, then run them against each other (and the famous strategies) in the Global Tournament or the Survival Crucible.
             Students click <b>📤 Share card</b> in the Strategy Lab and send you the code (e.g., via a Google Form or Classroom). Paste as many cards as you like below — one per line. The roster is saved in this browser and can be exported as JSON to merge classes.
         </div>
 
         <div class="grid">
             <div class="card">
-                <h3 style="color: var(--accent-teal);">PASTE SHARE CARDS</h3>
+                <h3 style="color: var(--accent-teal);">Paste share cards</h3>
                 <textarea class="plain share-box" id="class-paste" placeholder="SYMBIOSIS:eyJuYW1lIjoi...&#10;SYMBIOSIS:eyJuYW1lIjoi..."></textarea>
                 <div class="btn-group" style="margin-top: 10px;"><button class="teal" onclick="classImportCards()">➕ Import cards</button></div>
 
@@ -948,7 +968,7 @@
 
             <div class="card" style="display: flex; flex-direction: column;">
                 <div class="row" style="justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
-                    <h3 style="margin: 0; border: none; padding: 0;">CURRENT CLASS ROSTER</h3>
+                    <h3 style="margin: 0; border: none; padding: 0;">Current class roster</h3>
                     <span id="assembly-count" class="badge badge-grey" style="font-size: 12px;">0 Entities</span>
                 </div>
                 <div class="scroll-box" style="flex-grow: 1; max-height: 360px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--soft);">
@@ -978,7 +998,7 @@
 <div id="data-log-modal" class="modal-overlay" onclick="if (event.target === this) closeModal(this.id)">
     <div class="modal-content">
         <div class="modal-head">
-            <h3 id="log-title">CYCLE DATA LOG</h3>
+            <h3 id="log-title">Round-by-round log</h3>
             <button class="secondary small" onclick="closeModal('data-log-modal')">Close</button>
         </div>
         <div id="log-strips"></div>
@@ -994,7 +1014,7 @@
 <div id="report-modal" class="modal-overlay" onclick="if (event.target === this) closeModal(this.id)">
     <div class="modal-content" style="max-width: 880px; background: var(--soft);">
         <div class="modal-head">
-            <h3>📄 REPORT PREVIEW</h3>
+            <h3>📄 Report preview</h3>
             <div class="row">
                 <button class="secondary small" onclick="closeModal('report-modal')">Cancel</button>
                 <button class="green small" onclick="window.print()">Save as PDF / Print</button>
@@ -1007,7 +1027,7 @@
 <div id="env-modal" class="modal-overlay" onclick="if (event.target === this) closeModal(this.id)">
     <div class="modal-content" style="max-width: 720px;">
         <div class="modal-head">
-            <h3>⚙️ ENVIRONMENT PAYOFFS</h3>
+            <h3>⚙️ Environment payoffs</h3>
             <button class="secondary small" onclick="closeModal('env-modal')">Close</button>
         </div>
         <p style="font-size: 14px; margin-top: 0;">Points are "resources" — energy, food, offspring. Change them to model a different environment. Every mode of the lab uses these values.</p>
@@ -1032,7 +1052,7 @@
 <div id="share-modal" class="modal-overlay" onclick="if (event.target === this) closeModal(this.id)">
     <div class="modal-content" style="max-width: 640px;">
         <div class="modal-head">
-            <h3 id="share-title">📤 SHARE CARD</h3>
+            <h3 id="share-title">📤 Share card</h3>
             <button class="secondary small" onclick="closeModal('share-modal')">Close</button>
         </div>
         <div id="share-body"></div>
@@ -1985,7 +2005,7 @@ async function labQuickTest() {
         const errs = res.results.filter(r => r.err);
         box.innerHTML = `
             <h4>Quick test · 30 rounds vs six famous strategies</h4>
-            ${errs.length ? `<div class="note note-red"><b>⚠️ YOUR STRATEGY HAD ERRORS</b><br>Round ${errs[0].err.first.round}: ${esc(errs[0].err.first.message)}<br><span style="font-size: 12px;">When a strategy crashes, the lab makes it cooperate for that round.</span></div>` : ''}
+            ${errs.length ? `<div class="note note-red"><b>⚠️ Your strategy had errors</b><br>Round ${errs[0].err.first.round}: ${esc(errs[0].err.first.message)}<br><span style="font-size: 12px;">When a strategy crashes, the lab makes it cooperate for that round.</span></div>` : ''}
             <div style="overflow-x: auto;"><table class="test-results">
                 <tr><th>Opponent</th><th>You</th><th>Them</th><th>Your moves</th></tr>
                 ${res.results.map(r => `<tr><td>${r.emoji} ${esc(r.name)}</td><td><b>${r.sA}</b></td><td>${r.sB}</td><td><div class="strip">${[...r.a].map(m => `<span class="${m === 'C' ? 'c' : 'd'}"></span>`).join('')}</div></td></tr>`).join('')}
@@ -2026,7 +2046,7 @@ function labShare(id) {
     const card = { v: 2, name: s.name.trim(), emoji: s.emoji, author: s.author || studentName(), code: strategyCode(s), mode: s.mode, rules: s.mode === 'rules' ? s.rules : undefined, otherwise: s.mode === 'rules' ? s.otherwise : undefined };
     const text = encodeCard(card);
     window._shareCard = { text, card };
-    showShareModal('📤 SHARE CARD', `
+    showShareModal('📤 Share card', `
         <div class="card soft" style="margin-bottom: 14px;"><b style="font-size: 18px;">${esc(card.emoji)} ${esc(card.name)}</b><div class="muted">by ${esc(card.author || 'unknown')}</div></div>
         <p style="font-size: 14px;">Send this code to your teacher (or a classmate). They paste it into the <b>Class Arena</b> or <b>📥 Import card</b>.</p>
         <textarea class="plain share-box" readonly onclick="this.select()">${esc(text)}</textarea>
@@ -2037,7 +2057,7 @@ function labShare(id) {
 }
 
 function openImportCardModal() {
-    showShareModal('📥 IMPORT A STRATEGY CARD', `
+    showShareModal('📥 Import a strategy card', `
         <p style="font-size: 14px;">Paste a share card (it starts with <span class="mono">SYMBIOSIS:</span>). It will be added to <b>My strategies</b> so you can test against it or study it.</p>
         <textarea class="plain share-box" id="import-card-text" placeholder="SYMBIOSIS:..."></textarea>
         <div class="btn-group"><button onclick="importCardToMine()">📥 Import</button></div>`);
@@ -2068,7 +2088,7 @@ function strategyCardHTML(s) {
     if (!s) return '';
     if (s.lib) {
         const L = s.lib;
-        return `<b style="color: var(--accent-red); letter-spacing: .5px;">PROTOCOL ACTIVE: ${esc(L.role.toUpperCase())} (${esc(L.name.toUpperCase())})</b>
+        return `<b style="color: var(--accent-red); font-size: 15px;">${esc(L.emoji)} ${esc(L.name)}</b> <span class="muted">· ${esc(L.role)}</span>
             <div style="margin: 6px 0;">${L.traits.map(t => `<span class="badge ${/Nasty|Exploit|Unclear|Unresp|Unforgiving/.test(t) ? 'badge-neg' : 'badge-pos'}">${esc(t.toUpperCase())}</span>`).join('')}</div>
             <p style="margin: 6px 0;"><b>Strategy:</b> ${L.behavior}</p>
             <p style="margin: 6px 0;"><b>History:</b> ${L.origin}</p>
@@ -2076,14 +2096,14 @@ function strategyCardHTML(s) {
             <p style="margin: 6px 0;"><b>🏛️ In society:</b> ${L.politics}</p>
             <details><summary style="cursor: pointer; font-weight: 600;">View source</summary><pre class="code" style="margin-top: 6px;">${esc(L.code)}</pre></details>`;
     }
-    return `<b style="color: var(--accent-red); letter-spacing: .5px;">${esc(s.group === 'Class' ? 'CLASSMATE' : 'CUSTOM')} ENTITY: ${esc(s.emoji)} ${esc(s.name.toUpperCase())}</b>
+    return `<b style="color: var(--accent-red); font-size: 15px;">${esc(s.emoji)} ${esc(s.name)}</b> <span class="muted">· ${s.group === 'Class' ? 'Classmate' : 'Custom'} strategy</span>
         ${s.author ? `<div class="muted">Engineered by ${esc(s.author)}</div>` : ''}
         <pre class="code" style="margin-top: 10px;">${esc(s.code)}</pre>`;
 }
 
 function renderDuelOpponent() {
     const s = findStrategy($('duel-b').value);
-    $('opp-header').innerText = 'ENVIRONMENT SCRIPT: ' + (s ? s.name.toUpperCase() : '—');
+    $('opp-header').innerText = 'Opponent: ' + (s ? s.name : '—');
     $('opp-desc').innerHTML = strategyCardHTML(s);
 }
 
@@ -2100,7 +2120,7 @@ function stripsBlock(g, A, B, filled = true) {
 }
 
 function fillLog(g, A, B, title) {
-    $('log-title').innerText = title || 'CYCLE DATA LOG';
+    $('log-title').innerText = title || 'Round-by-round log';
     $('log-h1').innerText = (A.emoji + ' ' + A.name).slice(0, 26);
     $('log-h2').innerText = (B.emoji + ' ' + B.name).slice(0, 26);
     $('log-strips').innerHTML = `<div class="strip-wrap"><div class="strip-scroll">${stripsBlock(g, A, B)}</div></div>`;
@@ -2125,7 +2145,7 @@ async function startDuel() {
     try {
         g = await Runner.run('match', { a: A.code, b: B.code, rounds, unknown: settings.unknown, noise: settings.noise, payoff: state.payoff, seed: newSeed() }, 8000);
     } catch (e) {
-        $('duel-notes').innerHTML = `<h3>📓 FIELD NOTES</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`;
+        $('duel-notes').innerHTML = `<h3>📓 Field notes</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`;
         return;
     }
     if (token !== duelToken) return;
@@ -2170,7 +2190,7 @@ async function startDuel() {
     if (token !== duelToken) return;
     state.lastDuel = { g, A: { id: A.id, name: A.name, emoji: A.emoji, code: A.code, lib: A.lib, mine: A.mine }, B: { id: B.id, name: B.name, emoji: B.emoji, code: B.code, lib: B.lib, mine: B.mine }, settings, payoff: { ...P } };
     fillLog(g, A, B);
-    $('duel-notes').innerHTML = `<h3>📓 FIELD NOTES</h3>${duelNotesHTML(state.lastDuel)}`;
+    $('duel-notes').innerHTML = `<h3>📓 Field notes</h3>${duelNotesHTML(state.lastDuel)}`;
     checkDuelMissions(state.lastDuel);
 }
 function fmtScore(x) { return Number.isInteger(x) ? x : x.toFixed(1); }
@@ -2243,11 +2263,13 @@ function renderPicker() {
             ${items.length ? items.map(s => `<label><input type="checkbox" ${on.has(s.id) ? 'checked' : ''} onchange="pickToggle('${s.id}', this.checked)"> ${esc(s.emoji)} ${esc(s.name)}</label>`).join('') : '<div class="muted" style="font-size: 13px;">None yet.</div>'}</div>`;
     };
     $('tourney-picker').innerHTML = col('Mine', '🧬 Mine') + col('Famous', '📚 Famous') + col('Class', '🛠️ Class');
+    $('tourney-count').innerText = tourneyPick.on.length;
 }
 function pickToggle(id, v) {
     const on = new Set(tourneyPick.on);
     if (v) on.add(id); else on.delete(id);
     tourneyPick.on = [...on]; Store.set('tourneyPick', tourneyPick);
+    $('tourney-count').innerText = tourneyPick.on.length;
 }
 function pickAll(group, v) {
     const on = new Set(tourneyPick.on);
@@ -2276,7 +2298,7 @@ async function runTournament() {
     };
     const status = $('tourney-status');
     const work = entries.length * (entries.length + 1) / 2 * settings.rounds * settings.repeats;
-    status.innerText = `RUNNING ${entries.length * (entries.length + 1) / 2 * settings.repeats} ENCOUNTERS…`;
+    status.innerText = `Running ${entries.length * (entries.length + 1) / 2 * settings.repeats} encounters…`;
     let res;
     try {
         res = await Runner.run('tournament', {
@@ -2285,19 +2307,19 @@ async function runTournament() {
         }, 15000 + work / 15);
     } catch (e) {
         if (e.timeout) {
-            status.innerText = 'SEARCHING FOR STUCK STRATEGIES…';
+            status.innerText = 'Searching for stuck strategies…';
             const stuck = await findStuck(entries);
-            status.innerHTML = 'TOURNAMENT ABORTED';
-            $('tourney-notes').innerHTML = `<h3>📓 TOURNAMENT DEBRIEF</h3><div class="note note-red" style="margin: 0;">${STUCK_MSG}${stuck.length ? `<br><br>Likely culprit${stuck.length > 1 ? 's' : ''}: <b>${stuck.map(s => esc(s.emoji + ' ' + s.name)).join(', ')}</b>. Untick ${stuck.length > 1 ? 'them' : 'it'} and run again.` : '<br><br>Try fewer rounds or fewer entrants.'}</div>`;
+            status.innerHTML = 'Tournament stopped';
+            $('tourney-notes').innerHTML = `<h3>📓 Tournament debrief</h3><div class="note note-red" style="margin: 0;">${STUCK_MSG}${stuck.length ? `<br><br>Likely culprit${stuck.length > 1 ? 's' : ''}: <b>${stuck.map(s => esc(s.emoji + ' ' + s.name)).join(', ')}</b>. Untick ${stuck.length > 1 ? 'them' : 'it'} and run again.` : '<br><br>Try fewer rounds or fewer entrants.'}</div>`;
         } else {
-            status.innerText = 'ERROR'; toast(esc(e.message), 'warn');
+            status.innerText = 'Something went wrong'; toast(esc(e.message), 'warn');
         }
         return;
     }
     state.lastTourney = { entries: entries.map(e => ({ id: e.id, name: e.name, emoji: e.emoji, group: e.group, lib: e.lib, mine: !!e.mine, author: e.author })), res, settings, payoff: { ...state.payoff } };
     state.lastEco = null;
     renderTournament();
-    status.innerText = `TOURNAMENT COMPLETE · ${entries.length} ENTRANTS · ${settings.unknown ? 'AVG ' + Math.round(res.meanLen) : settings.rounds} ROUNDS PER ENCOUNTER`;
+    status.innerText = `Tournament complete · ${entries.length} entrants · ${settings.unknown ? 'about ' + Math.round(res.meanLen) : settings.rounds} rounds per encounter`;
     checkTourneyMissions(state.lastTourney);
     runEcology();
 }
@@ -2336,7 +2358,7 @@ function renderTournament() {
         return `<td style="background: ${off ? '#f1f5f9' : heat(v, T.payoff)}" onclick="replayGame(${i}, ${j})" title="${esc(T.entries[i].name)} vs ${esc(T.entries[j].name)}: ${fmt(v)} per round">${off ? '·' : fmt(v, 1)}</td>`;
     }).join('')}</tr>`).join('');
 
-    $('tourney-notes').innerHTML = `<h3>📓 TOURNAMENT DEBRIEF</h3><ul>${tourneyNotes(T).map(n => `<li>${n}</li>`).join('')}</ul>`;
+    $('tourney-notes').innerHTML = `<h3>📓 Tournament debrief</h3><ul>${tourneyNotes(T).map(n => `<li>${n}</li>`).join('')}</ul>`;
 }
 
 function replayGame(i, j) {
@@ -2399,7 +2421,7 @@ function runEcology() {
     const eco = computeEcology(T, parseInt($('eco-gens').value, 10));
     state.lastEco = eco;
     drawEcoChart($('eco-chart'), $('eco-legend'), T, eco);
-    $('eco-notes').innerHTML = `<h3>📓 ECOLOGY NOTES</h3><ul>${eco.notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+    $('eco-notes').innerHTML = `<h3>📓 Ecology notes</h3><ul>${eco.notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
     if (eco.extinct.length) completeMission('extinct');
 }
 
@@ -2545,12 +2567,12 @@ async function launchPetri(cfg, view) {
     Object.assign(petri, { running: false, finished: false, view });
     const setNotes = html => { if (view.notes) view.notes.innerHTML = html; };
     const { species: chosen, layout, rounds, noise, W, H } = cfg;
-    setNotes('<h3>📓 NOTES</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>');
+    setNotes('<h3>📓 Notes</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>');
     let res;
     try {
         res = await Runner.run('tournament', { entries: chosen.map(c => ({ code: c.code })), rounds, noise, repeats: 6, selfPlay: true, payoff: state.payoff, seed: newSeed(), keepGames: false }, 10000);
     } catch (e) {
-        setNotes(`<h3>📓 NOTES</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`);
+        setNotes(`<h3>📓 Notes</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`);
         return false;
     }
     if (petri.view !== view) return false;   // another dish was started meanwhile
@@ -2586,8 +2608,8 @@ async function launchPetri(cfg, view) {
     });
     petri.history.push(censusCounts());
     petri.start = petri.history[0].slice();
-    if (view.start) view.start.innerHTML = `<b>STARTING (${layout}, ${rounds} round${rounds === 1 ? '' : 's'}/encounter${noise ? ', ' + pct(noise) + ' noise' : ''}):</b><br>` + chosen.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${petri.start[i]}`).join(' · ');
-    setNotes('<h3>📓 NOTES</h3><div class="muted">Observations appear when the dish settles.</div>');
+    if (view.start) view.start.innerHTML = `<b>Starting (${layout}, ${rounds} round${rounds === 1 ? '' : 's'}/encounter${noise ? ', ' + pct(noise) + ' noise' : ''}):</b><br>` + chosen.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${petri.start[i]}`).join(' · ');
+    setNotes('<h3>📓 Notes</h3><div class="muted">Observations appear when the dish settles.</div>');
     if (view.pause) { view.pause.disabled = false; view.pause.innerText = 'Pause'; view.pause.className = 'secondary'; }
     if (view.step) view.step.disabled = false;
     drawPetri(); renderCensus();
@@ -2732,7 +2754,7 @@ function petriNotes() {
     if (rounds <= 2 && !coopKind[lead]) notes.push(`⏳ With only ${rounds} round${rounds === 1 ? '' : 's'} per encounter, there is no "shadow of the future": defecting has no consequences. Try 10+ rounds and compare.`);
     if (petri.layout === 'invasion') notes.push(final[0] > start[0] ? `🧫 The invader grew from ${start[0]} to ${final[0]} cells.` : `🧫 The invader shrank from ${start[0]} to ${final[0]} cells.`);
     petri.notes = notes;
-    if (petri.view.notes) petri.view.notes.innerHTML = `<h3>📓 NOTES</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+    if (petri.view.notes) petri.view.notes.innerHTML = `<h3>📓 Notes</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
 }
 
 
@@ -2762,12 +2784,12 @@ function roamSpawn(s, x, y) {
 async function launchRoam(cfg) {
     stopRoam(); stopPetriTimer(); petri.running = false;
     const view = labPetriView();
-    view.notes.innerHTML = '<h3>📓 NOTES</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>';
+    view.notes.innerHTML = '<h3>📓 Notes</h3><div class="muted">Culturing… measuring how each species fares against every other.</div>';
     let res;
     try {
         res = await Runner.run('tournament', { entries: cfg.species.map(c => ({ code: c.code })), rounds: cfg.rounds, noise: cfg.noise, repeats: 6, selfPlay: true, payoff: state.payoff, seed: newSeed(), keepGames: false }, 10000);
     } catch (e) {
-        view.notes.innerHTML = `<h3>📓 NOTES</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`;
+        view.notes.innerHTML = `<h3>📓 Notes</h3><div class="note note-red" style="margin: 0;">${e.timeout ? STUCK_MSG : esc(e.message)}</div>`;
         return;
     }
     const P = state.payoff, k = cfg.species.length;
@@ -2791,8 +2813,8 @@ async function launchRoam(cfg) {
     }
     roam.start = roamCounts();
     roam.history.push(roam.start.slice());
-    view.start.innerHTML = `<b>STARTING (free-roaming, ${cfg.layout}, ${cfg.rounds} round${cfg.rounds === 1 ? '' : 's'}/encounter${cfg.noise ? ', ' + pct(cfg.noise) + ' noise' : ''}):</b><br>` + cfg.species.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${roam.start[i]}`).join(' · ');
-    view.notes.innerHTML = '<h3>📓 NOTES</h3><div class="muted">Bigger glow = more energy. 💀 = starved. Observations appear when the run ends.</div>';
+    view.start.innerHTML = `<b>Starting (free-roaming, ${cfg.layout}, ${cfg.rounds} round${cfg.rounds === 1 ? '' : 's'}/encounter${cfg.noise ? ', ' + pct(cfg.noise) + ' noise' : ''}):</b><br>` + cfg.species.map((c, i) => `${esc(c.emoji)} ${esc(c.name)}: ${roam.start[i]}`).join(' · ');
+    view.notes.innerHTML = '<h3>📓 Notes</h3><div class="muted">Bigger glow = more energy. 💀 = starved. Observations appear when the run ends.</div>';
     view.pause.disabled = false; view.step.disabled = false; view.pause.innerText = 'Pause'; view.pause.className = 'secondary';
     roam.running = true;
     renderRoamCensus(); roamLoop();
@@ -2954,7 +2976,7 @@ function roamNotes() {
     if (totalEnd < totalStart * 0.6) notes.push(`⚠️ The whole ecosystem shrank from ${totalStart} to ${totalEnd} organisms. When exploitation is common, everyone, including the exploiters, ends up with less.${rounds <= 2 ? ` With only ${rounds} round${rounds === 1 ? '' : 's'} per encounter there's no shadow of the future. Try 10+ rounds.` : ''}`);
     else if (totalEnd >= cap * 0.9) notes.push(`🌿 The dish is full (${totalEnd} of ${cap} spaces): cooperation produced enough energy to support a crowded, thriving population.`);
     roam.notes = notes;
-    roam.view.notes.innerHTML = `<h3>📓 NOTES</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+    roam.view.notes.innerHTML = `<h3>📓 Notes</h3><ul style="padding-left: 18px; margin: 0;">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
 }
 
 function checkRoamMissions() {
@@ -3076,7 +3098,7 @@ function renderGuide() {
     const P = state.payoff;
     const w1 = (P.T - P.R) / (P.T - P.P), w2 = (P.T - P.R) / (P.R - P.S);
     const wStar = Math.max(w1, w2);
-    $('guide-body').innerHTML = `
+    const guideHTML = `
     <section id="g-question">
         <h2><small>01 · The puzzle</small>The Big Question</h2>
         <p>Natural selection favours whatever leaves more offspring. So why is nature full of cooperation? Vampire bats share blood, cleaner fish groom predators that could eat them, plants trade sugar with fungi, and the mitochondria in your cells were once free-living bacteria.</p>
@@ -3207,6 +3229,17 @@ function renderGuide() {
         </dl>
         <p class="muted" style="font-size: 13px;">Further exploring: Robert Axelrod, <i>The Evolution of Cooperation</i> (1984); Nicky Case, <i>The Evolution of Trust</i> (interactive, 2017); Martin Nowak, <i>SuperCooperators</i> (2011).</p>
     </section>`;
+    $('guide-body').innerHTML = guideHTML;
+    // Each section folds; the first starts open. Nav links open the section they point to.
+    $('guide-body').querySelectorAll(':scope > section').forEach((sec, i) => {
+        const d = document.createElement('details');
+        d.id = sec.id; d.className = 'guide-sec'; if (i === 0) d.open = true;
+        const h = sec.querySelector('h2'), sum = document.createElement('summary');
+        sum.appendChild(h); d.appendChild(sum);
+        while (sec.firstChild) d.appendChild(sec.firstChild);
+        sec.replaceWith(d);
+    });
+    document.querySelectorAll('.guide-nav a').forEach(a => a.onclick = () => { const d = document.querySelector(a.getAttribute('href')); if (d) d.open = true; });
 }
 
 // ============================================================================
@@ -3672,7 +3705,7 @@ function mountBriefQuiz(el) {
     ];
     el.innerHTML = `
         <div class="card soft" style="margin-top: 16px;">
-            <h3>🎲 THE GAME IN 60 SECONDS</h3>
+            <h3>🎲 The game in 60 seconds</h3>
             <p style="font-size: 15px; margin-top: 0;">Two organisms meet. Each secretly chooses to <b>cooperate</b> 🤝 or <b>defect</b> 🗡️. Then both choices are revealed, and each organism collects resources (points):</p>
             <table class="payoff-table" style="margin: 0 auto 14px;">
                 <tr><th></th><th>Partner cooperates 🤝</th><th>Partner defects 🗡️</th></tr>
@@ -3774,7 +3807,7 @@ function mountNodules(el) {
         const quiz = $('c2-quiz');
         const kept = names.map((n, i) => ($('c2-guess-' + i) || {}).value || '');
         quiz.classList.remove('hidden');
-        quiz.innerHTML = `<div class="card soft"><h3>🔬 IDENTIFY EACH STRAIN</h3>
+        quiz.innerHTML = `<div class="card soft"><h3>🔬 Identify each strain</h3>
             <p class="muted" style="font-size: 13px; margin-top: 0;">Your evidence (your choice on top, the nodule's response below):</p>
             ${names.map((n, i) => `<div class="row" style="margin-bottom: 12px; align-items: flex-start;"><b style="width: 90px;">Nodule ${n}</b>
                 <div class="hand-history" style="margin: 0;">${played[i].my.map((m, d) => `<div class="hh"><span>${m === 'C' ? '🍬' : '✂️'}</span><span>${played[i].their[d] === 'C' ? '✅' : '🚫'}</span><small>${d + 1}</small></div>`).join('')}</div>
@@ -3958,7 +3991,7 @@ function mountGenome(el) {
             </div>
             <div>
                 <div class="card soft">
-                    <h3>🧪 SURVIVAL TRIALS</h3>
+                    <h3>🧪 Survival trials</h3>
                     <p style="font-size: 14px; margin-top: 0;">Like any engineered design, your organism is tested against <b>design criteria</b> (what success looks like) under <b>constraints</b> (conditions you can't change).</p>
                     <p style="font-size: 14px;"><b>Criteria</b><br>🦠 <b>Freeloader trial:</b> a partner that never cooperates should not earn double what you earn or more.<br>🪞 <b>Partnership trial:</b> against a partner that copies your last move, average at least <b>${Math.round(0.87 * state.payoff.R * 10) / 10}</b> per encounter (the most possible is ${state.payoff.R}).</p>
                     <p style="font-size: 14px;"><b>Constraints</b><br>Each trial lasts 30 encounters, and you can't see or change your partner's behavior.</p>
@@ -4035,7 +4068,7 @@ async function runExpTournament() {
     // Also show it in the Open Lab tournament tab.
     state.lastTourney = expT; state.lastEco = null;
     renderTournament();
-    $('tourney-status').innerText = 'TOURNAMENT FROM THE EXPEDITION · 16 ENTRANTS · 200 ROUNDS';
+    $('tourney-status').innerText = 'Tournament from the Expedition · 16 entrants · 200 rounds per encounter';
     checkTourneyMissions(expT);
     return expT;
 }
@@ -4080,7 +4113,7 @@ function renderExpTourney() {
                 <tbody>${order.map((i, r) => `<tr class="lb-row ${T.entries[i].mine ? 'me' : ''}"><td>${r + 1}</td><td>${esc(T.entries[i].emoji)} ${esc(T.entries[i].name)}${T.entries[i].mine ? ' ← you' : ''}</td><td><b>${fmt(R.perRound[i])}</b></td><td>${R.wins[i]} / ${T.entries.length - 1}</td></tr>`).join('')}</tbody>
             </table></div>
             <div>
-                <div class="exp-task" style="margin-top: 0;"><b>📊 RESULTS</b>
+                <div class="exp-task" style="margin-top: 0;"><b>📊 Results</b>
                     Winner: <b>${esc(T.entries[winner].emoji)} ${esc(T.entries[winner].name)}</b>. Your prediction, ${esc(T.entries[predIdx].name)}, placed <b>#${order.indexOf(predIdx) + 1}</b>. Your organism placed <b>#${myRank}</b> of ${T.entries.length}.</div>
                 <p style="font-size: 15px;">Study the table before you move on. Compare the <b>Pts / round</b> column with the <b>Matchups won</b> column. Do the strategies that win the most matchups also score the most points?</p>
             </div>
@@ -4123,7 +4156,7 @@ window.expRunGenerations = () => {
     const lead = eco.finalOrder[0], predIdx = T.entries.findIndex(e => e.id === exp.data.predict5);
     const myIdx = T.entries.findIndex(e => e.mine);
     $('c5-notes').innerHTML = `
-        <div class="exp-task" style="margin-top: 0;"><b>📊 RESULTS</b>Most common: <b>${esc(T.entries[lead].emoji)} ${esc(T.entries[lead].name)}</b> (${pct(eco.x[lead])}). Your prediction, ${esc(T.entries[predIdx].name)}, ended at ${pct(eco.x[predIdx])}.</div>
+        <div class="exp-task" style="margin-top: 0;"><b>📊 Results</b>Most common: <b>${esc(T.entries[lead].emoji)} ${esc(T.entries[lead].name)}</b> (${pct(eco.x[lead])}). Your prediction, ${esc(T.entries[predIdx].name)}, ended at ${pct(eco.x[predIdx])}.</div>
         <p>${esc(T.entries[myIdx].emoji)} Your organism started at ${pct(1 / T.entries.length)} and ended at <b>${pct(eco.x[myIdx])}</b>.</p>
         <p style="font-size: 14px;">Study the graph. Find a line that <b>rose and then fell</b>, and one that <b>went extinct</b>. Hover-free tip: the legend shows the final share of the top 8.</p>`;
     exp.data.eco5 = { lead: T.entries[lead].name, extinct: eco.extinct.map(i => T.entries[i].name), boomBust: eco.boomBust.map(i => T.entries[i].name) };
@@ -4158,7 +4191,7 @@ function mountBiofilm(el) {
                 <canvas id="c6-chart" width="300" height="150" style="width: 100%;"></canvas>
             </div>
         </div>
-        <div class="card" style="margin-top: 14px;"><h3>📋 DATA TABLE</h3><div id="c6-table" style="overflow-x: auto;"></div><div id="c6-status" class="muted" style="font-size: 13px; margin-top: 8px;"></div></div>`;
+        <div class="card" style="margin-top: 14px;"><h3>📋 Data table</h3><div id="c6-table" style="overflow-x: auto;"></div><div id="c6-status" class="muted" style="font-size: 13px; margin-top: 8px;"></div></div>`;
     chById('biofilm').onWhy();
     renderBiofilmTable();
 }
@@ -4222,7 +4255,7 @@ function mountSociety(el) {
     const rec = genomeRecord(), a = exp.data.society || (exp.data.society = {});
     el.innerHTML = `
         <div class="card">
-            <h3>🧠 ANALYZE A HUMAN DILEMMA</h3>
+            <h3>🧠 Analyze a human dilemma</h3>
             <p style="font-size: 14px; margin-top: 0;">Pick one situation (or invent your own) and analyze it the way you analyzed bats and soybeans.</p>
             <div class="pick-row">${DILEMMAS.map(d => `<button class="pick ${a.scenario === d.id ? 'on' : ''}" onclick="exp.data.society.scenario = '${d.id}'; saveExp(); mountSociety($('exp-widget'))">${d.icon} ${d.title}</button>`).join('')}</div>
             ${a.scenario === 'own' ? `<input type="text" style="width: 100%; margin-bottom: 10px;" placeholder="Describe your situation in one sentence" value="${esc(a.own || '')}" oninput="exp.data.society.own = this.value; saveExp(); expSocietyCheck()">` : ''}
@@ -4230,7 +4263,7 @@ function mountSociety(el) {
             <div id="c7-status" class="muted" style="font-size: 13px; margin-top: 8px;"></div>
         </div>
         <div class="card soft" style="margin-top: 16px;">
-            <h3>🏆 ENTER THE CLASS CHAMPIONSHIP</h3>
+            <h3>🏆 Enter the Class Championship</h3>
             ${rec ? `<p style="font-size: 15px;">Send your organism, <b>${esc(rec.emoji)} ${esc(rec.name)}</b>, to your teacher. Copy this code and submit it however your teacher asks.</p>
                 <textarea class="plain share-box" readonly onclick="this.select()">${esc(encodeCard({ v: 2, name: rec.name, emoji: rec.emoji, author: studentName() || rec.author || '', code: strategyCode(rec), mode: 'rules', rules: rec.rules, otherwise: rec.otherwise }))}</textarea>
                 <div class="btn-group"><button onclick="copyText(this.closest('.card').querySelector('textarea').value)">📋 Copy my organism's code</button></div>
@@ -4270,7 +4303,7 @@ const CHAPTERS = [
         think: () => `Your roostmate was following a simple rule. <b>What do you think the rule was?</b> Write it as an "If… then…" statement, and point to a specific night in the history above as evidence.${exp.data.roost && !exp.data.roost.kept ? ' <i>(You never kept your blood, so how sure can you be?)</i>' : ''}`,
         discovery: () => {
             const r = exp.data.roost;
-            return `Your roostmate was playing <b>Tit for Tat</b>: it shared on the first night, then copied whatever <i>you</i> did the night before.${r ? ` It shared on ${r.theirShares} of 10 nights. You finished with ${fmtScore(r.sMe)} blood; it finished with ${fmtScore(r.sThem)}.` : ''} Keeping your blood paid off once, then cost you a night of sharing.<br><br>Real vampire bats behave in a similar way: individuals tend to give blood to roostmates that have given to them before (Wilkinson 1984; Carter &amp; Wilkinson 2013). Biologists call help that is paid back later <b>reciprocal altruism</b> (Trivers 1971).${roostMystery()}`;
+            return `Your roostmate was playing <b>Tit for Tat</b>: it shared on the first night, then copied whatever <i>you</i> did the night before.${r ? ` It shared on ${r.theirShares} of 10 nights. You finished with ${fmtScore(r.sMe)} blood; it finished with ${fmtScore(r.sThem)}.` : ''}${r && r.kept ? ' Each time you kept your blood, it paid off once, then cost you the next night of sharing.' : ''}<br><br>Real vampire bats behave in a similar way: individuals tend to give blood to roostmates that have given to them before (Wilkinson 1984; Carter &amp; Wilkinson 2013). Biologists call help that is paid back later <b>reciprocal altruism</b> (Trivers 1971).${roostMystery()}`;
         },
         connect: 'In Wilkinson\'s original study, a lot of the blood sharing happened between <b>relatives</b>, especially mothers and their offspring. Why could evolution favor helping a relative, even one who never repays you? How is that a different reason for helping than the one your roostmate had?',
         mount: mountRoost
@@ -4363,6 +4396,76 @@ const CHAPTERS = [
     }
 ];
 
+
+// ---------- Tap-to-define vocabulary ----------
+// Key words in chapter text get a dotted underline; tapping one shows a short definition.
+const GLOSSARY = [
+    ['Prisoner\'s Dilemma', /prisoner['’]s dilemma/i, 'A game where each player does better by cheating, but if both cheat, both end up worse off than if they had cooperated.'],
+    ['Tit for Tat', /tit for tat/i, 'A strategy: cooperate first, then copy whatever your partner did last time.'],
+    ['reciprocal altruism', /reciprocal altruism/i, 'Helping someone at a cost to yourself now, because the help is likely to be paid back later.'],
+    ['reciprocity', /\breciprocity\b/i, 'Returning help with help (and harm with harm).'],
+    ['mutualism', /\bmutualisms?\b/i, 'A relationship between two species in which both benefit.'],
+    ['parasite', /\bparasit(?:e|es|ism)\b/i, 'An organism that benefits by taking from another organism (its host) and harming it.'],
+    ['host', /\bhosts?\b/i, 'The organism a parasite lives on or feeds from.'],
+    ['competition', /\bcompetition\b/i, 'In this game: both partners defect, so both get less than if they had cooperated.'],
+    ['rhizobia', /\brhizobia\b/i, 'Soil bacteria that live inside root nodules and turn nitrogen from the air into a form plants can use.'],
+    ['nodule', /\bnodules?\b/i, 'A small bump on a plant\'s roots where helpful bacteria live.'],
+    ['freeload', /\bfreeload(?:s|ers?|ing)?\b/i, 'To take a benefit without paying your share of the cost.'],
+    ['sanction', /\bsanctions?\b/i, 'A punishment that makes cheating less rewarding.'],
+    ['biofilm', /\bbiofilms?\b/i, 'A community of microbes stuck together on a surface.'],
+    ['mutant', /\bmutants?\b/i, 'An individual with a new genetic variation.'],
+    ['fitness', /\bfitness\b/i, 'In biology: how well an organism survives and reproduces, passing on its genes.'],
+    ['natural selection', /natural selection/i, 'The process by which traits that help organisms survive and reproduce become more common over generations.'],
+    ['frequency-dependent', /frequency-dependent/i, 'When how well a strategy does depends on how common the other strategies are.'],
+    ['shadow of the future', /shadow of the future/i, 'How much future meetings matter. The more likely you are to meet again, the more cooperation pays.'],
+    ['Ultimatum Game', /ultimatum game/i, 'A psychology experiment: one person offers how to split some money, and the other can accept or reject it. If they reject it, nobody gets anything.'],
+    ['design criteria', /design criteria/i, 'The requirements a design must meet to count as a success.'],
+    ['constraints', /\bconstraints\b/i, 'Limits or conditions a design has to work within, which you can\'t change.']
+];
+
+function glossifyChapter() {
+    const root = $('exp-body');
+    if (!root) return;
+    const used = new Set([...root.querySelectorAll('.term')].map(t => t.dataset.term));
+    const boxes = ['.exp-story', '.exp-task', '#exp-think-q', '#exp-discovery', '.exp-connect label'].map(q => root.querySelector(q)).filter(Boolean);
+    for (const box of boxes) {
+        if (box.closest('.hidden')) continue;
+        const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, {
+            acceptNode: n => n.parentElement.closest('.term, button, a, textarea, input, select, pre, code') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+        });
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        for (const node of nodes) {
+            for (const [key, re, def] of GLOSSARY) {
+                if (used.has(key)) continue;
+                const m = node.nodeValue.match(re);
+                if (!m) continue;
+                const after = node.splitText(m.index);
+                after.splitText(m[0].length);
+                const btn = document.createElement('button');
+                btn.type = 'button'; btn.className = 'term'; btn.dataset.term = key;
+                btn.textContent = m[0];
+                btn.setAttribute('aria-label', `${m[0]}: tap for definition`);
+                after.replaceWith(btn);
+                used.add(key);
+                break;   // this text node was split; the rest is handled on the next refresh
+            }
+        }
+    }
+}
+document.addEventListener('click', e => {
+    const t = e.target.closest('.term');
+    let pop = $('term-pop');
+    if (!t) { if (pop) pop.remove(); return; }
+    const entry = GLOSSARY.find(g => g[0] === t.dataset.term);
+    if (!pop) { pop = document.createElement('div'); pop.id = 'term-pop'; pop.setAttribute('role', 'tooltip'); document.body.appendChild(pop); }
+    pop.innerHTML = `<b>${esc(entry[0])}</b>${esc(entry[2])}`;
+    const r = t.getBoundingClientRect();
+    pop.style.left = Math.max(8, Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - 316)) + 'px';
+    pop.style.top = (window.scrollY + r.bottom + 6) + 'px';
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('term-pop')) $('term-pop').remove(); });
+
 // ---------- Expedition shell ----------
 function chById(id) { return CHAPTERS.find(c => c.id === id); }
 function chIndex(id) { return CHAPTERS.findIndex(c => c.id === id); }
@@ -4414,22 +4517,24 @@ function renderExpedition() {
             <div><div class="exp-kicker">Day ${c.day} · ${chLabel(i)} · ${c.place}</div><h2>${c.title}</h2><div class="exp-story">${c.story}</div></div>
             <div class="exp-emoji">${c.icon}</div>
         </div>
-        <div class="exp-task"><b>🎯 YOUR TASK</b>${c.task}</div>
+        <div class="exp-task"><b>🎯 Your task</b>${c.task}</div>
+        <div class="exp-steps" id="exp-steps" aria-label="Chapter progress"></div>
         <div id="exp-widget"></div>
         ${c.think ? `<div id="exp-think" class="exp-think hidden">
-            <b>🤔 THINK BEFORE YOU READ ON</b>
+            <b>🤔 Think before you read on</b>
             <label for="exp-think-ans" id="exp-think-q"></label>
             <textarea id="exp-think-ans" placeholder="Explain your thinking…" oninput="exp.answers['${c.id}:think'] = this.value; saveExp(); expStage()">${esc(exp.answers[c.id + ':think'] || '')}</textarea>
             <div class="row"><span class="muted" id="exp-think-count" style="font-size: 13px;"></span><span class="spacer"></span><button id="exp-reveal" onclick="expReveal()">💡 Reveal the discovery</button></div>
         </div>` : ''}
         <div id="exp-after" class="hidden">
             <div class="exp-discovery" id="exp-discovery"></div>
-            <div class="exp-journal exp-connect"><b>🔗 CONNECT</b><label for="exp-connect-ans">${c.connect}</label>
+            <div class="exp-journal exp-connect"><b>🔗 Connect</b><label for="exp-connect-ans">${c.connect}</label>
                 <textarea id="exp-connect-ans" placeholder="Apply what you learned…" oninput="exp.answers['${c.id}:connect'] = this.value; saveExp(); expStage()">${esc(exp.answers[c.id + ':connect'] || '')}</textarea>
                 <div class="muted" id="exp-connect-count" style="font-size: 13px;"></div></div>
         </div>
         <div class="exp-nav">
             <button class="secondary" ${i === 0 ? 'disabled' : ''} onclick="expGo(${i - 1})">← Back</button>
+            <div id="exp-complete" class="exp-complete hidden"></div>
             <button class="ghost" onclick="expReset()">↺ Start the expedition over</button>
             ${last ? `<button class="green big" onclick="if (!studentName()) { toast('Type your name in the 👤 box at the top first, so your teacher knows whose journal this is.', 'warn'); $('student-name').focus(); return; } generateJournal()">🖨️ Print my Expedition Journal</button>`
                    : `<button class="big" id="exp-next" disabled onclick="expGo(${i + 1})">Next chapter →</button>`}
@@ -4452,13 +4557,37 @@ function expStage() {
     }
     const showAfter = done && (exp.revealed[c.id] || !c.think || teacherOn());
     const after = $('exp-after');
-    if (showAfter && after.classList.contains('hidden')) $('exp-discovery').innerHTML = `<b>💡 DISCOVERY</b>${chText(c.discovery)}`;
+    if (showAfter && after.classList.contains('hidden')) $('exp-discovery').innerHTML = `<b>💡 Discovery</b>${chText(c.discovery)}`;
     after.classList.toggle('hidden', !showAfter);
     const cw = realWords(exp.answers[c.id + ':connect']);
     $('exp-connect-count').innerText = cw >= need(CONNECT_WORDS) ? '' : `${cw} / ${CONNECT_WORDS} words to continue`;
     const next = $('exp-next');
     if (next) next.disabled = !(chapterFinished(c) || teacherOn());
+    renderExpSteps(c, done, showAfter, cw);
     renderExpRail();
+    for (let k = 0; k < 4; k++) glossifyChapter();
+}
+
+// The little "Task → Think → Discover → Connect" tracker under each chapter's task.
+function renderExpSteps(c, done, discoveryShown, connectWords) {
+    const steps = [{ label: 'Task', ok: done }];
+    if (c.think) steps.push({ label: 'Think', ok: !!exp.revealed[c.id] || (teacherOn() && done) });
+    steps.push({ label: 'Discover', ok: discoveryShown });
+    steps.push({ label: 'Connect', ok: connectWords >= need(CONNECT_WORDS) && discoveryShown });
+    const cur = steps.findIndex(st => !st.ok);
+    $('exp-steps').innerHTML = steps.map((st, i) => `<span class="exp-stepdot ${st.ok ? 'ok' : i === cur ? 'cur' : ''}">${st.ok ? '✓' : i + 1} ${st.label}</span>`).join('<span class="exp-steparrow">→</span>');
+    const fin = chapterFinished(c), box = $('exp-complete');
+    if (!box) return;
+    box.classList.toggle('hidden', !fin);
+    if (!fin) return;
+    const i = CHAPTERS.indexOf(c), nextC = CHAPTERS[i + 1];
+    box.innerHTML = `🎉 <b>Chapter complete!</b>${nextC ? ` Next: ${nextC.icon} ${nextC.title}` : ' You finished the Expedition. Print your journal below.'}`;
+    exp.celebrated = exp.celebrated || {};
+    if (!exp.celebrated[c.id]) {
+        exp.celebrated[c.id] = true; saveExp();
+        box.classList.remove('pop'); void box.offsetWidth; box.classList.add('pop');
+        toast(`🎉 <b>${esc(c.title)}</b> complete!`, 'mission', 3500);
+    }
 }
 
 function expReveal() {
@@ -4482,7 +4611,7 @@ function expComplete() {
     exp.done[c.id] = true; saveExp();
     if (!$('exp-after')) return;
     // Refresh the discovery if it is already showing (it may depend on the latest results).
-    if (exp.revealed[c.id] || !c.think) $('exp-discovery').innerHTML = `<b>💡 DISCOVERY</b>${chText(c.discovery)}`;
+    if (exp.revealed[c.id] || !c.think) $('exp-discovery').innerHTML = `<b>💡 Discovery</b>${chText(c.discovery)}`;
     expStage();
     const target = c.think ? $('exp-think') : $('exp-after');
     if (first && target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
