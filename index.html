@@ -347,6 +347,9 @@
         .evo-dot { width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; opacity: .9; }
         .evo-bar { display: grid; grid-template-columns: minmax(0, 1.4fr) 1fr 42px; gap: 8px; align-items: center; font-size: 13px; margin: 5px 0; }
         .evo-bar b { text-align: right; font-family: var(--mono); }
+        .cm-lake { background: linear-gradient(#bae6fd, #7dd3fc); border-radius: 14px; min-height: 90px; padding: 12px; font-size: 22px; line-height: 1.5; letter-spacing: 2px; margin: 12px 0 6px; word-break: break-all; }
+        .cm-choose { background: var(--soft); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 14px; }
+        .cm-choose label { display: block; margin-bottom: 6px; font-size: 15px; }
         .exp-journal { margin-top: 16px; }
         .exp-journal label { font-weight: 700; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-journal textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; }
@@ -514,6 +517,7 @@
                     <button role="menuitem" data-tab="tab-lab">🧬 Strategy Lab</button>
                     <button role="menuitem" data-tab="tab-1v1">⚔️ Head-to-Head</button>
                     <button role="menuitem" data-tab="tab-evo">🧪 Evolution Engine</button>
+                    <button role="menuitem" data-tab="tab-commons">🎣 The Commons</button>
                 </div>
             </div>
             <div class="tab" role="tab" tabindex="0" data-tab="tab-guide">📚 Field Guide</div>
@@ -947,6 +951,50 @@
         </div>
     </div>
 
+    <!-- =================== TAB: THE COMMONS =================== -->
+    <div id="tab-commons" class="tab-content">
+        <details class="note note-blue explain"><summary><b>🎣 How the Commons works</b> <span class="muted">(tap to read)</span></summary>
+            Until now, every dilemma had two players. Many real ones have <b>many</b>: a shared fishery, a forest, clean air, or the sugar that yeast cells release for their neighbors.
+            You are one of six villagers fishing the same lake. The fish regrow fastest when the lake is about half full, and not at all when it is empty.
+            Whatever you catch is yours, but the lake belongs to everyone.<br><br>
+            In 1968, ecologist Garrett Hardin argued that shared resources are doomed: each person gains by taking more, so the <b>"tragedy of the commons"</b> is inevitable.
+            Political scientist <b>Elinor Ostrom</b> (Nobel Prize, 2009) found real communities that avoided the tragedy for centuries. Try her rules and see if they work.
+        </details>
+        <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
+            <div>
+                <div class="card" id="cm-setup">
+                    <h3>🏛️ Village rules</h3>
+                    <p style="font-size: 14px; margin-top: 0;">Before the season starts, your village council decides which rules to use. Your five neighbors each have a hidden personality.</p>
+                    <label class="checkline" style="margin: 8px 0;"><input type="checkbox" id="cm-monitor"> 👁️ <b>Monitoring</b>: everyone's catch is posted publicly</label>
+                    <label class="checkline" style="margin: 8px 0;"><input type="checkbox" id="cm-sanction"> ⚖️ <b>Graduated sanctions</b>: anyone who takes more than the fair share pays a fine, small at first and larger for repeat offenses</label>
+                    <button class="teal" style="margin-top: 10px;" onclick="cmStart()">🎣 Start fishing</button>
+                </div>
+                <div class="card hidden" id="cm-game" style="margin-top: 0;">
+                    <div class="row" style="justify-content: space-between;">
+                        <h3 style="border: none; margin: 0; padding: 0;" id="cm-season">Season 1</h3>
+                        <span class="muted" style="font-size: 13px;" id="cm-rules"></span>
+                    </div>
+                    <div class="cm-lake" id="cm-lake"></div>
+                    <div class="row" style="font-size: 13px; margin: 4px 0 12px;"><span>🐟 Fish in the lake: <b id="cm-stock"></b></span><span class="spacer"></span><span class="muted" title="The most each person can take while keeping the lake near half full, where fish regrow fastest">Fair share this season: <b id="cm-fair"></b> fish each</span></div>
+                    <div class="cm-choose">
+                        <label for="cm-catch"><b>How many fish will you catch this season?</b></label>
+                        <div class="row"><input type="range" id="cm-catch" min="0" max="15" value="4" oninput="$('cm-catch-val').innerText = this.value" style="flex: 1;"><b class="gen-counter" id="cm-catch-val" style="min-width: 32px; text-align: right;">4</b></div>
+                        <button class="teal big" onclick="cmFish()">🎣 Go fishing</button>
+                    </div>
+                    <div class="note note-blue" id="cm-msg" style="margin: 14px 0 0;"></div>
+                </div>
+                <div class="chart-box" style="margin-top: 14px;"><b style="font-size: 14px;">🐟 Fish in the lake</b> <span class="muted" style="font-size: 12px;">(the gray line marks half full, where fish regrow fastest)</span><canvas id="cm-chart" width="720" height="190"></canvas></div>
+            </div>
+            <div>
+                <div class="card soft">
+                    <h3>🏘️ The village</h3>
+                    <div class="scroll-box" style="max-height: none;"><table id="cm-table" style="margin-top: 0;"><tbody><tr><td class="muted">Start fishing to meet your neighbors.</td></tr></tbody></table></div>
+                </div>
+                <div class="field-notes" id="cm-notes" style="margin-top: 14px;"><h3>📓 Notes</h3><div class="muted">Observations appear when the fishing ends. Nobody tells you when that is.</div></div>
+            </div>
+        </div>
+    </div>
+
     <!-- =================== TAB: FIELD GUIDE =================== -->
     <div id="tab-guide" class="tab-content">
         <div class="guide">
@@ -974,7 +1022,7 @@
                 <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows a 2½-minute edited clip of Veritasium's Prisoner's Dilemma video (three sections, played back to back), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a organism from genes (brain type, testing, reactions, memory) through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
-            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension idea:</b> in the 🧪 Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
+            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension ideas:</b> after Chapter 7, have students play 🎣 The Commons twice (no rules, then monitoring + sanctions) and explain the difference. In the 🧪 Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>🔗 Classroom link</h3>
@@ -998,9 +1046,9 @@
             <h4 style="margin-top: 6px;">Engineering Applications (TEH7)</h4>
             <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2 (c, e, f)</td><td>Apply the engineering design process: develop solutions to criteria and constraints, optimize with modeling, test and evaluate to identify improvements</td><td>Ch. 3 design cycle with two survival trials as constraints; Ch. 4 and 6 test the design and refine it from results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.N.14.d</td><td>Integrate mathematical modeling and simulations to optimize designs and predict performance under various constraints</td><td>Payoff model, tournament and ecology simulations; Ch. 6 invasion-threshold experiment</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.H.8.a</td><td>Analyze the concept of models and types of models (physical, virtual, mathematical)</td><td>The whole game is a virtual and mathematical model of evolution; the Briefing builds the payoff model</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.h</td><td>Communicate data, observations, processes and results of the design process</td><td>Think and Connect journal entries cite the student's own data; Class Championship</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.C.3.a</td><td>Record all stages of the design process: problem definition, testing, iterations, reflections</td><td>The Expedition Journal records hypotheses, tests and reflections (no dated or signed entries)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.L.12 (a, b)</td><td>Design, program and simulate autonomous systems that use feedback loops</td><td>Strategies are autonomous decision programs that sense the partner's last move and respond: feedback-loop logic in simulation, no hardware</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.d</td><td>Research, select, then safely and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper, with the rule that students must be able to explain every line</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.M.13.a</td><td>Research and apply AI for optimization, predictive analytics and machine learning in engineering design</td><td>Evolution Engine: students run a genetic algorithm (an AI optimization method), tune mutation, population size and generations, and compare evolved designs with human-designed ones. Covers optimization, not predictive analytics or machine learning</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
             <h4>Engineering Concepts (TEH8)</h4>
-            <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2 (c, e, f, g)</td><td>Apply the design process: solve to criteria and constraints, optimize with modeling, test and evaluate using simulations, and refine using performance data</td><td>Ch. 3 genome design and trials; Ch. 4–6 simulations; revising the organism after poor results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.L.12.d</td><td>Conduct controlled experiments to evaluate performance and reliability under varying conditions</td><td>Ch. 6: vary one variable (encounters), hold the rest constant, bracket the threshold in a data table</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.M.13.b</td><td>Use mathematical models to represent and predict phenomena</td><td>Payoff model predicts single-meeting behavior; simulations predict which strategies spread</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.I.9.d</td><td>Use technologies to generate data to optimize solutions, including graphical displays</td><td>Ch. 6 data table, Ch. 5 population graph, tournament leaderboard and payoff matrix</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.L.12.c</td><td>Integrate biological concepts to design solutions</td><td>Students design an organism's behavior using real mutualism and sanction strategies (bats, soybeans, biofilms)</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.K.11.c</td><td>Represent data through graphs and charts to evaluate prototypes</td><td>Leaderboard, payoff-matrix heat map and population charts used to evaluate the student's organism</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2.a</td><td>Utilize an engineering design notebook to document the design process</td><td>The Expedition Journal (printable)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2.d</td><td>Research, select and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.M.13.d</td><td>Evaluate the societal impacts of engineering solutions</td><td>Ch. 7 analysis of a human dilemma and the 'who benefits?' discussion</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
+            <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2 (c, e, f, g)</td><td>Apply the design process: solve to criteria and constraints, optimize with modeling, test and evaluate using simulations, and refine using performance data</td><td>Ch. 3 genome design and trials; Ch. 4–6 simulations; revising the organism after poor results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.L.12.d</td><td>Conduct controlled experiments to evaluate performance and reliability under varying conditions</td><td>Ch. 6: vary one variable (encounters), hold the rest constant, bracket the threshold in a data table</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.M.13.b</td><td>Use mathematical models to represent and predict phenomena</td><td>Payoff model predicts single-meeting behavior; simulations predict which strategies spread</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.I.9.d</td><td>Use technologies to generate data to optimize solutions, including graphical displays</td><td>Ch. 6 data table, Ch. 5 population graph, tournament leaderboard and payoff matrix</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.L.12.c</td><td>Integrate biological concepts to design solutions</td><td>Students design an organism's behavior using real mutualism and sanction strategies (bats, soybeans, biofilms)</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.K.11.c</td><td>Represent data through graphs and charts to evaluate prototypes</td><td>Leaderboard, payoff-matrix heat map and population charts used to evaluate the student's organism</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2.a</td><td>Utilize an engineering design notebook to document the design process</td><td>The Expedition Journal (printable)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2.d</td><td>Research, select and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.M.13.d</td><td>Evaluate the societal impacts of engineering solutions</td><td>Ch. 7 analysis of a human dilemma; 🎣 The Commons, where students compare village rules by their effect on the fish stock and on each villager</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
             <p style="font-size: 13px; margin-bottom: 6px;"><b>Not addressed:</b> machine learning and predictive analytics (the rest of TEH7.M.13.a), robotics hardware (sensors and actuators), and the notebook formatting, dating and witness-signature requirements (TEH7.C.3.c–e).</p>
-            <p style="font-size: 13px; margin: 0;"><b>Also aligns with</b> NGSS HS-LS2-8 (group behavior and survival) and HS-LS4-4 (natural selection leads to adaptation), plus the practices of forming hypotheses, planning investigations and arguing from evidence.</p>
+            <p style="font-size: 13px; margin: 0;"><b>Also aligns with</b> NGSS HS-LS2-8 (group behavior and survival), HS-LS4-4 (natural selection leads to adaptation) and HS-LS2-7 (evaluating solutions that reduce human impacts on the environment, in 🎣 The Commons), plus the practices of forming hypotheses, planning investigations and arguing from evidence.</p>
         </div>
         <details class="card soft" style="margin-bottom: 20px;">
             <summary style="cursor: pointer; font-weight: 700; font-size: 15px;">📝 ANSWER GUIDE: what to look for in each journal entry</summary>
@@ -1463,7 +1511,7 @@ function downloadFile(filename, text, mime = 'application/json') {
     }
 }
 
-const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine' };
+const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine', 'tab-commons': 'The Commons' };
 function toggleOpenLabMenu(force) {
     const m = $('openlab-menu'), open = force !== undefined ? force : m.classList.contains('hidden');
     m.classList.toggle('hidden', !open);
@@ -2570,12 +2618,13 @@ function drawLineChart(cv, series, opts = {}) {
     for (let k = 0; k <= 4; k++) {
         const v = yMax * k / 4, y = m.t + ph - ph * k / 4;
         ctx.beginPath(); ctx.moveTo(m.l, y); ctx.lineTo(w - m.r, y); ctx.stroke();
-        ctx.fillText(opts.percent ? Math.round(v * 100) + '%' : fmt(v, 1), m.l - 6, y);
+        ctx.fillText(opts.percent ? Math.round(v * 100) + '%' : yMax >= 20 ? Math.round(v) : fmt(v, 1), m.l - 6, y);
     }
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    for (let k = 0; k <= 5; k++) {
-        const x = m.l + pw * k / 5;
-        ctx.fillText(Math.round((len - 1) * k / 5), x, m.t + ph + 6);
+    const ticks = Math.min(5, len - 1);   // no repeated labels when there are only a few points
+    for (let k = 0; k <= ticks; k++) {
+        const x = m.l + pw * k / ticks;
+        ctx.fillText(Math.round((len - 1) * k / ticks), x, m.t + ph + 6);
     }
     if (opts.xLabel) { ctx.textAlign = 'right'; ctx.fillText(opts.xLabel, w - m.r, m.t + ph + 18); }
     series.forEach(s => {
@@ -3288,6 +3337,142 @@ return random() < p[last] ? 'C' : 'D';`;
 }
 
 // ============================================================================
+// THE COMMONS (a many-player dilemma: Hardin's tragedy vs. Ostrom's rules)
+// ============================================================================
+// The lake regrows logistically (fastest at half capacity). Each season every villager chooses a catch.
+const CM = { K: 200, r: 0.6, start: 150, maxCatch: 15, seasons: 20, villagers: 6 };
+const CM_TYPES = {
+    steward: { label: 'Steward', emoji: '🌿', desc: 'always takes the fair share' },
+    greedy: { label: 'Greedy', emoji: '🦈', desc: 'takes as much as possible, unless fines make it not worth it' },
+    reciprocator: { label: 'Reciprocator', emoji: '🦇', desc: 'takes the fair share, but if others overfish, overfishes too' },
+    copycat: { label: 'Copycat', emoji: '🐒', desc: 'copies the average catch from last season' }
+};
+const CM_NAMES = [['Ana', '👩‍🌾'], ['Ben', '🧔'], ['Chloe', '👩'], ['Dev', '👨'], ['Elif', '🧕']];
+const cm = { on: false };
+
+function cmRegrowth(S) { return CM.r * S * (1 - S / CM.K); }
+// The fair share works like a real fishery quota: it steers the lake toward half full, where fish regrow
+// fastest ("maximum sustainable yield"). Above half, a little extra may be taken; below half, less. Rounded down.
+function cmFair(S) { return Math.max(1, Math.floor((cmRegrowth(S) + 0.5 * (S - CM.K / 2)) / CM.villagers)); }
+function cmFine(n) { return n <= 1 ? 3 : n === 2 ? 6 : 12; }   // graduated: bigger for repeat offenses
+
+function cmStart() {
+    const types = shuffle(['steward', 'greedy', 'reciprocator', 'reciprocator', 'copycat']);
+    Object.assign(cm, {
+        on: true, season: 1, stock: CM.start, monitor: $('cm-monitor').checked, sanction: $('cm-sanction').checked,
+        people: [{ name: 'You', emoji: '🙋', you: true, total: 0, fines: 0, offenses: 0, last: null, banned: 0 },
+            ...CM_NAMES.map(([name, emoji], i) => ({ name, emoji, type: types[i], total: 0, fines: 0, offenses: 0, last: null, banned: 0 }))],
+        history: [CM.start], lastAvg: null, lastTotal: null, ended: false, collapsed: false
+    });
+    $('cm-setup').classList.add('hidden'); $('cm-game').classList.remove('hidden');
+    $('cm-rules').innerText = [cm.monitor ? '👁️ Monitoring' : '🙈 No monitoring', cm.sanction ? '⚖️ Sanctions' : 'No sanctions'].join(' · ');
+    $('cm-notes').innerHTML = '<h3>📓 Notes</h3><div class="muted">Observations appear when the fishing ends. Nobody tells you when that is.</div>';
+    $('cm-msg').innerHTML = cm.sanction && !cm.monitor
+        ? '⚖️ Your village has sanctions, but no monitoring. Think about how the council will know who overfished.'
+        : 'The lake is healthy. Choose your catch.';
+    $('cm-catch').value = cmFair(cm.stock); $('cm-catch-val').innerText = cmFair(cm.stock);
+    cmRender();
+}
+
+function cmAiCatch(p, fair) {
+    const max = CM.maxCatch, enforced = cm.sanction && cm.monitor;
+    if (p.type === 'steward') return fair;
+    // Under real enforcement, fined villagers learn: greedy ones once the next fine would outweigh the extra catch.
+    if (enforced && p.offenses >= (p.type === 'greedy' ? 2 : 1)) return fair;
+    if (p.type === 'greedy') return max;
+    if (p.type === 'copycat') return cm.lastAvg === null ? fair : Math.min(max, Math.round(cm.lastAvg));
+    // Reciprocator: cooperates while it trusts the system. With enforcement it relies on the fines (Ostrom's
+    // "conditional cooperators"); with monitoring alone it reacts to the visible average; without, only to the lake shrinking.
+    if (cm.lastAvg === null || enforced) return fair;
+    const othersOverfished = cm.monitor ? cm.lastAvg > cm.lastFair * 1.5 : cm.lastTotal > cm.lastFair * CM.villagers * 1.5;
+    return othersOverfished ? Math.min(max, Math.round(cm.lastAvg * 1.2)) : fair;
+}
+
+function cmFish() {
+    if (!cm.on || cm.ended) return;
+    const fair = cmFair(cm.stock), msgs = [];
+    // Excluded fishers (third offense) sit out a season: the last step of graduated sanctions.
+    const wants = cm.people.map(p => p.banned > 0 ? 0 : p.you ? +$('cm-catch').value : cmAiCatch(p, fair));
+    cm.people.forEach(p => { if (p.banned > 0) { msgs.push(`🚫 ${p.you ? 'You are' : p.name + ' is'} barred from fishing this season (third offense).`); p.banned--; } });
+    const wanted = wants.reduce((a, b) => a + b, 0);
+    const scale = wanted > cm.stock ? cm.stock / wanted : 1;   // can't catch fish that aren't there
+    if (scale < 1) msgs.push('🎣 Everyone wanted more fish than the lake had left. Catches were cut short.');
+    cm.people.forEach((p, i) => {
+        const got = Math.floor(wants[i] * scale);
+        p.last = got; p.total += got;
+        if (cm.sanction && cm.monitor && got > fair) {
+            p.offenses++;
+            const fine = Math.min(p.total, cmFine(p.offenses));
+            p.total -= fine; p.fines += fine;
+            if (p.offenses >= 3) p.banned = 1;
+            msgs.push(`⚖️ ${p.you ? 'You were' : p.name + ' was'} fined ${fine} fish for taking ${got} (fair share ${fair}).${p.offenses === 2 ? ' Repeat offense: bigger fine.' : p.offenses >= 3 ? ' Third offense: barred from fishing next season.' : ''}`);
+        }
+    });
+    const total = cm.people.reduce((t, p) => t + p.last, 0);
+    cm.lastAvg = total / CM.villagers; cm.lastTotal = total; cm.lastFair = fair;
+    cm.stock = Math.max(0, cm.stock - total);
+    cm.stock = Math.min(CM.K, Math.round(cm.stock + cmRegrowth(cm.stock)));
+    cm.history.push(cm.stock);
+    if (cm.sanction && !cm.monitor && total > fair * CM.villagers * 1.1) msgs.push('🙈 The lake shrank, but with no monitoring nobody can prove who overfished, so no one is fined.');
+    msgs.unshift(`The village caught <b>${total}</b> fish (a sustainable catch would be about ${fair * CM.villagers}). The lake now holds <b>${cm.stock}</b>.`);
+    $('cm-msg').innerHTML = msgs.join('<br>');
+    cm.season++;
+    if (cm.stock < 10) { cm.collapsed = true; cmEnd(); }
+    else if (cm.season > CM.seasons) cmEnd();
+    else { $('cm-catch').max = CM.maxCatch; cmRender(); }
+}
+
+function cmRender() {
+    const fishIcons = Math.round(cm.stock / 10);
+    $('cm-lake').innerHTML = fishIcons ? '🐟'.repeat(fishIcons) : '<span class="muted">No fish left.</span>';
+    $('cm-stock').innerText = cm.stock + ' / ' + CM.K;
+    $('cm-fair').innerText = cmFair(cm.stock);
+    $('cm-season').innerText = cm.ended ? 'Fishing is over' : 'Season ' + cm.season;
+    const reveal = cm.ended;
+    $('cm-table').innerHTML = `<thead><tr><th>Villager</th><th>Last catch</th><th>Total</th>${cm.sanction ? '<th>Fines</th>' : ''}</tr></thead><tbody>` + cm.people.map(p => {
+        const t = p.you ? null : CM_TYPES[p.type];
+        const showLast = p.you || cm.monitor || reveal;
+        return `<tr class="${p.you ? 'lb-row me' : ''}"><td>${p.emoji} ${esc(p.name)}${reveal && t ? `<br><span class="badge badge-grey">${t.emoji} ${t.label}</span>` : ''}</td>
+            <td>${p.last === null ? '–' : showLast ? p.last : '<span class="muted" title="No monitoring: catches are private">?</span>'}</td><td><b>${p.total}</b></td>${cm.sanction ? `<td>${p.fines || '–'}</td>` : ''}</tr>`;
+    }).join('') + '</tbody>' + (cm.monitor || reveal || cm.lastTotal === null ? '' : `<caption style="caption-side: bottom; font-size: 12px; padding-top: 6px;" class="muted">No monitoring: you only see the village total (${cm.lastTotal} last season).</caption>`);
+    drawLineChart($('cm-chart'), [
+        { name: 'Half full', color: '#cbd5e1', values: cm.history.map(() => CM.K / 2), width: 1 },
+        { name: 'Fish', color: '#0ea5e9', values: cm.history, width: 2.6 }
+    ], { yMax: CM.K, xLabel: 'Season' });
+}
+
+function cmEnd() {
+    cm.ended = true;
+    cmRender();
+    $('cm-game').querySelector('.cm-choose').classList.add('hidden');
+    const you = cm.people[0], others = cm.people.slice(1), village = cm.people.reduce((t, p) => t + p.total, 0);
+    const healthy = cm.stock >= CM.K * 0.4, seasons = cm.history.length - 1;
+    const best = Math.max(...others.map(p => p.total));
+    const notes = [];
+    notes.push(cm.collapsed ? `💀 <b>The fishery collapsed</b> after ${seasons} season${seasons === 1 ? '' : 's'}. Nobody will catch anything next year, including the people who overfished.` : `🐟 After ${seasons} seasons the lake holds <b>${cm.stock}</b> fish${healthy ? ', and it can keep feeding the village.' : ', far below the level where it regrows well.'}`);
+    // What a village taking only the fair share would have caught over the same seasons, starting from the same lake.
+    let sS = CM.start, sCatch = 0;
+    for (let k = 0; k < seasons; k++) { const f = cmFair(sS) * CM.villagers; sCatch += f; sS = Math.min(CM.K, Math.round(sS - f + cmRegrowth(sS - f))); }
+    notes.push(`You caught <b>${you.total}</b> fish (after fines). The whole village caught <b>${village}</b>. A village where everyone took only the fair share would have caught about <b>${sCatch}</b> over the same ${seasons} seasons${cm.collapsed ? ', and would still have a lake' : ''}.`);
+    notes.push('Your neighbors were: ' + others.map(p => `${p.emoji} ${esc(p.name)} = ${CM_TYPES[p.type].emoji} ${CM_TYPES[p.type].label} (${CM_TYPES[p.type].desc})`).join('; ') + '.');
+    if (!cm.monitor && !cm.sanction) notes.push('🏛️ With no rules, this is Hardin\'s tragedy of the commons: each person gains by taking more, and the cost is shared by everyone. Try again with Ostrom\'s rules.');
+    if (cm.sanction && !cm.monitor) notes.push('🙈 Sanctions without monitoring did nothing: you can\'t punish what you can\'t see. Ostrom found that successful communities always had a way to monitor use.');
+    if (cm.monitor && !cm.sanction) notes.push('👁️ Monitoring let the reciprocators see exactly who overfished, but with no consequences the greedy villager kept taking. What would change if cheating cost something?');
+    if (cm.monitor && cm.sanction) notes.push(`⚖️ With monitoring <i>and</i> graduated sanctions, cheating became visible and expensive. Small first fines gave offenders a chance to change; repeat offenses cost more. These are two of Elinor Ostrom's design principles for long-lasting commons.`);
+    if (you.total > best && cm.collapsed) notes.push('🤔 You out-caught your neighbors, but the lake is gone. Did you win?');
+    if (cm.collapsed && village > sCatch) notes.push('📉 Overfishing really can catch more fish for a while, by "mining" the stock. But it only works until the fish run out. The longer the village depends on the lake, the more restraint pays: the shadow of the future again.');
+    cm.notes = notes;
+    $('cm-notes').innerHTML = `<h3>📓 Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="cmAgain()">🔁 Try different village rules</button>`;
+    $('cm-msg').innerHTML += '<br><b>Fishing is over.</b> Read the notes to meet your neighbors.';
+    if (healthy && !cm.collapsed) completeMission('commons');
+    if (healthy && cm.monitor && cm.sanction) completeMission('ostrom');
+}
+function cmAgain() {
+    $('cm-game').classList.add('hidden'); $('cm-setup').classList.remove('hidden');
+    $('cm-game').querySelector('.cm-choose').classList.remove('hidden');
+}
+
+// ============================================================================
 // SECTION 10: MISSIONS
 // ============================================================================
 
@@ -3320,6 +3505,10 @@ const MISSIONS = [
       lesson: 'A genetic algorithm designs without a designer: random variation plus selection is enough to build a working strategy. Engineers use the same idea to optimize real designs.' },
     { id: 'rediscover', ic: '🔁', tag: 'Evolution', title: 'Evolution Rediscovers Cooperation', desc: 'Finish an Evolution Engine run (starting from random strategies) in which the population evolves to cooperate, earning close to the mutual-cooperation payoff.',
       lesson: 'Starting from random behavior, selection alone produced organisms that cooperate with cooperators and punish cheaters. No one had to invent reciprocity: it evolved.' },
+    { id: 'commons', ic: '🎣', tag: 'Commons', title: 'Keeper of the Lake', desc: 'In The Commons, finish the fishing with the lake still at least 40% full.',
+      lesson: 'A shared resource survives when users take no more than it can regrow. Restraint now is what makes catches possible later.' },
+    { id: 'ostrom', ic: '⚖️', tag: 'Commons', title: "Ostrom's Rules", desc: 'In The Commons, turn on monitoring AND graduated sanctions, and keep the lake at least 40% full.',
+      lesson: "The tragedy of the commons is not inevitable. Communities that can see who takes what, and respond with fair, escalating penalties, can share a resource for generations." },
     { id: 'class', ic: '👑', tag: 'Class', title: 'Class Champion', desc: 'Win a tournament that includes at least 3 classmates\' strategies, using one of your strategies.',
       lesson: "You can't control what your classmates submit — the environment is made of other organisms' strategies. That's evolution." }
 ];
@@ -4684,7 +4873,7 @@ const CHAPTERS = [
         think: null,
         discovery: `Three real cases to compare with your analysis:<br>
             <div class="story-quote"><b>🪖 WWI trenches.</b> Enemy units facing each other for months often stopped trying to kill each other. They shelled at predictable times, held fire at meal times, and answered real attacks with attacks. No one ordered it; it emerged because the same units kept meeting (Axelrod 1984, ch. 4).</div>
-            <div class="story-quote"><b>🎣 Fishing villages &amp; forests.</b> Elinor Ostrom won a 2009 Nobel Prize for showing how communities manage shared resources for long periods: members watch each other, and penalties start small and grow for repeat offenders.</div>
+            <div class="story-quote"><b>🎣 Fishing villages &amp; forests.</b> Elinor Ostrom won a 2009 Nobel Prize for showing how communities manage shared resources for long periods: members watch each other, and penalties start small and grow for repeat offenders. Try her rules in the Open Lab's 🎣 The Commons.</div>
             <div class="story-quote"><b>⚠️ Cartels.</b> Companies that secretly agree to keep prices high are cooperating with each other at their customers' expense. Cooperation is a tool. Who benefits matters.</div>`,
         connect: 'Final question: is cooperation that grows out of self-interest <b>real</b> kindness? Take a side and defend it, using at least one example from this expedition (bats, soybeans, your organism, the trenches…). Then give the strongest argument <i>against</i> your side.',
         mount: mountSociety
