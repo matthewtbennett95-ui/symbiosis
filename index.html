@@ -36,6 +36,24 @@
         .mono { font-family: var(--mono); }
 
         /* ---------- Header ---------- */
+        .topbar { display: flex; align-items: center; gap: 12px 22px; flex-wrap: wrap; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 22px; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand-logo { font-size: 30px; line-height: 1; }
+        .brand h1 { font-size: 24px; font-weight: 700; letter-spacing: -.3px; }
+        .brand .subtitle { margin-top: 0; text-transform: none; letter-spacing: 0; font-size: 12px; font-weight: 500; }
+        .topbar .tab-container { border-bottom: none; margin: 0; flex: 1; gap: 4px 14px; align-items: center; }
+        .topbar .tab { padding: 8px 6px; margin-bottom: 0; border-bottom-width: 3px; font-size: 14px; letter-spacing: 0; background: transparent; box-shadow: none; color: var(--text-muted); text-transform: none; border-radius: 0; }
+        .topbar .tab:hover { transform: none; filter: none; color: var(--text-main); }
+        .topbar .tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+        .openlab { position: relative; }
+        .openlab-menu { position: absolute; top: 100%; left: 0; z-index: 50; background: #fff; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 12px 30px -8px rgba(0,0,0,.2); padding: 6px; min-width: 220px; display: flex; flex-direction: column; }
+        .openlab-menu.hidden { display: none; }
+        .openlab-menu button { background: transparent; color: var(--text-main); box-shadow: none; text-transform: none; letter-spacing: 0; text-align: left; font-size: 14px; padding: 9px 12px; border-radius: 6px; font-weight: 600; }
+        .openlab-menu button:hover { background: var(--soft-2); transform: none; filter: none; }
+        .openlab-menu button.on { color: var(--accent-blue); background: #eff6ff; }
+        .name-field { display: flex; align-items: center; gap: 6px; font-size: 16px; }
+        .name-field input { width: 170px; }
+        .name-field input:placeholder-shown { border-color: var(--accent-amber); }
         .header-section { margin-bottom: 26px; }
         .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
         h1 { margin: 0; color: var(--text-main); font-weight: 300; font-size: 34px; letter-spacing: -0.5px; line-height: 1.2; }
@@ -358,7 +376,12 @@
             .header-section { margin-bottom: 14px; }
             .header-top { margin-bottom: 0; gap: 8px; }
             /* The Expedition has its own name box, so the header one is hidden on phones. */
-            .header-tools .tech-label { display: none; }
+            .topbar { gap: 8px 10px; padding-bottom: 6px; margin-bottom: 14px; }
+            .brand h1 { font-size: 20px; } .brand-logo { font-size: 24px; }
+            .brand .subtitle, .ol-sub { display: none; }
+            .name-field { margin-left: auto; font-size: 14px; } .name-field input { width: 118px; padding: 6px 8px; }
+            .topbar .tab-container { order: 3; width: 100%; flex: 1 1 100%; overflow-x: visible; flex-wrap: wrap; gap: 2px 6px; justify-content: space-between; }
+            .topbar .tab { font-size: 12px; padding: 6px 0; white-space: nowrap; }
             .tab-container { margin-bottom: 16px; }
             .tab { font-size: 12px; padding: 8px 4px 10px; }
             .exp-intro { flex-wrap: wrap; padding: 12px 14px; font-size: 13px; gap: 10px; }
@@ -431,7 +454,7 @@
             .print-report-container th { background-color: #eee; font-weight: bold; }
             .print-report-container img { max-width: 100%; }
             .print-report-container .lines { border-bottom: 1px solid #999; height: 26px; }
-            .print-report-container::after { content: "OFFICIAL LAB REPORT - BIO-POLITICAL SYSTEMS"; display: block; text-align: center; margin-top: 40px; font-size: 10px; color: #666; font-family: monospace; }
+            .print-report-container::after { content: "SYMBIOSIS LAB REPORT"; display: block; text-align: center; margin-top: 40px; font-size: 10px; color: #666; font-family: monospace; }
         }
         #print-root { display: none; }
         .report-preview { background: white; padding: 30px; border: 1px solid #ccc; min-height: 400px; font-family: Arial, sans-serif; }
@@ -446,38 +469,32 @@
 <body>
 
 <div id="app">
-    <!-- =================== HEADER =================== -->
-    <div class="header-section">
-        <div class="header-top">
-            <div>
-                <h1><span>SYS.LAB //</span> Bio-Political Engineering</h1>
-                <div class="subtitle">Symbiosis · The Evolution of Cooperation</div>
-            </div>
-            <div class="header-tools">
-                <label class="tech-label">Lab Technician <input type="text" id="student-name" placeholder="Your name" style="width: 170px;"></label>
-                <button class="secondary small" onclick="openEnvModal()">⚙️ Environment Payoffs</button>
-            </div>
+    <!-- =================== HEADER + NAVIGATION =================== -->
+    <div class="topbar">
+        <div class="brand">
+            <span class="brand-logo">🧬</span>
+            <div><h1>Symbiosis Lab</h1><div class="subtitle">The evolution of cooperation</div></div>
         </div>
-    </div>
-
-    <!-- =================== TABS =================== -->
-    <div class="tab-container" id="tabs">
-        <div class="tab active" role="tab" tabindex="0" data-tab="tab-expedition" style="--tab-color: var(--accent-blue)">🧭 EXPEDITION</div>
-        <div class="tab-sep">│ OPEN LAB:</div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-tournament" style="--tab-color: var(--accent-amber)">🏆 TOURNAMENT</div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-petri" style="--tab-color: var(--accent-purple)">🧫 SURVIVAL CRUCIBLE</div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-missions" style="--tab-color: #10b981">🎯 MISSIONS <span id="mission-count" class="badge badge-pos">0/0</span></div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-lab" style="--tab-color: var(--accent-blue)">🧬 STRATEGY LAB</div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-1v1" style="--tab-color: var(--accent-green)">⚔️ HEAD-TO-HEAD</div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-guide" style="--tab-color: var(--accent-pink)">📚 FIELD GUIDE</div>
-        <div style="flex-grow: 1;"></div>
-        <div class="tab" role="tab" tabindex="0" data-tab="tab-class" style="--tab-color: var(--accent-teal)">🛠️ TEACHER</div>
+        <nav class="tab-container" id="tabs" aria-label="Sections">
+            <div class="tab active" role="tab" tabindex="0" data-tab="tab-expedition">🧭 Expedition</div>
+            <div class="openlab" id="openlab">
+                <button class="tab" id="openlab-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleOpenLabMenu()">🔬 <span id="openlab-label">Open Lab</span> ▾</button>
+                <div class="openlab-menu hidden" id="openlab-menu" role="menu">
+                    <button role="menuitem" data-tab="tab-tournament">🏆 Tournament</button>
+                    <button role="menuitem" data-tab="tab-petri">🧫 Survival Crucible</button>
+                    <button role="menuitem" data-tab="tab-missions">🎯 Missions <span id="mission-count" class="badge badge-pos">0/0</span></button>
+                    <button role="menuitem" data-tab="tab-lab">🧬 Strategy Lab</button>
+                    <button role="menuitem" data-tab="tab-1v1">⚔️ Head-to-Head</button>
+                </div>
+            </div>
+            <div class="tab" role="tab" tabindex="0" data-tab="tab-guide">📚 Field Guide</div>
+            <div class="tab" role="tab" tabindex="0" data-tab="tab-class" id="teacher-tab">🛠️ Teacher</div>
+        </nav>
+        <label class="name-field" title="Your name appears on your journal and reports">👤 <input type="text" id="student-name" placeholder="Your name" aria-label="Your name"></label>
     </div>
 
     <!-- =================== TAB: EXPEDITION =================== -->
     <div id="tab-expedition" class="tab-content active">
-        <div class="exp-intro"><span style="font-size: 28px;">🧭</span><div style="flex: 1;"><b>How does cooperation evolve in a selfish world?</b> In 1980, Robert Axelrod ran a famous contest to find out. In this expedition you'll play as real organisms, design your own, and watch evolution decide who survives.</div>
-            <label class="tech-label" style="flex-direction: column; align-items: flex-start; gap: 4px;">Your name (for your journal)<input type="text" id="exp-name" placeholder="First and last name" style="width: 190px;" oninput="$('student-name').value = this.value; Store.set('studentName', this.value);"></label></div>
         <div id="teacher-banner" class="note note-teal hidden" style="margin-bottom: 14px;"></div>
         <div class="exp-rail" id="exp-rail"></div>
         <div id="exp-body"></div>
@@ -699,6 +716,7 @@
             </div>
             <div class="btn-group" style="margin-top: 0;">
                 <button class="amber" onclick="runTournament()">▶ Execute Tournament</button>
+                <button class="secondary small" onclick="openEnvModal()" title="Change how many points each outcome is worth">⚙️ Payoffs</button>
                 <button class="secondary" onclick="generateReport('tournament')">🖨️ Create Report</button>
             </div>
         </div>
@@ -796,6 +814,7 @@
             </div>
             <div class="btn-group" style="margin-top: 0;">
                 <button class="purple" onclick="startPetri()">🧫 Inject Population</button>
+                <button class="secondary small" onclick="openEnvModal()" title="Change how many points each outcome is worth">⚙️ Payoffs</button>
                 <button class="secondary" id="pause-btn" onclick="togglePetri()" disabled>Pause</button>
                 <button class="secondary" id="step-btn" onclick="stepPetri()" disabled>Step</button>
                 <button class="secondary" onclick="generateReport('survival')">🖨️ Create Report</button>
@@ -856,6 +875,16 @@
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
             <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
+        </div>
+        <div class="card soft" style="margin-bottom: 20px;">
+            <h3>🔗 CLASSROOM LINK</h3>
+            <p style="font-size: 14px; margin-top: 0;">Share this link with students to keep them focused on the Expedition. On it, the <b>Open Lab</b> and this <b>Teacher</b> tab (with the answer guide) are hidden. Each student's Open Lab unlocks automatically once they finish the Expedition. The normal link shows everything.</p>
+            <div class="row"><input type="text" id="class-link" readonly style="flex: 1; min-width: 220px; font-family: var(--mono); font-size: 13px;" onclick="this.select()"><button class="teal small" onclick="copyText($('class-link').value)">📋 Copy link</button></div>
+        </div>
+        <div class="card soft" style="margin-bottom: 20px;">
+            <h3>⚙️ ENVIRONMENT PAYOFFS</h3>
+            <p style="font-size: 14px; margin-top: 0;">Change how many points each outcome is worth on this device (for demos or extension activities). Leave it on <b>Classic</b> during the Expedition, so results match the chapter text and classmates' results.</p>
+            <button class="secondary small" onclick="openEnvModal()">⚙️ Open payoff settings</button>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>👩‍🏫 TEACHER MODE</h3>
@@ -1308,7 +1337,7 @@ function toast(html, kind = '', ms = 4200) {
 function openModal(id) { $(id).classList.add('open'); }
 function closeModal(id) { $(id).classList.remove('open'); }
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+    if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open')); toggleOpenLabMenu(false); }
     // Tabs and chapter steps are divs, so make Enter/Space activate them like buttons.
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.tab, .exp-step, .howto div')) { e.preventDefault(); e.target.click(); }
 });
@@ -1334,8 +1363,33 @@ function downloadFile(filename, text, mime = 'application/json') {
     }
 }
 
+const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head' };
+function toggleOpenLabMenu(force) {
+    const m = $('openlab-menu'), open = force !== undefined ? force : m.classList.contains('hidden');
+    m.classList.toggle('hidden', !open);
+    $('openlab-btn').setAttribute('aria-expanded', open);
+    if (open) (m.querySelector('button.on') || m.querySelector('button')).focus();
+}
+document.addEventListener('click', e => { if (!e.target.closest('#openlab')) toggleOpenLabMenu(false); });
+
+// Classroom link (?mode=class): Open Lab and Teacher tabs stay hidden until a student finishes the Expedition.
+const CLASS_MODE = new URLSearchParams(location.search).get('mode') === 'class';
+function openLabAvailable() { return !CLASS_MODE || teacherOn() || CHAPTERS.every(chapterFinished); }
+function refreshNavLocks() {
+    const lab = openLabAvailable(), was = !$('openlab').classList.contains('hidden');
+    $('openlab').classList.toggle('hidden', !lab);
+    $('teacher-tab').classList.toggle('hidden', CLASS_MODE && !teacherOn());
+    if (CLASS_MODE && lab && !was && Store.get('labUnlockedShown', false) === false) { Store.set('labUnlockedShown', true); toast('🔬 <b>Open Lab unlocked!</b> Try the Tournament and the Survival Crucible.', 'mission', 7000); }
+}
+
 function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+    if (OPEN_LAB_TABS[tabId] && !openLabAvailable()) { toast('🔬 The Open Lab unlocks when you finish the Expedition.'); tabId = 'tab-expedition'; }
+    if (tabId === 'tab-class' && CLASS_MODE && !teacherOn()) tabId = 'tab-expedition';
+    document.querySelectorAll('#tabs .tab[data-tab]').forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+    document.querySelectorAll('#openlab-menu button').forEach(b => b.classList.toggle('on', b.dataset.tab === tabId));
+    $('openlab-btn').classList.toggle('active', !!OPEN_LAB_TABS[tabId]);
+    $('openlab-label').innerHTML = 'Open Lab' + (OPEN_LAB_TABS[tabId] ? `<span class="ol-sub">: ${OPEN_LAB_TABS[tabId]}</span>` : '');
+    toggleOpenLabMenu(false);
     document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === tabId));
     if (tabId === 'tab-tournament') renderPicker();
     if (tabId === 'tab-missions') renderMissions();
@@ -3315,7 +3369,7 @@ function applyPayoffs() {
 function reportHeader(title) {
     const P = state.payoff, name = studentName();
     return `<h2>${title}</h2>
-        <p><b>Lab Technician:</b> ${name ? esc(name) : '____________________'} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()}<br>
+        <p><b>Name:</b> ${name ? esc(name) : '____________________'} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()}<br>
         <b>Environment payoffs:</b> Mutualism R=${P.R}, Temptation T=${P.T}, Sucker S=${P.S}, Competition P=${P.P}</p>`;
 }
 function reflection(qs) {
@@ -3905,8 +3959,9 @@ function mountGenome(el) {
             <div>
                 <div class="card soft">
                     <h3>🧪 SURVIVAL TRIALS</h3>
-                    <p style="font-size: 14px; margin-top: 0;">Before release, test your organism in two trials (30 encounters each):</p>
-                    <p style="font-size: 14px;">🦠 <b>The Freeloader trial:</b> a partner that never cooperates should not earn double what you earn or more.<br>🪞 <b>The Partnership trial:</b> against a partner that copies your last move, aim to average at least <b>${Math.round(0.87 * state.payoff.R * 10) / 10}</b> per encounter (the most possible is ${state.payoff.R}).</p>
+                    <p style="font-size: 14px; margin-top: 0;">Like any engineered design, your organism is tested against <b>design criteria</b> (what success looks like) under <b>constraints</b> (conditions you can't change).</p>
+                    <p style="font-size: 14px;"><b>Criteria</b><br>🦠 <b>Freeloader trial:</b> a partner that never cooperates should not earn double what you earn or more.<br>🪞 <b>Partnership trial:</b> against a partner that copies your last move, average at least <b>${Math.round(0.87 * state.payoff.R * 10) / 10}</b> per encounter (the most possible is ${state.payoff.R}).</p>
+                    <p style="font-size: 14px;"><b>Constraints</b><br>Each trial lasts 30 encounters, and you can't see or change your partner's behavior.</p>
                     <button class="purple" onclick="expGenomeTest()">🧪 Run the trials</button>
                     <div id="c3-goals" style="margin-top: 12px;"></div>
                 </div>
@@ -4179,7 +4234,7 @@ function mountSociety(el) {
             ${rec ? `<p style="font-size: 15px;">Send your organism, <b>${esc(rec.emoji)} ${esc(rec.name)}</b>, to your teacher. Copy this code and submit it however your teacher asks.</p>
                 <textarea class="plain share-box" readonly onclick="this.select()">${esc(encodeCard({ v: 2, name: rec.name, emoji: rec.emoji, author: studentName() || rec.author || '', code: strategyCode(rec), mode: 'rules', rules: rec.rules, otherwise: rec.otherwise }))}</textarea>
                 <div class="btn-group"><button onclick="copyText(this.closest('.card').querySelector('textarea').value)">📋 Copy my organism's code</button></div>
-                ${!studentName() ? '<p style="color: var(--accent-amber); font-size: 13px;">Type your name in the <b>Lab Technician</b> box at the top first, so your teacher knows the organism is yours.</p>' : ''}` : needGenomeHTML()}
+                ${!studentName() ? '<p style="color: var(--accent-amber); font-size: 13px;">Type your name in the <b>👤 Your name</b> box at the top first, so your teacher knows the organism is yours.</p>' : ''}` : needGenomeHTML()}
         </div>`;
     expSocietyCheck();
 }
@@ -4321,6 +4376,7 @@ function expChapterUnlocked(i) { return i === 0 || CHAPTERS.slice(0, i).every(ch
 function chText(v) { return typeof v === 'function' ? v() : v; }
 
 function renderExpRail() {
+    refreshNavLocks();
     let html = '', lastDay = 0;
     CHAPTERS.forEach((c, i) => {
         if (c.day !== lastDay) { if (lastDay) html += '<div class="exp-divider"></div>'; html += `<div class="exp-day">DAY ${c.day}</div>`; lastDay = c.day; }
@@ -4375,7 +4431,7 @@ function renderExpedition() {
         <div class="exp-nav">
             <button class="secondary" ${i === 0 ? 'disabled' : ''} onclick="expGo(${i - 1})">← Back</button>
             <button class="ghost" onclick="expReset()">↺ Start the expedition over</button>
-            ${last ? `<button class="green big" onclick="if (!studentName()) { toast('Type your name at the top of the Expedition first, so your teacher knows whose journal this is.', 'warn'); $('exp-name').focus(); return; } generateJournal()">🖨️ Print my Expedition Journal</button>`
+            ${last ? `<button class="green big" onclick="if (!studentName()) { toast('Type your name in the 👤 box at the top first, so your teacher knows whose journal this is.', 'warn'); $('student-name').focus(); return; } generateJournal()">🖨️ Print my Expedition Journal</button>`
                    : `<button class="big" id="exp-next" disabled onclick="expGo(${i + 1})">Next chapter →</button>`}
         </div>`;
     c.mount($('exp-widget'));
@@ -4470,9 +4526,9 @@ function generateJournal() {
 function init() {
     Runner.start();
     $('student-name').value = Store.get('studentName', '');
-    $('student-name').addEventListener('input', e => { Store.set('studentName', e.target.value); $('exp-name').value = e.target.value; });
-    $('exp-name').value = $('student-name').value;
-    document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+    $('student-name').addEventListener('input', e => Store.set('studentName', e.target.value));
+    $('class-link').value = location.href.split('?')[0].split('#')[0] + '?mode=class';
+    document.querySelectorAll('#tabs .tab[data-tab], #openlab-menu button').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
     $('add-roster-emoji').innerHTML = EMOJIS.map(e => `<option>${e}</option>`).join('');
     $('ai-prompt').textContent = `Act as a JavaScript tutor. I'm in a game-theory tournament based on Robert Axelrod's Iterated Prisoner's Dilemma. I need the BODY of a JavaScript function (no function wrapper) that decides my next move.
 
