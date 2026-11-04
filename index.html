@@ -343,6 +343,10 @@
         details.guide-sec > summary h2 { display: inline-block; margin: 6px 0; }
         details.guide-sec > summary::after { content: ' ▸'; color: var(--text-muted); font-size: 18px; }
         details.guide-sec[open] > summary::after { content: ' ▾'; }
+        .evo-pop { display: flex; flex-wrap: wrap; gap: 4px; margin: 12px 0 6px; }
+        .evo-dot { width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; opacity: .9; }
+        .evo-bar { display: grid; grid-template-columns: minmax(0, 1.4fr) 1fr 42px; gap: 8px; align-items: center; font-size: 13px; margin: 5px 0; }
+        .evo-bar b { text-align: right; font-family: var(--mono); }
         .exp-journal { margin-top: 16px; }
         .exp-journal label { font-weight: 700; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-journal textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; }
@@ -509,6 +513,7 @@
                     <button role="menuitem" data-tab="tab-missions">🎯 Missions <span id="mission-count" class="badge badge-pos">0/0</span></button>
                     <button role="menuitem" data-tab="tab-lab">🧬 Strategy Lab</button>
                     <button role="menuitem" data-tab="tab-1v1">⚔️ Head-to-Head</button>
+                    <button role="menuitem" data-tab="tab-evo">🧪 Evolution Engine</button>
                 </div>
             </div>
             <div class="tab" role="tab" tabindex="0" data-tab="tab-guide">📚 Field Guide</div>
@@ -867,6 +872,81 @@
         <div class="mission-grid" id="mission-grid"></div>
     </div>
 
+    <!-- =================== TAB: EVOLUTION ENGINE =================== -->
+    <div id="tab-evo" class="tab-content">
+        <details class="note note-blue explain"><summary><b>🧪 How the Evolution Engine works</b> <span class="muted">(tap to read)</span></summary>
+            In 1987, Robert Axelrod stopped designing strategies by hand and let evolution do it. He used a <b>genetic algorithm</b>, a method from artificial intelligence that copies natural selection:
+            <ol style="margin: 8px 0;">
+                <li>Start with a population of <b>random</b> strategies. Each one's genes are its chances of cooperating after each kind of round.</li>
+                <li>Every strategy plays. Its average score is its <b>fitness</b>.</li>
+                <li>The fittest <b>reproduce</b>. Offspring copy their parent's genes with small random <b>mutations</b>, and sometimes mix two parents' genes (<b>crossover</b>, like sexual reproduction).</li>
+                <li>Repeat for many generations.</li>
+            </ol>
+            Nobody tells the population what a good strategy looks like. Watch what it discovers.
+        </details>
+        <div class="controls">
+            <div class="control-group">
+                <label>Environment</label>
+                <select id="evo-env">
+                    <option value="co">🌍 Compete against each other</option>
+                    <option value="lib">📚 Compete against the 15 famous strategies</option>
+                </select>
+                <label class="checkline"><input type="checkbox" id="evo-cross" checked> Crossover (mix two parents)</label>
+            </div>
+            <div class="control-group">
+                <label>Mutation rate: <span class="val" id="evo-mut-val">20%</span></label>
+                <input type="range" id="evo-mut" min="0" max="40" value="20" oninput="$('evo-mut-val').innerText = this.value + '%'">
+                <label>Noise / mistakes: <span class="val" id="evo-noise-val">1%</span></label>
+                <input type="range" id="evo-noise" min="0" max="10" value="1" oninput="$('evo-noise-val').innerText = this.value + '%'">
+            </div>
+            <div class="control-group">
+                <label>Rounds per encounter: <span class="val" id="evo-rounds-val">50</span></label>
+                <input type="range" id="evo-rounds" min="1" max="100" value="50" oninput="$('evo-rounds-val').innerText = this.value">
+                <span class="hint">"Shadow of the future"</span>
+            </div>
+            <div class="control-group">
+                <label>Population</label>
+                <select id="evo-size"><option value="20">20</option><option value="40" selected>40</option><option value="80">80</option></select>
+                <label>Generations</label>
+                <select id="evo-gens"><option>100</option><option selected>300</option><option>600</option></select>
+            </div>
+            <div class="control-group">
+                <label>Speed</label>
+                <select id="evo-speed"><option value="350">Slow</option><option value="90" selected>Normal</option><option value="0">Fast</option></select>
+            </div>
+            <div class="btn-group" style="margin-top: 0;">
+                <button class="purple" onclick="evoStart()">▶ Evolve</button>
+                <button class="secondary" id="evo-pause" onclick="evoToggle()" disabled>Pause</button>
+                <button class="secondary small" onclick="openEnvModal()" title="Change how many points each outcome is worth">⚙️ Payoffs</button>
+            </div>
+        </div>
+        <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
+            <div>
+                <div class="card">
+                    <div class="row" style="justify-content: space-between;">
+                        <h3 style="border: none; margin: 0; padding: 0;">🧬 The population</h3>
+                        <span class="muted" style="font-size: 13px;">Generation <b class="gen-counter" id="evo-gen" style="font-size: 18px;">0</b></span>
+                    </div>
+                    <div class="evo-pop" id="evo-pop"><div class="muted" style="font-size: 13px;">Press ▶ Evolve to create a random population.</div></div>
+                    <div class="chart-legend" id="evo-fam-legend"></div>
+                </div>
+                <div class="chart-box" style="margin-top: 14px;">
+                    <b style="font-size: 14px;">How the population behaves</b> <span class="muted" style="font-size: 12px;">(average chance of cooperating after each kind of round)</span>
+                    <canvas id="evo-genes" width="720" height="230"></canvas>
+                    <div class="chart-legend" id="evo-genes-legend"></div>
+                </div>
+                <div class="chart-box" style="margin-top: 14px;">
+                    <b style="font-size: 14px;">Fitness</b> <span class="muted" style="font-size: 12px;">(points per round: population average and best)</span>
+                    <canvas id="evo-fit" width="720" height="170"></canvas>
+                </div>
+            </div>
+            <div>
+                <div class="card soft" id="evo-champ"><h3>🏆 Current champion</h3><div class="muted" style="font-size: 13px;">The fittest strategy of each generation appears here.</div></div>
+                <div class="field-notes" id="evo-notes" style="margin-top: 14px;"><h3>📓 Notes</h3><div class="muted">Observations appear when the run ends.</div></div>
+            </div>
+        </div>
+    </div>
+
     <!-- =================== TAB: FIELD GUIDE =================== -->
     <div id="tab-guide" class="tab-content">
         <div class="guide">
@@ -894,7 +974,7 @@
                 <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows a 2½-minute edited clip of Veritasium's Prisoner's Dilemma video (three sections, played back to back), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a organism from genes (brain type, testing, reactions, memory) through repeated trials. Every chapter has two short journal entries: a <b>🤔 Think</b> answer written <i>before</i> the explanation unlocks, and a <b>🔗 Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
-            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab tabs (Tournament, Survival Crucible, Missions, Strategy Lab) are free play with 13 extra challenges.</p>
+            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension idea:</b> in the 🧪 Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>🔗 Classroom link</h3>
@@ -916,10 +996,10 @@
             <h3>🎯 Standards alignment: Georgia CTAE Engineering AKS</h3>
             <p style="font-size: 13px; margin-top: 0;" class="muted">From the current Engineering Applications (TEH7) and Engineering Concepts (TEH8) AKS (last revised April 2026). <b>Strong</b> = students directly practice it. <b>Partial</b> = the activity supports it but doesn't cover the whole standard.</p>
             <h4 style="margin-top: 6px;">Engineering Applications (TEH7)</h4>
-            <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2 (c, e, f)</td><td>Apply the engineering design process: develop solutions to criteria and constraints, optimize with modeling, test and evaluate to identify improvements</td><td>Ch. 3 design cycle with two survival trials as constraints; Ch. 4 and 6 test the design and refine it from results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.N.14.d</td><td>Integrate mathematical modeling and simulations to optimize designs and predict performance under various constraints</td><td>Payoff model, tournament and ecology simulations; Ch. 6 invasion-threshold experiment</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.H.8.a</td><td>Analyze the concept of models and types of models (physical, virtual, mathematical)</td><td>The whole game is a virtual and mathematical model of evolution; the Briefing builds the payoff model</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.h</td><td>Communicate data, observations, processes and results of the design process</td><td>Think and Connect journal entries cite the student's own data; Class Championship</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.C.3.a</td><td>Record all stages of the design process: problem definition, testing, iterations, reflections</td><td>The Expedition Journal records hypotheses, tests and reflections (no dated or signed entries)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.L.12 (a, b)</td><td>Design, program and simulate autonomous systems that use feedback loops</td><td>Strategies are autonomous decision programs that sense the partner's last move and respond: feedback-loop logic in simulation, no hardware</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.d</td><td>Research, select, then safely and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper, with the rule that students must be able to explain every line</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
+            <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2 (c, e, f)</td><td>Apply the engineering design process: develop solutions to criteria and constraints, optimize with modeling, test and evaluate to identify improvements</td><td>Ch. 3 design cycle with two survival trials as constraints; Ch. 4 and 6 test the design and refine it from results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.N.14.d</td><td>Integrate mathematical modeling and simulations to optimize designs and predict performance under various constraints</td><td>Payoff model, tournament and ecology simulations; Ch. 6 invasion-threshold experiment</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.H.8.a</td><td>Analyze the concept of models and types of models (physical, virtual, mathematical)</td><td>The whole game is a virtual and mathematical model of evolution; the Briefing builds the payoff model</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.h</td><td>Communicate data, observations, processes and results of the design process</td><td>Think and Connect journal entries cite the student's own data; Class Championship</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.C.3.a</td><td>Record all stages of the design process: problem definition, testing, iterations, reflections</td><td>The Expedition Journal records hypotheses, tests and reflections (no dated or signed entries)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.L.12 (a, b)</td><td>Design, program and simulate autonomous systems that use feedback loops</td><td>Strategies are autonomous decision programs that sense the partner's last move and respond: feedback-loop logic in simulation, no hardware</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.B.2.d</td><td>Research, select, then safely and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper, with the rule that students must be able to explain every line</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH7.M.13.a</td><td>Research and apply AI for optimization, predictive analytics and machine learning in engineering design</td><td>Evolution Engine: students run a genetic algorithm (an AI optimization method), tune mutation, population size and generations, and compare evolved designs with human-designed ones. Covers optimization, not predictive analytics or machine learning</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
             <h4>Engineering Concepts (TEH8)</h4>
             <div style="overflow-x: auto;"><table style="font-size: 13px;"><tr><th style="width: 15%;">AKS</th><th>Standard (summary)</th><th>Where it happens</th><th>Fit</th></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2 (c, e, f, g)</td><td>Apply the design process: solve to criteria and constraints, optimize with modeling, test and evaluate using simulations, and refine using performance data</td><td>Ch. 3 genome design and trials; Ch. 4–6 simulations; revising the organism after poor results</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.L.12.d</td><td>Conduct controlled experiments to evaluate performance and reliability under varying conditions</td><td>Ch. 6: vary one variable (encounters), hold the rest constant, bracket the threshold in a data table</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.M.13.b</td><td>Use mathematical models to represent and predict phenomena</td><td>Payoff model predicts single-meeting behavior; simulations predict which strategies spread</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.I.9.d</td><td>Use technologies to generate data to optimize solutions, including graphical displays</td><td>Ch. 6 data table, Ch. 5 population graph, tournament leaderboard and payoff matrix</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.L.12.c</td><td>Integrate biological concepts to design solutions</td><td>Students design an organism's behavior using real mutualism and sanction strategies (bats, soybeans, biofilms)</td><td><span class="badge badge-pos">STRONG</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.K.11.c</td><td>Represent data through graphs and charts to evaluate prototypes</td><td>Leaderboard, payoff-matrix heat map and population charts used to evaluate the student's organism</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2.a</td><td>Utilize an engineering design notebook to document the design process</td><td>The Expedition Journal (printable)</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.B.2.d</td><td>Research, select and ethically apply emerging technologies such as AI</td><td>Strategy Lab AI prompt helper</td><td><span class="badge badge-amber">PARTIAL</span></td></tr><tr><td class="mono" style="white-space: nowrap;">TEH8.M.13.d</td><td>Evaluate the societal impacts of engineering solutions</td><td>Ch. 7 analysis of a human dilemma and the 'who benefits?' discussion</td><td><span class="badge badge-amber">PARTIAL</span></td></tr></table></div>
-            <p style="font-size: 13px; margin-bottom: 6px;"><b>Not addressed:</b> TEH7.M.13.a (applying AI and machine learning to optimize designs), robotics hardware (sensors and actuators), and the notebook formatting, dating and witness-signature requirements (TEH7.C.3.c–e).</p>
+            <p style="font-size: 13px; margin-bottom: 6px;"><b>Not addressed:</b> machine learning and predictive analytics (the rest of TEH7.M.13.a), robotics hardware (sensors and actuators), and the notebook formatting, dating and witness-signature requirements (TEH7.C.3.c–e).</p>
             <p style="font-size: 13px; margin: 0;"><b>Also aligns with</b> NGSS HS-LS2-8 (group behavior and survival) and HS-LS4-4 (natural selection leads to adaptation), plus the practices of forming hypotheses, planning investigations and arguing from evidence.</p>
         </div>
         <details class="card soft" style="margin-bottom: 20px;">
@@ -1383,7 +1463,7 @@ function downloadFile(filename, text, mime = 'application/json') {
     }
 }
 
-const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head' };
+const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine' };
 function toggleOpenLabMenu(force) {
     const m = $('openlab-menu'), open = force !== undefined ? force : m.classList.contains('hidden');
     m.classList.toggle('hidden', !open);
@@ -2998,6 +3078,216 @@ function setCrucibleModel(m) {
 }
 
 // ============================================================================
+// EVOLUTION ENGINE (a genetic algorithm, like Axelrod 1987 and Nowak & Sigmund 1993)
+// ============================================================================
+// A genome = chance of cooperating on the first move + after each of the four possible previous rounds.
+const EVO_GENES = [
+    { key: 'CC', label: 'After we both cooperated', icon: '🤝', color: '#22c55e' },
+    { key: 'CD', label: 'After I was exploited', icon: '🍂', color: '#f59e0b' },
+    { key: 'DC', label: 'After I exploited them', icon: '🦠', color: '#ef4444' },
+    { key: 'DD', label: 'After we both defected', icon: '⚔️', color: '#64748b' }
+];
+// The memory-one versions of famous strategies, used to name what evolution finds.
+const EVO_FAMILIES = [
+    { name: 'Tit for Tat', emoji: '🦇', first: 1, g: [1, 0, 1, 0], color: '#3b82f6', reciprocal: true },
+    { name: 'Generous Tit for Tat', emoji: '🐬', first: 1, g: [1, 1 / 3, 1, 1 / 3], color: '#0ea5e9', reciprocal: true },
+    { name: 'Pavlov', emoji: '🐕', first: 1, g: [1, 0, 0, 1], color: '#22c55e', reciprocal: true },
+    { name: 'Grim Trigger', emoji: '🌳', first: 1, g: [1, 0, 0, 0], color: '#14b8a6', reciprocal: true },
+    { name: 'Suspicious Tit for Tat', emoji: '🦂', first: 0, g: [1, 0, 1, 0], color: '#f97316' },
+    { name: 'Always Cooperate', emoji: '🌿', first: 1, g: [1, 1, 1, 1], color: '#a855f7' },
+    { name: 'Always Defect', emoji: '🦠', first: 0, g: [0, 0, 0, 0], color: '#ef4444' },
+    { name: 'Mixed / unpredictable', emoji: '🎲', first: 0.5, g: [0.5, 0.5, 0.5, 0.5], color: '#94a3b8' }
+];
+const evo = { pop: [], gen: 0, running: false, timer: null, history: [], lib: null, done: false };
+
+// Name a genome by its nearest famous strategy. In short encounters the first move is most of the
+// behavior (with 1 round the reaction genes are never used), so it counts for more.
+function evoFamily(G) {
+    const rounds = evo.cfg ? evo.cfg.rounds : 50, w = rounds <= 1 ? 25 : rounds <= 5 ? 4 : 1;
+    let best = null, bd = Infinity;
+    for (const f of EVO_FAMILIES) {
+        const d = Math.sqrt(f.g.reduce((t, v, i) => t + (v - G.g[i]) ** 2, 0) + w * (f.first - G.first) ** 2);
+        if (d < bd) { bd = d; best = f; }
+    }
+    return { fam: best, match: Math.max(0, 1 - bd / Math.sqrt(4 + w)) };
+}
+function evoRandomGenome() { return { g: [0, 0, 0, 0].map(() => Math.random()), first: Math.random(), fit: 0 }; }
+function evoMove(G, myLast, theirLast, round) {
+    const p = round === 1 ? G.first : G.g[(myLast === 'C' ? 0 : 2) + (theirLast === 'C' ? 0 : 1)];
+    return Math.random() < p ? 'C' : 'D';
+}
+function evoPay(a, b) { const P = state.payoff; return a === 'C' ? (b === 'C' ? P.R : P.S) : (b === 'C' ? P.T : P.P); }
+const evoFlip = (m, noise) => noise > 0 && Math.random() < noise ? (m === 'C' ? 'D' : 'C') : m;
+
+function evoVsGenome(A, B, rounds, noise) {
+    let a0, b0, sa = 0, sb = 0;
+    for (let r = 1; r <= rounds; r++) {
+        const a = evoFlip(evoMove(A, a0, b0, r), noise), b = evoFlip(evoMove(B, b0, a0, r), noise);
+        sa += evoPay(a, b); sb += evoPay(b, a); a0 = a; b0 = b;
+    }
+    return [sa / rounds, sb / rounds];
+}
+function evoVsLibrary(A, fn, rounds, noise) {
+    const hA = [], hB = [], mem = {};
+    let sa = 0;
+    for (let r = 1; r <= rounds; r++) {
+        const a = evoFlip(evoMove(A, hA[r - 2], hB[r - 2], r), noise);
+        let b;
+        try { b = fn(hB.slice(), hA.slice(), r, mem, Math.random); } catch (e) { b = 'C'; }
+        b = evoFlip(b === 'D' ? 'D' : 'C', noise);
+        sa += evoPay(a, b); hA.push(a); hB.push(b);
+    }
+    return sa / rounds;
+}
+
+function evoSettings() {
+    return {
+        env: $('evo-env').value, size: +$('evo-size').value, gens: +$('evo-gens').value, rounds: +$('evo-rounds').value,
+        mut: +$('evo-mut').value / 100, noise: +$('evo-noise').value / 100, cross: $('evo-cross').checked
+    };
+}
+
+function evoEvaluate(cfg) {
+    const pop = evo.pop;
+    pop.forEach(G => { G.fit = 0; });
+    if (cfg.env === 'co') {
+        for (let i = 0; i < pop.length; i++) for (let j = i + 1; j < pop.length; j++) {
+            const [a, b] = evoVsGenome(pop[i], pop[j], cfg.rounds, cfg.noise);
+            pop[i].fit += a; pop[j].fit += b;
+        }
+        pop.forEach(G => { G.fit /= pop.length - 1; });
+    } else {
+        if (!evo.lib) evo.lib = LIBRARY.map(s => compileTrusted(s.code));
+        pop.forEach(G => { G.fit = evo.lib.reduce((t, fn) => t + evoVsLibrary(G, fn, cfg.rounds, cfg.noise), 0) / evo.lib.length; });
+    }
+}
+
+function evoGaussian() { return Math.sqrt(-2 * Math.log(1 - Math.random())) * Math.cos(2 * Math.PI * Math.random()); }
+function evoNextGeneration(cfg) {
+    const sorted = evo.pop.slice().sort((a, b) => b.fit - a.fit);
+    const pick = () => { let best = null; for (let k = 0; k < 3; k++) { const c = sorted[Math.floor(Math.random() * sorted.length)]; if (!best || c.fit > best.fit) best = c; } return best; };
+    const clamp = v => Math.min(1, Math.max(0, v));
+    const next = sorted.slice(0, Math.max(1, Math.round(cfg.size * 0.1))).map(G => ({ g: G.g.slice(), first: G.first, fit: 0 }));   // elites survive unchanged
+    while (next.length < cfg.size) {
+        const p1 = pick(), p2 = cfg.cross && Math.random() < 0.7 ? pick() : p1;
+        const child = { g: p1.g.map((v, i) => Math.random() < 0.5 ? v : p2.g[i]), first: Math.random() < 0.5 ? p1.first : p2.first, fit: 0 };
+        child.g = child.g.map(v => Math.random() < cfg.mut ? clamp(v + evoGaussian() * 0.2) : v);
+        if (Math.random() < cfg.mut) child.first = clamp(child.first + evoGaussian() * 0.2);
+        next.push(child);
+    }
+    evo.pop = next;
+}
+
+function evoStart() {
+    clearTimeout(evo.timer);
+    const cfg = evoSettings();
+    Object.assign(evo, { cfg, pop: Array.from({ length: cfg.size }, evoRandomGenome), gen: 0, history: [], running: true, done: false, lib: null });
+    $('evo-pause').disabled = false; $('evo-pause').innerText = 'Pause'; $('evo-pause').className = 'secondary';
+    $('evo-notes').innerHTML = '<h3>📓 Notes</h3><div class="muted">Evolving… observations appear when the run ends.</div>';
+    evoStep();
+}
+function evoToggle() {
+    if (evo.done || !evo.pop.length) return;
+    evo.running = !evo.running;
+    const b = $('evo-pause');
+    if (evo.running) { b.innerText = 'Pause'; b.className = 'secondary'; evoStep(); }
+    else { b.innerText = 'Resume'; b.className = 'red'; clearTimeout(evo.timer); }
+}
+function evoStep() {
+    if (!evo.running) return;
+    const delay = +$('evo-speed').value, batch = delay === 0 ? 4 : 1;
+    for (let k = 0; k < batch && evo.gen < evo.cfg.gens; k++) {
+        evoEvaluate(evo.cfg);
+        evoRecord();
+        evo.gen++;
+        if (evo.gen < evo.cfg.gens) evoNextGeneration(evo.cfg);
+    }
+    evoRender();
+    if (evo.gen >= evo.cfg.gens) { evoFinish(); return; }
+    evo.timer = setTimeout(evoStep, delay);
+}
+function evoRecord() {
+    const pop = evo.pop, n = pop.length;
+    const counts = Object.fromEntries(EVO_FAMILIES.map(f => [f.name, 0]));
+    pop.forEach(G => counts[evoFamily(G).fam.name]++);
+    evo.history.push({
+        genes: [0, 1, 2, 3].map(i => pop.reduce((t, G) => t + G.g[i], 0) / n),
+        avg: pop.reduce((t, G) => t + G.fit, 0) / n, best: Math.max(...pop.map(G => G.fit)), counts
+    });
+}
+function evoChampion() { return evo.pop.reduce((b, G) => (G.fit > b.fit ? G : b), evo.pop[0]); }
+
+function evoBars(G) {
+    const row = (icon, label, p) => `<div class="evo-bar"><span>${icon} ${label}</span><div class="meter"><div style="width: ${Math.round(p * 100)}%; background: ${p >= 0.5 ? '#22c55e' : '#ef4444'};"></div></div><b>${Math.round(p * 100)}%</b></div>`;
+    return row('🚪', 'First meeting', G.first) + EVO_GENES.map((d, i) => row(d.icon, d.label, G.g[i])).join('');
+}
+
+function evoRender() {
+    const pop = evo.pop.slice().sort((a, b) => b.fit - a.fit), h = evo.history[evo.history.length - 1];
+    $('evo-gen').innerText = evo.gen;
+    $('evo-pop').innerHTML = pop.map(G => { const f = evoFamily(G).fam; return `<span class="evo-dot" style="background: ${f.color};" title="${f.name} · fitness ${fmt(G.fit)}">${f.emoji}</span>`; }).join('');
+    const present = EVO_FAMILIES.filter(f => h.counts[f.name]);
+    $('evo-fam-legend').innerHTML = present.map(f => `<span><i style="background: ${f.color}"></i>${f.emoji} ${f.name}-like: <b>${h.counts[f.name]}</b></span>`).join('');
+    const C = evoChampion(), cf = evoFamily(C);
+    $('evo-champ').innerHTML = `<h3>🏆 Current champion</h3>
+        <p style="font-size: 14px; margin: 0 0 10px;">Fitness <b>${fmt(C.fit)}</b> points per round. Closest famous strategy: <b>${cf.fam.emoji} ${cf.fam.name}</b> (${pct(cf.match)} match).</p>
+        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Chance of cooperating…</div>
+        ${evoBars(C)}
+        <button class="green small" style="margin-top: 12px;" onclick="evoAdopt()">💾 Adopt this champion as my strategy</button>`;
+    if (evo.gen % 3 === 0 || evo.gen >= evo.cfg.gens) {
+        drawLineChart($('evo-genes'), EVO_GENES.map((d, i) => ({ name: d.label, color: d.color, values: evo.history.map(x => x.genes[i]), width: 2.4 })), { yMax: 1, percent: true, xLabel: 'Generation' });
+        $('evo-genes-legend').innerHTML = EVO_GENES.map(d => `<span><i style="background: ${d.color}"></i>${d.icon} ${d.label}</span>`).join('');
+        const P = state.payoff, top = Math.max(P.T, P.R);
+        drawLineChart($('evo-fit'), [
+            { name: 'Mutual cooperation', color: '#cbd5e1', values: evo.history.map(() => P.R), width: 1 },
+            { name: 'Average', color: '#a855f7', values: evo.history.map(x => x.avg), width: 2.4 },
+            { name: 'Best', color: '#22c55e', values: evo.history.map(x => x.best), width: 2 }
+        ], { yMax: top, xLabel: 'Generation' });
+    }
+}
+
+function evoFinish() {
+    evo.running = false; evo.done = true; clearTimeout(evo.timer);
+    $('evo-pause').disabled = true;
+    const h = evo.history[evo.history.length - 1], n = evo.pop.length, P = state.payoff, cfg = evo.cfg;
+    const ranked = EVO_FAMILIES.map(f => [f, h.counts[f.name]]).sort((a, b) => b[1] - a[1]);
+    const [dom, domN] = ranked[0];
+    const notes = [`After ${evo.gen} generations, <b>${domN} of ${n}</b> strategies are closest to <b>${dom.emoji} ${dom.name}</b>. The population averages <b>${fmt(h.avg)}</b> points per round (mutual cooperation earns ${P.R}).`];
+    const recip = EVO_FAMILIES.filter(f => f.reciprocal).reduce((t, f) => t + h.counts[f.name], 0);
+    // Judge by behavior: a cooperative population earns close to the mutual-cooperation payoff.
+    const cooperative = h.avg >= P.P + 0.75 * (P.R - P.P);
+    evo.cooperative = cooperative;
+    if (cooperative && recip <= n / 2) notes.push(`🌱 <b>Cooperation evolved</b> (average ${fmt(h.avg)} of a possible ${P.R}). Many strategies look "${ranked[0][0].name}" because of <b>neutral drift</b>: when everyone cooperates, the genes for reacting to cheating are almost never used, so they wander randomly. That hidden variation is why cooperative populations can later be invaded by defectors.`);
+    if (recip > n / 2) notes.push(`🔁 <b>Evolution rediscovered reciprocity.</b> Starting from random genes, with no designer, most of the population now cooperates with cooperators and responds to defection. In Axelrod's 1987 genetic-algorithm runs, most populations also evolved Tit-for-Tat-like strategies.`);
+    if (cfg.rounds <= 1) notes.push('🔎 With 1 round per encounter, only the "first meeting" gene is ever used, so the other genes drift randomly. Look at the first-meeting gene of the champion.');
+    if (!cooperative && cfg.rounds > 3) notes.push(`🦠 Defection took over this run. A population of defectors is hard to escape: a single cooperative mutant gets exploited. Evolution needs <b>variation</b> and <b>time</b>. Try a higher mutation rate, more generations or a bigger population, and run it again.`);
+    if (!cooperative && cfg.rounds <= 3) notes.push(`⏳ With only ${cfg.rounds} round${cfg.rounds === 1 ? '' : 's'} per encounter there is little shadow of the future, so defection wins. Try 20+ rounds.`);
+    if (dom.name === 'Always Cooperate') notes.push('🌿 Unconditional cooperators took over. That population is fragile: a mutant that defects would thrive. Keep evolving and watch for a crash.');
+    if (cfg.noise >= 0.03 && (dom.name === 'Pavlov' || dom.name === 'Generous Tit for Tat')) notes.push('⚡ With frequent mistakes, evolution favored strategies that forgive and recover, just as Nowak and Sigmund found in 1992–93.');
+    if (cfg.env === 'lib') notes.push('📚 This population evolved against the 15 famous strategies, like Axelrod\'s 1987 experiment. Compare it with a run where they compete against each other.');
+    evo.notes = notes;
+    $('evo-notes').innerHTML = `<h3>📓 Notes</h3><ul>${notes.map(x => `<li>${x}</li>`).join('')}</ul>`;
+    evo.finishedGens = (evo.finishedGens || 0) + evo.gen;
+    if (cooperative) completeMission('rediscover');
+}
+
+function evoAdopt() {
+    if (!evo.pop.length) return;
+    const C = evoChampion(), f = evoFamily(C).fam, r2 = v => Math.round(v * 100) / 100;
+    const code = `// 🧪 Evolved by the Evolution Engine (generation ${evo.gen}, closest to ${f.name}).
+// Chance of cooperating after each kind of round (my move, their move):
+const p = { CC: ${r2(C.g[0])}, CD: ${r2(C.g[1])}, DC: ${r2(C.g[2])}, DD: ${r2(C.g[3])} };
+if (round === 1) return random() < ${r2(C.first)} ? 'C' : 'D';
+const last = myHistory[myHistory.length - 1] + theirHistory[theirHistory.length - 1];
+return random() < p[last] ? 'C' : 'D';`;
+    const rec = { id: uid(), name: `Evolved ${f.name}-like (gen ${evo.gen})`, emoji: '🧪', author: studentName(), mode: 'code', rules: [], otherwise: 'C', code, updated: Date.now() };
+    state.my.unshift(rec); Store.set('my', state.my);
+    renderMyList(); refreshSelects();
+    toast(`💾 Saved <b>🧪 ${esc(rec.name)}</b> to your strategies. Enter it in the Tournament or the Crucible!`);
+    if (evo.gen >= 100) completeMission('evolver');
+}
+
+// ============================================================================
 // SECTION 10: MISSIONS
 // ============================================================================
 
@@ -3026,6 +3316,10 @@ const MISSIONS = [
       lesson: 'A lone cooperator in a world of defectors dies — but a small <i>cluster</i> of reciprocators can invade, because they mostly meet each other.' },
     { id: 'shadow', ic: '⏳', tag: 'Crucible', title: 'Shadow of the Future', desc: 'Run the Crucible twice with the same species: once with 1 round per encounter and once with 20+. Get a different winner.',
       lesson: 'Cooperation needs a future. When organisms (or nations) expect to meet again, reciprocity pays; when they never will, defection wins.' },
+    { id: 'evolver', ic: '🧪', tag: 'Evolution', title: 'Natural Engineer', desc: 'Run the Evolution Engine for at least 100 generations, then adopt the champion as one of your strategies.',
+      lesson: 'A genetic algorithm designs without a designer: random variation plus selection is enough to build a working strategy. Engineers use the same idea to optimize real designs.' },
+    { id: 'rediscover', ic: '🔁', tag: 'Evolution', title: 'Evolution Rediscovers Cooperation', desc: 'Finish an Evolution Engine run (starting from random strategies) in which the population evolves to cooperate, earning close to the mutual-cooperation payoff.',
+      lesson: 'Starting from random behavior, selection alone produced organisms that cooperate with cooperators and punish cheaters. No one had to invent reciprocity: it evolved.' },
     { id: 'class', ic: '👑', tag: 'Class', title: 'Class Champion', desc: 'Win a tournament that includes at least 3 classmates\' strategies, using one of your strategies.',
       lesson: "You can't control what your classmates submit — the environment is made of other organisms' strategies. That's evolution." }
 ];
@@ -3132,6 +3426,7 @@ function renderGuide() {
             <div><b>1980</b> — Political scientist <b>Robert Axelrod</b> invites experts in game theory, economics, psychology, mathematics and political science to submit computer programs. 14 entries (plus RANDOM) play each other for 200 rounds. The winner is <b>Tit for Tat</b>, submitted by Anatol Rapoport — the shortest program entered.</div>
             <div><b>1980</b> — A second, bigger tournament: 62 entries from six countries, and this time nobody knows how long each game will last. Everyone has seen the first results and tries to beat Tit for Tat. <b>Tit for Tat wins again.</b></div>
             <div><b>1981</b> — Axelrod and evolutionary biologist W. D. Hamilton publish "The Evolution of Cooperation" in <i>Science</i>, connecting the tournaments to biology.</div>
+            <div><b>1987</b> — Axelrod lets evolution design strategies with a <i>genetic algorithm</i>: random strategies mutate, mix and reproduce according to their scores. Most populations evolve Tit-for-Tat-like reciprocity on their own. Try it in the Open Lab's 🧪 Evolution Engine.</div>
             <div><b>1992–93</b> — Martin Nowak, Karl Sigmund and Robert May show that with <i>mistakes</i>, more forgiving strategies (Generous Tit for Tat, Pavlov) can beat Tit for Tat, and that cooperators survive in <i>spatial clusters</i> — try this in the Survival Crucible.</div>
             <div><b>2004</b> — In a 20th-anniversary tournament, a team from the University of Southampton won by entering many programs that recognised each other with a secret opening sequence. "Servant" programs sacrificed themselves to feed points to "master" programs. Collusion — or kin recognition?</div>
         </div>

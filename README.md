@@ -36,7 +36,8 @@ The Teacher tab maps the activities to the Georgia CTAE **Engineering Applicatio
 | ⚔️ Head-to-Head | Animated 1v1 duel, behavior timeline, data log, auto-written field notes, printable report |
 | 🏆 Global Tournament | Axelrod-style round robin: noise, unknown match length, personality traits (nice / retaliatory / forgiving), clickable payoff matrix, and the ecological "future generations" simulation |
 | 🧫 Survival Crucible | Two models: **free-roaming** organisms that bump, gain or lose energy, reproduce and starve; or a **grid** where strategies spread cell by cell. Territories, well-mixed, and invasion layouts; a "shadow of the future" slider |
-| 🎯 Missions | 13 guided experiments that unlock "discoveries" |
+| 🧪 Evolution Engine | A genetic algorithm (like Axelrod 1987): random strategies mutate, cross over and reproduce by fitness; watch evolution rediscover reciprocity, then adopt the champion |
+| 🎯 Missions | 15 guided experiments that unlock "discoveries" |
 | 📚 Field Guide | History, the math, biology case files, bio-politics, discussion questions, glossary |
 | 🛠️ Class Arena | Teacher roster: paste share cards, validate, import/export JSON, run class tournaments |
 
