@@ -350,6 +350,18 @@
         .cm-lake { background: linear-gradient(#bae6fd, #7dd3fc); border-radius: 14px; min-height: 90px; padding: 12px; font-size: 22px; line-height: 1.5; letter-spacing: 2px; margin: 12px 0 6px; word-break: break-all; }
         .cm-choose { background: var(--soft); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 14px; }
         .cm-choose label { display: block; margin-bottom: 6px; font-size: 15px; }
+        .cl-reef { background: linear-gradient(#cffafe, #67e8f9); border-radius: 14px; min-height: 120px; padding: 14px; text-align: center; margin: 12px 0 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+        .cl-client { font-size: 54px; line-height: 1; }
+        .cl-watchers { font-size: 22px; letter-spacing: 6px; min-height: 26px; }
+        .cl-caption { font-size: 15px; }
+        .kn-scene { background: linear-gradient(#f0fdf4, #dcfce7); border-radius: 14px; padding: 14px; margin: 12px 0; }
+        .kn-threat { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .kn-terms { margin-bottom: 10px; }
+        .kn-terms .badge { font-size: 12px; padding: 4px 8px; }
+        .kn-near { display: flex; flex-wrap: wrap; gap: 10px; }
+        .kn-sq { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 12px; display: flex; flex-direction: column; align-items: center; font-size: 13px; min-width: 96px; }
+        .kn-emoji { font-size: 28px; }
+        .kn-rule { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #94a3b8; font-size: 14px; }
         .exp-journal { margin-top: 16px; }
         .exp-journal label { font-weight: 700; font-size: 15px; display: block; margin-bottom: 6px; }
         .exp-journal textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-size: 15px; resize: vertical; }
@@ -518,6 +530,8 @@
                     <button role="menuitem" data-tab="tab-1v1">⚔️ Head-to-Head</button>
                     <button role="menuitem" data-tab="tab-evo">🧪 Evolution Engine</button>
                     <button role="menuitem" data-tab="tab-commons">🎣 The Commons</button>
+                    <button role="menuitem" data-tab="tab-clean">🐟 Cleaning Station</button>
+                    <button role="menuitem" data-tab="tab-kin">🐿️ Family Ties</button>
                 </div>
             </div>
             <div class="tab" role="tab" tabindex="0" data-tab="tab-guide">📚 Field Guide</div>
@@ -991,6 +1005,70 @@
                     <div class="scroll-box" style="max-height: none;"><table id="cm-table" style="margin-top: 0;"><tbody><tr><td class="muted">Start fishing to meet your neighbors.</td></tr></tbody></table></div>
                 </div>
                 <div class="field-notes" id="cm-notes" style="margin-top: 14px;"><h3>📓 Notes</h3><div class="muted">Observations appear when the fishing ends. Nobody tells you when that is.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================== TAB: CLEANING STATION (reputation) =================== -->
+    <div id="tab-clean" class="tab-content">
+        <details class="note note-blue explain"><summary><b>How the Cleaning Station works</b> <span class="muted">(tap to read)</span></summary>
+            You are a <b>cleaner wrasse</b>, a small reef fish that runs a "cleaning station." Bigger fish visit to have parasites picked off their skin. Eating parasites is an honest meal.
+            But cleaners would rather bite off a mouthful of the client's protective mucus, which is more nutritious and hurts the client.<br><br>
+            Clients choose which cleaner to visit, and other fish nearby are often <b>watching</b>. This time you will rarely meet the same client twice, so what keeps you honest is your <b>reputation</b>.
+        </details>
+        <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
+            <div>
+                <div class="card" id="cl-start">
+                    <h3>Open your cleaning station</h3>
+                    <p style="font-size: 14px; margin-top: 0;">Each day, a client may visit. You decide how to treat it. Nobody tells you how long the season lasts.</p>
+                    <button class="teal" id="cl-start-btn" onclick="clStart()">Open the station</button>
+                </div>
+                <div class="card hidden" id="cl-game">
+                    <div class="row" style="justify-content: space-between;"><h3 style="border: none; margin: 0; padding: 0;" id="cl-day">Day 1</h3><span class="muted" style="font-size: 13px;">Food: <b id="cl-food">0</b></span></div>
+                    <div class="cl-reef" id="cl-reef"></div>
+                    <div class="row" style="font-size: 13px; margin: 6px 0 12px;"><span>Reputation</span><div class="meter" style="flex: 1; max-width: 260px;"><div id="cl-rep" style="background: #0ea5e9;"></div></div><b id="cl-rep-val"></b></div>
+                    <div class="row" id="cl-actions" style="gap: 10px;">
+                        <button class="big-btn coop" id="cl-clean" onclick="clChoose('clean')">Clean honestly (+2)</button>
+                        <button class="big-btn defect" id="cl-bite" onclick="clChoose('bite')">Bite the mucus (+4)</button>
+                        <button class="secondary hidden" id="cl-next" onclick="clNextDay()">Wait for the next day</button>
+                    </div>
+                    <div class="note note-blue" id="cl-msg" style="margin: 14px 0 0;"></div>
+                </div>
+                <div class="chart-box" style="margin-top: 14px;"><b style="font-size: 14px;">Your reputation over the season</b><canvas id="cl-chart" width="720" height="170"></canvas></div>
+            </div>
+            <div>
+                <div class="field-notes" id="cl-notes"><h3>Notes</h3><div class="muted">Observations appear when the season ends.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================== TAB: FAMILY TIES (kin selection) =================== -->
+    <div id="tab-kin" class="tab-content">
+        <details class="note note-blue explain"><summary><b>How Family Ties works</b> <span class="muted">(tap to read)</span></summary>
+            You are a <b>Belding's ground squirrel</b> in a mountain meadow. When a predator appears, you can give an <b>alarm call</b>. Calling warns everyone nearby, but it draws the predator's attention to <i>you</i>.
+            Some of your neighbors are relatives. Relatives share some of your genes: a sister shares about half, a cousin about an eighth, a stranger none (beyond what everyone in the population shares).
+            Your score counts every copy of your genes that survives: in you, <i>and</i> in your relatives.
+        </details>
+        <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
+            <div>
+                <div class="card" id="kn-start">
+                    <h3>Into the meadow</h3>
+                    <p style="font-size: 14px; margin-top: 0;">Predators will appear several times. Each time, look at who is nearby and how dangerous it is to call.</p>
+                    <button class="teal" id="kn-start-btn" onclick="knStart()">Start foraging</button>
+                </div>
+                <div class="card hidden" id="kn-game">
+                    <div class="row" style="justify-content: space-between;"><h3 style="border: none; margin: 0; padding: 0;" id="kn-round">Alarm 1</h3><span class="muted" style="font-size: 13px;">Gene score: <b id="kn-score">0</b></span></div>
+                    <div class="kn-scene" id="kn-scene"></div>
+                    <div class="row" id="kn-actions" style="gap: 10px;">
+                        <button class="big-btn coop" id="kn-call" onclick="knChoose(true)">Give an alarm call</button>
+                        <button class="big-btn defect" id="kn-silent" onclick="knChoose(false)">Stay silent and hide</button>
+                        <button class="secondary hidden" id="kn-next" onclick="knNext()">Next</button>
+                    </div>
+                    <div class="note note-blue" id="kn-msg" style="margin: 14px 0 0;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="field-notes" id="kn-notes"><h3>Notes</h3><div class="muted">Observations appear when the season ends.</div></div>
             </div>
         </div>
     </div>
@@ -1511,7 +1589,7 @@ function downloadFile(filename, text, mime = 'application/json') {
     }
 }
 
-const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine', 'tab-commons': 'The Commons' };
+const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine', 'tab-commons': 'The Commons', 'tab-clean': 'Cleaning Station', 'tab-kin': 'Family Ties' };
 function toggleOpenLabMenu(force) {
     const m = $('openlab-menu'), open = force !== undefined ? force : m.classList.contains('hidden');
     m.classList.toggle('hidden', !open);
@@ -3473,6 +3551,160 @@ function cmAgain() {
 }
 
 // ============================================================================
+// THE CLEANING STATION (reputation / indirect reciprocity, after Bshary & Grutter)
+// ============================================================================
+// Tuned by simulation: on average honest cleaners out-earn "sneaky" ones (cheat only when unobserved),
+// who far out-earn constant cheaters. Bitten clients sometimes chase the cleaner (a real punishment).
+const CL = { days: 25, rep0: 0.6, base: 0.15, clean: 2, bite: 4, biteHit: 0.12, watchHit: 0.12, cleanGain: 0.04, watchGain: 0.03, chase: 0.4, chaseCost: 2 };
+const CL_CLIENTS = ['🐠', '🐡', '🐟', '🦈', '🐢', '🦑'];
+const cl = { on: false };
+
+function clStart() {
+    Object.assign(cl, { on: true, day: 0, rep: CL.rep0, food: 0, history: [CL.rep0], log: { clean: 0, bite: 0, biteWatched: 0, cleanWatched: 0, empty: 0 }, ended: false });
+    $('cl-start').classList.add('hidden'); $('cl-game').classList.remove('hidden');
+    $('cl-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear when the season ends.</div>';
+    clNextDay();
+}
+function clNextDay() {
+    cl.day++;
+    if (cl.day > CL.days) return clEnd();
+    $('cl-day').innerText = 'Day ' + cl.day;
+    cl.client = Math.random() < CL.base + (1 - CL.base) * cl.rep;
+    const r = Math.random();
+    cl.watch = r < 0.35 ? 0 : r < 0.65 ? 1 : r < 0.85 ? 2 : 3;
+    const c = CL_CLIENTS[Math.floor(Math.random() * CL_CLIENTS.length)];
+    $('cl-reef').innerHTML = cl.client
+        ? `<div class="cl-client">${c}</div><div class="cl-watchers">${cl.watch ? '🐟'.repeat(cl.watch) : ''}</div><div class="cl-caption">${cl.watch ? `A client is waiting, and <b>${cl.watch}</b> fish ${cl.watch === 1 ? 'is' : 'are'} watching.` : 'A client is waiting. <b>Nobody is watching.</b>'}</div>`
+        : `<div class="cl-caption">No clients came to your station today.${cl.rep < 0.4 ? ' Word may be getting around.' : ''}</div>`;
+    $('cl-clean').classList.toggle('hidden', !cl.client); $('cl-bite').classList.toggle('hidden', !cl.client);
+    $('cl-next').classList.toggle('hidden', !!cl.client);
+    if (!cl.client) { cl.log.empty++; cl.history.push(cl.rep); }
+    if (cl.day === 1) $('cl-msg').innerHTML = 'Your station is open. Clients prefer cleaners with a good reputation.';
+    clRender();
+}
+function clChoose(how) {
+    const msgs = [];
+    if (how === 'clean') {
+        cl.food += CL.clean; cl.rep += CL.cleanGain + CL.watchGain * cl.watch; cl.log.clean++; if (cl.watch) cl.log.cleanWatched++;
+        msgs.push(`You cleaned honestly: <b>+${CL.clean}</b> food.${cl.watch ? ' The watching fish noticed.' : ''}`);
+    } else {
+        cl.food += CL.bite; cl.rep -= CL.biteHit + CL.watchHit * cl.watch; cl.log.bite++; if (cl.watch) cl.log.biteWatched++;
+        msgs.push(`You bit the client: <b>+${CL.bite}</b> food. It jolted and swam off${cl.watch ? `, and ${cl.watch} fish saw it happen` : ''}.`);
+        if (Math.random() < CL.chase) { cl.food -= CL.chaseCost; msgs.push(`The angry client chased you around the reef: <b>−${CL.chaseCost}</b> food in wasted energy.`); }
+    }
+    cl.rep = Math.max(0, Math.min(1, cl.rep));
+    cl.history.push(cl.rep);
+    $('cl-msg').innerHTML = msgs.join('<br>');
+    $('cl-clean').classList.add('hidden'); $('cl-bite').classList.add('hidden'); $('cl-next').classList.remove('hidden');
+    clRender();
+}
+function clRender() {
+    $('cl-food').innerText = cl.food;
+    $('cl-rep').style.width = Math.round(cl.rep * 100) + '%';
+    $('cl-rep-val').innerText = Math.round(cl.rep * 100) + '%';
+    drawLineChart($('cl-chart'), [{ name: 'Reputation', color: '#0ea5e9', values: cl.history, width: 2.6 }], { yMax: 1, percent: true, xLabel: 'Day' });
+}
+function clBaseline(policy) {
+    let total = 0;
+    for (let k = 0; k < 2000; k++) {
+        let rep = CL.rep0, food = 0;
+        for (let d = 0; d < CL.days; d++) {
+            if (Math.random() >= CL.base + (1 - CL.base) * rep) continue;
+            const r = Math.random(), a = r < 0.35 ? 0 : r < 0.65 ? 1 : r < 0.85 ? 2 : 3;
+            const bite = policy === 'cheat' || (policy === 'sneaky' && a === 0);
+            if (bite) { food += CL.bite; rep -= CL.biteHit + CL.watchHit * a; if (Math.random() < CL.chase) food -= CL.chaseCost; }
+            else { food += CL.clean; rep += CL.cleanGain + CL.watchGain * a; }
+            rep = Math.max(0, Math.min(1, rep));
+        }
+        total += food;
+    }
+    return Math.round(total / 2000);
+}
+function clEnd() {
+    cl.ended = true;
+    $('cl-day').innerText = 'The season is over';
+    $('cl-reef').innerHTML = '<div class="cl-caption">The season is over.</div>';
+    ['cl-clean', 'cl-bite', 'cl-next'].forEach(id => $(id).classList.add('hidden'));
+    const L = cl.log, served = L.clean + L.bite;
+    const base = { honest: clBaseline('honest'), sneaky: clBaseline('sneaky'), cheat: clBaseline('cheat') };
+    const notes = [`You served <b>${served}</b> clients (${L.empty} day${L.empty === 1 ? '' : 's'} nobody came) and finished with <b>${cl.food}</b> food and a reputation of <b>${Math.round(cl.rep * 100)}%</b>.`,
+        `For comparison, over thousands of simulated seasons: always-honest cleaners averaged <b>${base.honest}</b> food, cleaners who cheated only when nobody was watching averaged <b>${base.sneaky}</b>, and cleaners who always cheated averaged <b>${base.cheat}</b>.`];
+    if (L.bite && L.biteWatched < L.bite) notes.push(`You cheated ${L.bite - L.biteWatched} time${L.bite - L.biteWatched === 1 ? '' : 's'} when nobody was watching${L.biteWatched ? ` and ${L.biteWatched} time${L.biteWatched === 1 ? '' : 's'} in front of an audience` : ''}. Real cleaner wrasse do the same: they cooperate more when other clients are watching (Bshary &amp; Grutter 2006).`);
+    if (!L.bite) notes.push('You never cheated. Your good reputation kept clients coming, even though each honest meal was smaller.');
+    notes.push('This is <b>indirect reciprocity</b>: you rarely meet the same client twice, so nobody can pay you back directly. Instead, your reputation does it, because clients choose cleaners that others have seen behaving well. Reviews, references and gossip do the same job for people.');
+    cl.notes = notes;
+    $('cl-notes').innerHTML = `<h3>Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="clStart()">Play another season</button>`;
+    if (cl.food >= base.honest && cl.rep >= 0.6) completeMission('reputation');
+}
+
+// ============================================================================
+// FAMILY TIES (kin selection and Hamilton's rule, after Sherman 1977)
+// ============================================================================
+const KIN = [
+    { rel: 'sister', r: 0.5 }, { rel: 'mother', r: 0.5 }, { rel: 'daughter', r: 0.5 }, { rel: 'half-sister', r: 0.25 },
+    { rel: 'niece', r: 0.25 }, { rel: 'cousin', r: 0.125 }, { rel: 'stranger', r: 0 }, { rel: 'stranger', r: 0 }
+];
+const KN = { rounds: 8, B: 2 };   // each warned neighbor gains B in survival
+const KN_THREATS = [
+    { what: 'A hawk is circling far overhead.', C: 0.5 },
+    { what: 'A coyote is creeping closer through the grass.', C: 1 },
+    { what: 'A weasel is just a few meters away.', C: 1.5 }
+];
+const kn = { on: false };
+
+function knStart() {
+    Object.assign(kn, { on: true, round: 0, score: 0, direct: 0, indirect: 0, choices: [], ended: false });
+    $('kn-start').classList.add('hidden'); $('kn-game').classList.remove('hidden');
+    $('kn-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear when the season ends.</div>';
+    knNext();
+}
+function knNext() {
+    kn.round++;
+    if (kn.round > KN.rounds) return knEnd();
+    const n = 2 + Math.floor(Math.random() * 3);
+    kn.near = shuffle(KIN).slice(0, n);
+    kn.threat = KN_THREATS[Math.floor(Math.random() * KN_THREATS.length)];
+    $('kn-round').innerText = 'Alarm ' + kn.round;
+    $('kn-scene').innerHTML = `<div class="kn-threat">${kn.threat.what}</div>
+        <div class="kn-terms"><span class="badge badge-amber">Cost of calling to you: C = ${kn.threat.C}</span> <span class="badge badge-pos">Benefit to each neighbor you warn: B = ${KN.B}</span></div>
+        <div class="kn-near">${kn.near.map(k => `<div class="kn-sq"><span class="kn-emoji">🐿️</span><b>${k.rel}</b><span class="muted">shares ${k.r ? (k.r === 0.5 ? '½' : k.r === 0.25 ? '¼' : '⅛') : 'none'} of your genes</span></div>`).join('')}</div>`;
+    $('kn-call').classList.remove('hidden'); $('kn-silent').classList.remove('hidden'); $('kn-next').classList.add('hidden');
+    if (kn.round === 1) $('kn-msg').innerHTML = 'Who is nearby, and how risky is calling? Decide.';
+}
+function knChoose(call) {
+    const C = kn.threat.C, rB = kn.near.reduce((t, k) => t + k.r * KN.B, 0);
+    const terms = kn.near.filter(k => k.r).map(k => `${k.r} × ${KN.B}`).join(' + ') || '0';
+    let msg;
+    if (call) {
+        kn.direct -= C; kn.indirect += rB; kn.score += rB - C;
+        msg = `You called. Everyone nearby escaped, but you took a risk of <b>${C}</b>. Copies of your genes saved in relatives: ${terms} = <b>${rB.toFixed(2)}</b>. Net effect on your genes: <b>${(rB - C >= 0 ? '+' : '') + (rB - C).toFixed(2)}</b>.`;
+    } else {
+        msg = `You stayed silent and safe. Your neighbors had to fend for themselves. If you had called, your genes' net gain would have been ${terms} − ${C} = <b>${(rB - C).toFixed(2)}</b>.`;
+    }
+    kn.choices.push({ call, gain: rB - C, rB, C });
+    msg += `<div class="kn-rule">Hamilton's rule: helping pays your genes when <b>r × B &gt; C</b>. Here r × B = ${rB.toFixed(2)} and C = ${C}, so calling ${rB > C ? '<b>helps</b>' : rB === C ? 'breaks even' : '<b>does not help</b>'} your genes.</div>`;
+    $('kn-msg').innerHTML = msg;
+    $('kn-score').innerText = kn.score.toFixed(2);
+    $('kn-call').classList.add('hidden'); $('kn-silent').classList.add('hidden'); $('kn-next').classList.remove('hidden');
+}
+function knEnd() {
+    kn.ended = true;
+    $('kn-round').innerText = 'The season is over';
+    $('kn-scene').innerHTML = '';
+    ['kn-call', 'kn-silent', 'kn-next'].forEach(id => $(id).classList.add('hidden'));
+    const best = kn.choices.reduce((t, c) => t + Math.max(0, c.gain), 0);
+    const always = kn.choices.reduce((t, c) => t + c.gain, 0);
+    const followed = kn.choices.filter(c => c.call === (c.gain > 0)).length;
+    const notes = [`Your gene score: <b>${kn.score.toFixed(2)}</b>. Calling every time would have scored ${always.toFixed(2)}; never calling scores 0; calling only when r × B &gt; C would have scored <b>${best.toFixed(2)}</b>.`,
+        `Your choices matched Hamilton's rule in <b>${followed} of ${kn.choices.length}</b> alarms.`,
+        'This is <b>kin selection</b> (W. D. Hamilton, 1964). A behavior that costs you can still spread through a population if it helps enough relatives, because they carry copies of the same genes.',
+        'Real Belding\'s ground squirrels behave this way. Paul Sherman (1977) found that females, which live near their relatives, gave alarm calls more often than males, which move away from home, and that females with relatives nearby were the most likely to call.'];
+    kn.notes = notes;
+    $('kn-notes').innerHTML = `<h3>Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="knStart()">Play again</button>`;
+    if (followed === kn.choices.length) completeMission('hamilton');
+}
+
+// ============================================================================
 // SECTION 10: MISSIONS
 // ============================================================================
 
@@ -3509,6 +3741,10 @@ const MISSIONS = [
       lesson: 'A shared resource survives when users take no more than it can regrow. Restraint now is what makes catches possible later.' },
     { id: 'ostrom', ic: '⚖️', tag: 'Commons', title: "Ostrom's Rules", desc: 'In The Commons, turn on monitoring AND graduated sanctions, and keep the lake at least 40% full.',
       lesson: "The tragedy of the commons is not inevitable. Communities that can see who takes what, and respond with fair, escalating penalties, can share a resource for generations." },
+    { id: 'reputation', ic: '🐟', tag: 'Reputation', title: 'Good Name', desc: 'In the Cleaning Station, finish a season with at least as much food as the average honest cleaner and a reputation of 60% or more.',
+      lesson: 'When you rarely meet the same partner twice, reputation does the work that payback does in repeated meetings. Being seen as trustworthy brings partners to you.' },
+    { id: 'hamilton', ic: '🐿️', tag: 'Kin', title: "Hamilton's Rule", desc: 'In Family Ties, make every alarm-call decision the way Hamilton\'s rule predicts.',
+      lesson: 'Helping relatives can spread your genes even when it costs you, as long as relatedness × benefit is greater than the cost (r × B > C).' },
     { id: 'class', ic: '👑', tag: 'Class', title: 'Class Champion', desc: 'Win a tournament that includes at least 3 classmates\' strategies, using one of your strategies.',
       lesson: "You can't control what your classmates submit — the environment is made of other organisms' strategies. That's evolution." }
 ];
@@ -3647,7 +3883,7 @@ function renderGuide() {
         <h2><small>06 · The evidence</small>Biology Case Files</h2>
         <div class="case-grid">
             <div class="case"><span class="em">🦇</span><b>Vampire bats</b>A bat that fails to feed for a few nights can starve. Roostmates regurgitate blood for it, and bats tend to give to those who have given to them. <div class="src">Wilkinson 1984, Nature; Carter &amp; Wilkinson 2013. ↔ Tit for Tat</div></div>
-            <div class="case"><span class="em">🐟</span><b>Cleaner wrasse</b>Cleaners eat parasites off "client" fish but would rather bite their nutritious mucus. Clients chase cheaters or leave, and cleaners behave better when other clients are watching. <div class="src">Bshary &amp; Grutter 2006, Nature. ↔ Joss, reputation</div></div>
+            <div class="case"><span class="em">🐟</span><b>Cleaner wrasse</b>Cleaners eat parasites off "client" fish but would rather bite their nutritious mucus. Clients chase cheaters or leave, and cleaners behave better when other clients are watching. Try it in the Open Lab's Cleaning Station. <div class="src">Bshary &amp; Grutter 2006, Nature. ↔ Joss, reputation</div></div>
             <div class="case"><span class="em">🌱</span><b>Soybeans &amp; rhizobia</b>Bacteria in root nodules fix nitrogen in exchange for sugar. When nodules stop fixing nitrogen, the plant appears to restrict their oxygen, and the cheating bacteria reproduce about half as much. <div class="src">Kiers et al. 2003, Nature. ↔ retaliation / sanctions</div></div>
             <div class="case"><span class="em">🍄</span><b>Fungal markets</b>Plants trade sugar to mycorrhizal fungi for phosphorus. Both partners send more resources to the partners that give more in return. <div class="src">Kiers et al. 2011, Science. ↔ reciprocal reward</div></div>
             <div class="case"><span class="em">🦋</span><b>Yucca &amp; yucca moth</b>The moth pollinates the yucca and lays eggs in its flowers; its larvae eat some seeds. Yuccas abort flowers with too many eggs, keeping the moth from becoming a parasite. <div class="src">Pellmyr &amp; Huth 1994, Nature. ↔ Grim Trigger / Gradual</div></div>
