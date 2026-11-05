@@ -1,5 +1,5 @@
 /**
- * Google Apps Script host for Symbiosis Lab.
+ * Google Apps Script host for Symbio.
  *
  * Setup:
  *  1. Create a new project at https://script.google.com
@@ -9,7 +9,7 @@
  */
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('index')
-    .setTitle('Symbiosis Lab')
+    .setTitle('Symbio')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
