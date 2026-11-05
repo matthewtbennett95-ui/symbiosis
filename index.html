@@ -565,6 +565,33 @@
         .term { border-bottom-color: #a5b4fc; }
         .term:hover { background: var(--brand-50); }
         .vf-icon { margin-bottom: 8px; opacity: .8; }
+        .duo-board { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin-bottom: 16px; }
+        .duo-score { background: var(--soft); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px 16px; text-align: center; min-width: 0; }
+        .duo-score span { display: block; font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .duo-score b { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .duo-round { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+        .duo-turn { background: var(--brand-50); border: 1px solid var(--brand-100); border-radius: 18px; padding: 26px 20px; text-align: center; }
+        .duo-turn.reveal { background: #fff; border-color: var(--border-color); }
+        .duo-who { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+        .duo-hist { display: grid; gap: 8px; margin-top: 16px; font-size: 13px; }
+        .duo-chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+        .duo-chip { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; }
+        .duo-chip.c { background: var(--coop); } .duo-chip.d { background: var(--defect); }
+        .quiz-score { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: #fffbeb; border: 1px solid #fde68a; border-radius: 16px; padding: 16px 20px; margin-bottom: 18px; }
+        .quiz-score.good { background: var(--coop-50); border-color: #a7f3d0; }
+        .quiz-score b { display: block; font-size: 30px; font-weight: 800; }
+        .quiz-q { border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; }
+        .quiz-q.pass { border-color: #a7f3d0; } .quiz-q.fail { border-color: #fecdd3; }
+        .quiz-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; font-size: 15px; }
+        .quiz-n { width: 26px; height: 26px; border-radius: 50%; background: var(--soft-2); display: grid; place-items: center; font-size: 13px; font-weight: 700; flex: none; }
+        .quiz-q.pass .quiz-n, .quiz-q.fail .quiz-n { background: none; }
+        .quiz-opts { display: grid; gap: 8px; padding-left: 38px; }
+        .quiz-opt { justify-content: flex-start; text-align: left; font-size: 14px; padding: 10px 14px; }
+        .quiz-opt:disabled { background: #fff; color: var(--text-muted); border-color: var(--border-color); cursor: default; }
+        .quiz-opt.on:disabled { border-color: var(--defect); color: var(--text-main); background: var(--defect-50); }
+        .quiz-opt.correct:disabled { border-color: var(--coop); color: var(--text-main); background: var(--coop-50); }
+        .quiz-why { margin: 10px 0 0 38px; font-size: 14px; background: var(--soft); border-radius: 12px; padding: 10px 14px; }
+        @media (max-width: 700px) { .quiz-opts, .quiz-why { padding-left: 0; margin-left: 0; } .duo-score b { font-size: 24px; } }
         .checkline { display: block; }
         .checkline input { margin: 0 6px 0 0; vertical-align: -2px; }
         details.entrants > summary { list-style: none; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -769,6 +796,8 @@
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-duo" viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M2 20a5 5 0 0 1 10 0M12 20a5 5 0 0 1 10 0"/></symbol>
+    <symbol id="i-quiz" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 2h6v4H9zM9 14l2 2 4-4"/></symbol>
     <symbol id="i-test" viewBox="0 0 24 24"><path d="M9 2v6L4 18a2 2 0 0 0 1.8 3h12.4A2 2 0 0 0 20 18L15 8V2M8 2h8M6.5 14h11"/></symbol>
 </svg>
 
@@ -785,6 +814,7 @@
                 <button class="tab" id="openlab-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleOpenLabMenu()"><svg class="ico" width="16" height="16" aria-hidden="true"><use href="#i-flask"/></svg><span id="openlab-label">Open Lab</span><svg class="ico chev" width="14" height="14" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
                 <div class="openlab-menu hidden" id="openlab-menu" role="menu">
                     <div class="menu-group"><div class="menu-head">Games</div>
+                        <button role="menuitem" data-tab="tab-duo"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-duo"/></svg></span><span class="mi-tx"><b>Face a Classmate</b><small>Two players, one Chromebook</small></span></button>
                         <button role="menuitem" data-tab="tab-commons"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-fish"/></svg></span><span class="mi-tx"><b>The Commons</b><small>Share a lake without emptying it</small></span></button>
                         <button role="menuitem" data-tab="tab-clean"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="mi-tx"><b>Cleaning Station</b><small>Earn food, keep your reputation</small></span></button>
                         <button role="menuitem" data-tab="tab-kin"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-users"/></svg></span><span class="mi-tx"><b>Family Ties</b><small>Risk yourself to warn your relatives?</small></span></button>
@@ -797,6 +827,8 @@
                     <div class="menu-group"><div class="menu-head">Build &amp; test</div>
                         <button role="menuitem" data-tab="tab-lab"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-code"/></svg></span><span class="mi-tx"><b>Strategy Lab</b><small>Design your own strategy</small></span></button>
                         <button role="menuitem" data-tab="tab-1v1"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-swords"/></svg></span><span class="mi-tx"><b>Head-to-Head</b><small>Watch one matchup round by round</small></span></button>
+                        <div class="menu-head" style="margin-top: 6px;">Review</div>
+                        <button role="menuitem" data-tab="tab-quiz"><span class="mi-ic"><svg class="ico" width="18" height="18" aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mi-tx"><b>Check-in Quiz</b><small>Ten questions with explanations</small></span></button>
                     </div>
                 </div>
             </div>
@@ -1349,6 +1381,21 @@
         </div>
     </div>
 
+    <!-- =================== TAB: FACE A CLASSMATE =================== -->
+    <div id="tab-duo" class="tab-content">
+        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-duo"/></svg></div><div><div class="page-kicker">Game</div><h2>Face a Classmate</h2><p>Two players, one Chromebook. Choose in secret each round, and nobody knows when the match will end.</p></div></div>
+        <details class="note note-blue explain"><summary><b>How it works</b> <span class="muted">(tap to read)</span></summary>
+            This is the Prisoner's Dilemma with real people. Each round you both choose to <b>cooperate</b> or <b>defect</b> without seeing the other's choice, using the same points as the rest of the lab. Because the match can end after any round from round 6 on, there is no safe "last round" to cheat on.
+        </details>
+        <div id="duo-box"></div>
+    </div>
+
+    <!-- =================== TAB: CHECK-IN QUIZ =================== -->
+    <div id="tab-quiz" class="tab-content">
+        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-quiz"/></svg></div><div><div class="page-kicker">Review</div><h2>Check-in Quiz</h2><p>Ten questions on the big ideas. Answer all ten, then check your answers to see an explanation for each one.</p></div></div>
+        <div id="quiz-box"></div>
+    </div>
+
     <!-- =================== TAB: FIELD GUIDE =================== -->
     <div id="tab-guide" class="tab-content">
         <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-book"/></svg></div><div><div class="page-kicker">Reference</div><h2>Field Guide</h2><p>The science, history and real-world cases behind the game. Tap a section to open it.</p></div></div>
@@ -1378,7 +1425,7 @@
                 <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows a 2½-minute edited clip of Veritasium's Prisoner's Dilemma video (three sections, played back to back), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a organism from genes (brain type, testing, reactions, memory) through repeated trials. Every chapter has two short journal entries: a <b>Think</b> answer written <i>before</i> the explanation unlocks, and a <b>Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
-            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension ideas:</b> after Chapter 7, have students play The Commons twice (no rules, then monitoring + sanctions) and explain the difference. In the Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
+            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Exit ticket: the <b>Check-in Quiz</b> in the Open Lab (10 questions, printable score). Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension ideas:</b> after Chapter 7, have students play The Commons twice (no rules, then monitoring + sanctions) and explain the difference. In the Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>Classroom link</h3>
@@ -1870,7 +1917,7 @@ function downloadFile(filename, text, mime = 'application/json') {
 // Inline icon from the SVG sprite at the top of <body>.
 function ICON(name, size = 16, cls = '') { return `<svg class="ico${cls ? ' ' + cls : ''}" width="${size}" height="${size}" aria-hidden="true"><use href="#i-${name}"/></svg>`; }
 
-const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine', 'tab-commons': 'The Commons', 'tab-clean': 'Cleaning Station', 'tab-kin': 'Family Ties' };
+const OPEN_LAB_TABS = { 'tab-tournament': 'Tournament', 'tab-petri': 'Survival Crucible', 'tab-missions': 'Missions', 'tab-lab': 'Strategy Lab', 'tab-1v1': 'Head-to-Head', 'tab-evo': 'Evolution Engine', 'tab-commons': 'The Commons', 'tab-clean': 'Cleaning Station', 'tab-kin': 'Family Ties', 'tab-duo': 'Face a Classmate', 'tab-quiz': 'Check-in Quiz' };
 function toggleOpenLabMenu(force) {
     const m = $('openlab-menu'), open = force !== undefined ? force : m.classList.contains('hidden');
     m.classList.toggle('hidden', !open);
@@ -1906,6 +1953,8 @@ function switchTab(tabId) {
     window.scrollTo({ top: 0 });
     if (tabId === 'tab-tournament') renderPicker();
     if (tabId === 'tab-missions') renderMissions();
+    if (tabId === 'tab-duo' && !duo) duoSetup();
+    if (tabId === 'tab-quiz') quizRender();
 }
 
 // ============================================================================
@@ -3989,6 +4038,212 @@ function knEnd() {
     kn.notes = notes;
     $('kn-notes').innerHTML = `<h3>Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="knStart()">Play again</button>`;
     if (followed === kn.choices.length) completeMission('hamilton');
+}
+
+// ============================================================================
+// SECTION 9C: FACE A CLASSMATE (pass-and-play, two humans on one device)
+// ============================================================================
+const DUO = { minRounds: 6, endChance: 0.25, maxRounds: 15 };
+let duo = null;
+
+function duoSetup() {
+    const P = state.payoff, last = Store.get('duoNames', ['', '']);
+    duo = null;
+    $('duo-box').innerHTML = `
+        <div class="grid">
+            <div class="card">
+                <h3>Who's playing?</h3>
+                <div class="row" style="margin-bottom: 12px;">
+                    <div class="control-group" style="flex: 1; min-width: 150px;"><label for="duo-n1">Player 1</label><input type="text" id="duo-n1" maxlength="24" placeholder="Player 1" value="${esc(last[0])}"></div>
+                    <div class="control-group" style="flex: 1; min-width: 150px;"><label for="duo-n2">Player 2</label><input type="text" id="duo-n2" maxlength="24" placeholder="Player 2" value="${esc(last[1])}"></div>
+                </div>
+                <p class="muted" style="font-size: 14px; margin-top: 0;">Sit side by side. Each round, one player chooses while the other looks away, then you swap. The match lasts at least ${DUO.minRounds} rounds, and after that it can end at any time. Nobody knows when.</p>
+                <button id="duo-start" onclick="duoStart()">${ICON('play', 14)}Start the match</button>
+            </div>
+            <div class="card soft">
+                <h3>Points each round</h3>
+                <table class="payoff-table" style="margin-top: 0;">
+                    <tr><th></th><th>Partner cooperates</th><th>Partner defects</th></tr>
+                    <tr><th>You cooperate</th><td class="cc">You <b>${P.R}</b> · Partner ${P.R}</td><td class="mix">You <b>${P.S}</b> · Partner ${P.T}</td></tr>
+                    <tr><th>You defect</th><td class="mix">You <b>${P.T}</b> · Partner ${P.S}</td><td class="dd">You <b>${P.P}</b> · Partner ${P.P}</td></tr>
+                </table>
+                <p class="muted" style="font-size: 13px; margin-bottom: 0;">Before you start, decide: are you trying to beat your partner, or to earn as many points as you can?</p>
+            </div>
+        </div>`;
+}
+
+function duoStart() {
+    const n1 = $('duo-n1').value.trim(), n2 = $('duo-n2').value.trim();
+    Store.set('duoNames', [n1, n2]);
+    duo = { names: [n1 || 'Player 1', n2 || 'Player 2'], hist: [], scores: [0, 0], phase: 0, pick: null, over: false };
+    duoRender();
+}
+
+function duoChoose(m) {
+    if (!duo || duo.phase > 1) return;
+    if (duo.phase === 0) { duo.pick = m; duo.phase = 1; duoRender(); return; }
+    const a = duo.pick, b = m, P = state.payoff;
+    const pa = a === 'C' ? (b === 'C' ? P.R : P.S) : (b === 'C' ? P.T : P.P);
+    const pb = b === 'C' ? (a === 'C' ? P.R : P.S) : (a === 'C' ? P.T : P.P);
+    duo.hist.push({ a, b, pa, pb });
+    duo.scores[0] += pa; duo.scores[1] += pb;
+    const n = duo.hist.length;
+    duo.over = n >= DUO.maxRounds || (n >= DUO.minRounds && Math.random() < DUO.endChance);
+    duo.phase = 2; duo.pick = null;
+    duoRender();
+}
+
+function duoNext() { if (duo.over) duoEnd(); else { duo.phase = 0; duoRender(); } }
+
+function duoHistory() {
+    if (!duo.hist.length) return '';
+    const row = (i) => duo.hist.map(h => { const m = i ? h.b : h.a; return `<span class="duo-chip ${m === 'C' ? 'c' : 'd'}" title="${m === 'C' ? 'Cooperated' : 'Defected'}">${m}</span>`; }).join('');
+    return `<div class="duo-hist"><div><b>${esc(duo.names[0])}</b><div class="duo-chips">${row(0)}</div></div><div><b>${esc(duo.names[1])}</b><div class="duo-chips">${row(1)}</div></div></div>`;
+}
+
+function duoRender() {
+    const [n1, n2] = duo.names.map(esc), n = duo.hist.length;
+    const board = `<div class="duo-board">
+        <div class="duo-score"><span>${n1}</span><b>${duo.scores[0]}</b></div>
+        <div class="duo-round">${duo.phase === 2 ? `Round ${n}` : `Round ${n + 1}`}</div>
+        <div class="duo-score"><span>${n2}</span><b>${duo.scores[1]}</b></div></div>`;
+    let main;
+    if (duo.phase < 2) {
+        const me = duo.phase === 0 ? n1 : n2, other = duo.phase === 0 ? n2 : n1;
+        main = `<div class="duo-turn">
+            <div class="duo-who">${me}, your turn</div>
+            <p>${other}, look away. ${duo.phase === 1 ? `${n1} has already chosen.` : 'Choose in secret.'}</p>
+            <div class="row" style="justify-content: center;">
+                <button class="big-btn coop" id="duo-c" onclick="duoChoose('C')">Cooperate</button>
+                <button class="big-btn defect" id="duo-d" onclick="duoChoose('D')">Defect</button>
+            </div></div>`;
+    } else {
+        const h = duo.hist[n - 1], word = m => m === 'C' ? '<b style="color: var(--coop);">cooperated</b>' : '<b style="color: var(--defect);">defected</b>';
+        const what = h.a === 'C' && h.b === 'C' ? 'Mutual cooperation. You both did well.'
+            : h.a === 'D' && h.b === 'D' ? 'Mutual defection. You both scraped by.'
+            : `${h.a === 'D' ? n1 : n2} exploited ${h.a === 'D' ? n2 : n1}.`;
+        main = `<div class="duo-turn reveal">
+            <p style="font-size: 17px; margin: 0 0 6px;">${n1} ${word(h.a)} (+${h.pa}) · ${n2} ${word(h.b)} (+${h.pb})</p>
+            <p class="muted" style="margin-top: 0;">${what}</p>
+            ${duo.over ? '<p style="font-weight: 700;">That was the last round. The match is over.</p>' : ''}
+            <button id="duo-next" onclick="duoNext()">${duo.over ? 'See the results' : 'Next round'}</button></div>`;
+    }
+    $('duo-box').innerHTML = board + main + duoHistory();
+}
+
+function duoEnd() {
+    const P = state.payoff, n = duo.hist.length, [s1, s2] = duo.scores, [n1, n2] = duo.names.map(esc);
+    const cc = duo.hist.filter(h => h.a === 'C' && h.b === 'C').length, dd = duo.hist.filter(h => h.a === 'D' && h.b === 'D').length;
+    // A "revenge" round: someone defects right after being exploited.
+    let revenge = 0;
+    for (let i = 1; i < n; i++) { const p = duo.hist[i - 1], h = duo.hist[i]; if ((p.a === 'C' && p.b === 'D' && h.a === 'D') || (p.b === 'C' && p.a === 'D' && h.b === 'D')) revenge++; }
+    const notes = [];
+    notes.push(s1 === s2 ? `You tied, ${s1} to ${s2}, after ${n} rounds.` : `${s1 > s2 ? n1 : n2} scored more, ${Math.max(s1, s2)} to ${Math.min(s1, s2)}, after ${n} rounds.`);
+    notes.push(`Together you earned <b>${s1 + s2}</b> points. If you had both cooperated every round, you would have earned <b>${2 * P.R * n}</b>. If you had both defected every round, <b>${2 * P.P * n}</b>.`);
+    if (cc === n) notes.push('You cooperated every single round: the best total two players can earn. Trust paid off for both of you.');
+    else if (dd >= n / 2) notes.push(`You were stuck in mutual defection for ${dd} of ${n} rounds. Each defection made sense on its own, but together it cost you both.`);
+    [0, 1].forEach(v => {
+        // v = the victim. Count rounds they were exploited, and whether they ever struck back.
+        const mine = h => v ? h.b : h.a, theirs = h => v ? h.a : h.b;
+        const hit = duo.hist.filter(h => mine(h) === 'C' && theirs(h) === 'D').length;
+        const struck = duo.hist.some((h, i) => i > 0 && mine(h) === 'D' && theirs(duo.hist[i - 1]) === 'D');
+        if (hit >= 2 && !struck) notes.push(`${v ? n2 : n1} was exploited ${hit} times and never struck back. In nature, a partner that never retaliates invites parasites.`);
+    });
+    if (revenge) notes.push(`There ${revenge === 1 ? 'was 1 round' : `were ${revenge} rounds`} of revenge (defecting right after being exploited). Did revenge help, or did it start a feud?`);
+    notes.push('In Axelrod\'s tournament, Tit for Tat never scored more than a single opponent, yet it earned the most points overall. Beating your partner and doing well are not the same thing.');
+    $('duo-box').innerHTML = `
+        <div class="duo-board">
+            <div class="duo-score"><span>${n1}</span><b>${s1}</b></div><div class="duo-round">Final</div><div class="duo-score"><span>${n2}</span><b>${s2}</b></div></div>
+        ${duoHistory()}
+        <div class="field-notes" style="margin-top: 16px;"><h3>Notes</h3><ul>${notes.map(x => `<li>${x}</li>`).join('')}</ul>
+            <div class="bio"><b>Talk about it:</b> Did not knowing when the match would end change how you played? Would you play differently against someone you'll sit next to all year?</div></div>
+        <div class="btn-group"><button id="duo-rematch" onclick="duoStart()">${ICON('refresh')}Rematch</button><button class="secondary" onclick="duoSetup()">New players</button></div>`;
+}
+
+// ============================================================================
+// SECTION 9D: CHECK-IN QUIZ (exit ticket)
+// ============================================================================
+const QUIZ = [
+    { q: 'In a single round of the Prisoner\'s Dilemma, why is defecting tempting?',
+      opts: ['It earns you more points no matter what your partner does', 'It always earns both players more points', 'Your partner can never strike back', 'Defecting is the only way to earn any points'],
+      why: 'If your partner cooperates, defecting earns the Temptation payoff instead of Mutualism. If your partner defects, it earns Competition instead of the Sucker payoff. Either way you get more in that one round. That is the dilemma: if both players think this way, both end up worse off than if they had cooperated.' },
+    { q: 'Tit for Tat won Axelrod\'s tournaments, yet it never scored more than its partner in any single match. How did it win?',
+      opts: ['It earned steady points by cooperating with many partners, while exploiters\' matches collapsed into defection', 'It secretly defected in the last round of every match', 'It crushed the weakest strategies by a large margin', 'The tournament counted matches won, not points'],
+      why: 'The tournament added up total points. Tit for Tat tied or lost each match by a little, but it built long runs of mutual cooperation. Exploiters "won" their matches but earned little, because their partners stopped cooperating with them.' },
+    { q: 'Which piece of advice did Axelrod NOT give?',
+      opts: ['Try to score more than your partner', 'Be nice: don\'t be the first to defect', 'Be provocable: strike back when you are cheated', 'Be forgiving: go back to cooperating when your partner does'],
+      why: 'Axelrod\'s advice was "don\'t be envious." You can do very well without beating your partner, and strategies that try to out-score their partners start feuds.' },
+    { q: 'Cooperation is most likely to evolve when…',
+      opts: ['partners are likely to meet again many more times', 'partners meet only once', 'everyone knows exactly which round is the last one', 'the reward for cheating is huge'],
+      why: 'Axelrod called this the "shadow of the future." If you will meet again, cheating today costs you cooperation tomorrow. With a single meeting, or a known last round, defecting pays.' },
+    { q: 'When players sometimes make mistakes, why do forgiving strategies like Generous Tit for Tat do well?',
+      opts: ['They break the cycles of revenge that one accident can start', 'They never cooperate, so mistakes don\'t affect them', 'Mistakes only ever hurt the other player', 'They always defect first to stay safe'],
+      why: 'With strict Tit for Tat, one accidental defection can echo back and forth for the rest of the match. Forgiving now and then lets the pair get back to mutual cooperation.' },
+    { q: 'A ground squirrel spots a predator. By Hamilton\'s rule, a risky alarm call pays off (for its genes) when…',
+      opts: ['r × B > C: relatedness times the benefit to the others is greater than the cost to the caller', 'the caller is the oldest squirrel in the group', 'B > C, whether or not the others are related', 'the predator is still far away'],
+      why: 'r is how related the caller is to those it warns (½ for a sister, ⅛ for a cousin), B is the benefit to them, and C is the cost to the caller. Helping relatives helps copies of your own genes survive. Sherman (1977) found that Belding\'s ground squirrels with relatives nearby were more likely to call.' },
+    { q: 'Elinor Ostrom studied communities that shared fisheries, forests and water for generations. What helped them avoid the tragedy of the commons?',
+      opts: ['Watching who takes what, plus penalties that start small and grow for repeat offenses', 'Letting everyone take as much as they want', 'Keeping everyone\'s catch secret', 'Banning everyone from ever using the resource'],
+      why: 'Ostrom (Nobel Prize, 2009) found that successful communities make their own rules, monitor for cheating, and use graduated sanctions. You can\'t punish what you can\'t see, and a harsh penalty for a first mistake breaks trust.' },
+    { q: 'Cleaner wrasse would rather eat a client fish\'s protective mucus than its parasites. When do they cheat less?',
+      opts: ['When other client fish are watching', 'When they are very hungry', 'When the client fish is small', 'When no other cleaners are nearby'],
+      why: 'Bshary and Grutter found that cleaners behave better in front of bystanders, because client fish avoid cleaners they have seen cheat. A good reputation brings more customers. This is called indirect reciprocity.' },
+    { q: 'Soybeans trade sugar to bacteria in their root nodules in exchange for nitrogen. What happens to a nodule whose bacteria stop fixing nitrogen?',
+      opts: ['The plant cuts its oxygen supply, and the bacteria inside reproduce less', 'The plant sends it extra sugar to win it back', 'Nothing: the plant can\'t tell which nodule is cheating', 'The bacteria move to a different plant'],
+      why: 'Kiers and colleagues (2003) found that plants "sanction" nodules that don\'t fix nitrogen by reducing their oxygen, so the cheaters reproduce less. No brain is needed: the plant responds to each nodule\'s output.' },
+    { q: 'A vampire bat that misses a few meals can starve. Which roostmates is a bat most likely to share blood with?',
+      opts: ['Roostmates that have shared with it before', 'Any bat, chosen at random', 'Only the largest bat in the roost', 'Bats from a different roost'],
+      why: 'Wilkinson (1984) found that bats share with relatives and with roostmates they know well. Later experiments (Carter and Wilkinson, 2013) showed that past sharing predicted who would help even better than relatedness did. That is reciprocity: today\'s donor is tomorrow\'s recipient.' }
+];
+let quiz = Store.get('quiz', null);
+
+function quizOrder() {
+    // Each student gets their own (saved) option order, so the answer isn't always in the same spot.
+    if (!quiz || !quiz.order) {
+        const order = QUIZ.map(q => { const o = q.opts.map((_, i) => i); for (let i = o.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [o[i], o[j]] = [o[j], o[i]]; } return o; });
+        quiz = { order, answers: {}, checked: false };
+        Store.set('quiz', quiz);
+    }
+    return quiz.order;
+}
+
+function quizRender() {
+    const order = quizOrder(), done = quiz.checked;
+    const score = QUIZ.filter((q, i) => quiz.answers[i] === 0).length, answered = Object.keys(quiz.answers).length;
+    let html = done ? `<div class="quiz-score ${score >= 8 ? 'good' : ''}"><div><b>${score} / ${QUIZ.length}</b><span>${score === QUIZ.length ? 'Perfect score!' : score >= 8 ? 'Strong work. Read the explanations for any you missed.' : 'Read each explanation below, then try again.'}</span></div>
+        <div class="btn-group" style="margin: 0;"><button id="quiz-print" onclick="quizPrint()">${ICON('printer')}Print my results</button><button class="secondary" onclick="quizReset()">${ICON('refresh')}Try again</button></div></div>` : '';
+    html += QUIZ.map((q, i) => {
+        const mine = quiz.answers[i], right = mine === 0;
+        return `<div class="quiz-q ${done ? (right ? 'pass' : 'fail') : ''}">
+            <div class="quiz-head"><span class="quiz-n">${done ? (right ? ICON('check-circle', 22, 'ok') : ICON('x-circle', 22, 'bad')) : i + 1}</span><b>${q.q}</b></div>
+            <div class="quiz-opts">${order[i].map(k => `<button class="pick quiz-opt ${mine === k ? 'on' : ''} ${done && k === 0 ? 'correct' : ''}" data-q="${i}" data-k="${k}" ${done ? 'disabled' : ''} onclick="quizPick(${i}, ${k})">${esc(q.opts[k])}</button>`).join('')}</div>
+            ${done ? `<div class="quiz-why"><b>${right ? 'Correct.' : 'The answer: ' + esc(q.opts[0]) + '.'}</b> ${q.why}</div>` : ''}
+        </div>`;
+    }).join('');
+    if (!done) html += `<div class="row" style="margin-top: 18px;"><button class="big" id="quiz-check" ${answered < QUIZ.length ? 'disabled' : ''} onclick="quizCheck()">${ICON('check')}Check my answers</button><span class="muted" style="font-size: 14px;">${answered} of ${QUIZ.length} answered</span></div>`;
+    $('quiz-box').innerHTML = html;
+}
+
+function quizPick(i, k) { if (quiz.checked) return; quiz.answers[i] = k; Store.set('quiz', quiz); quizRender(); }
+function quizCheck() {
+    if (Object.keys(quiz.answers).length < QUIZ.length) return;
+    quiz.checked = true; Store.set('quiz', quiz); quizRender();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function quizReset() { quiz = null; Store.set('quiz', null); quizRender(); }
+function quizPrint() {
+    if (!studentName()) { toast('Type your name in the name box at the top first, so your teacher knows whose quiz this is.', 'warn'); $('student-name').focus(); return; }
+    const score = QUIZ.filter((q, i) => quiz.answers[i] === 0).length;
+    let html = `<div class="print-report-container"><h2>CHECK-IN QUIZ</h2>
+        <p><b>Name:</b> ${esc(studentName())} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()} &nbsp; <b>Score:</b> ${score} / ${QUIZ.length}</p>`;
+    QUIZ.forEach((q, i) => {
+        const mine = quiz.answers[i], right = mine === 0;
+        html += `<h3>${i + 1}. ${esc(q.q)}</h3><p><b>${right ? 'Correct' : 'Incorrect'}.</b> My answer: ${esc(q.opts[mine])}${right ? '' : `<br>Correct answer: ${esc(q.opts[0])}`}</p>`;
+    });
+    html += `</div>`;
+    $('report-preview-content').innerHTML = html;
+    $('print-root').innerHTML = html;
+    openModal('report-modal');
 }
 
 // ============================================================================
