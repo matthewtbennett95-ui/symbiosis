@@ -67,5 +67,11 @@ The interface uses one brand color (indigo), green for cooperation and rose for 
 - Student code runs inside a Web Worker. An infinite loop gets stopped and reported instead of freezing the page.
 - Progress, strategies, and the class roster are saved in the browser's `localStorage` (per device).
   Nothing is sent to a server yet.
+- **Turning work in:** students can print or save as PDF their Expedition journal at any point (*Print my journal so far*,
+  marked IN PROGRESS until every chapter is done). Every Open Lab game has *Print my results*: goals reached, a summary,
+  a table of their decisions, the end-of-game notes, and a reflection question.
+- **Switching Chromebooks:** *Save progress* gives a progress code (plain text students can paste into a Google Doc or a
+  Classroom comment, for Chromebooks that block file downloads) or a file; *Load progress* restores it on another device.
+  Teacher mode is never included in a save.
 - Older roster JSON files (`[{ name, emoji, code }]`) still import.
 - The original version is kept at `archive/currentState.html`.

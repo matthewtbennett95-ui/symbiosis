@@ -565,6 +565,7 @@
         .term { border-bottom-color: #a5b4fc; }
         .term:hover { background: var(--brand-50); }
         .vf-icon { margin-bottom: 8px; opacity: .8; }
+        .exp-tools { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 4px; margin: -8px 0 10px; }
         .g-hud { display: flex; flex-wrap: wrap; gap: 8px; }
         .g-chip { background: var(--soft); border: 1px solid var(--border-color); border-radius: 12px; padding: 6px 12px; display: flex; flex-direction: column; min-width: 86px; }
         .g-chip span { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: .02em; }
@@ -885,6 +886,7 @@
     <!-- =================== TAB: EXPEDITION =================== -->
     <div id="tab-expedition" class="tab-content active">
         <div id="teacher-banner" class="note note-teal hidden" style="margin-bottom: 14px;"></div>
+        <div class="exp-tools"><button class="ghost small" id="exp-print-sofar" onclick="printJournalSoFar()"><svg class="ico" width="16" height="16" aria-hidden="true"><use href="#i-printer"/></svg>Print my journal so far</button><button class="ghost small" id="save-progress-btn" onclick="openSaveProgress()"><svg class="ico" width="16" height="16" aria-hidden="true"><use href="#i-save"/></svg>Save progress</button><button class="ghost small" id="load-progress-btn" onclick="openLoadProgress()"><svg class="ico" width="16" height="16" aria-hidden="true"><use href="#i-upload"/></svg>Load progress</button></div>
         <div class="exp-rail" id="exp-rail"></div>
         <div id="exp-body"></div>
     </div>
@@ -1498,7 +1500,7 @@
                 <div><b>Day 1 · Briefing + chapters 1–3 (~50 min)</b><br>The Briefing shows a 2½-minute edited clip of Veritasium's Prisoner's Dilemma video (three sections, played back to back), then students work out the game's payoffs themselves.<br>Students play as a vampire bat and a soybean plant, then design a organism from genes (brain type, testing, reactions, memory) through repeated trials. Every chapter has two short journal entries: a <b>Think</b> answer written <i>before</i> the explanation unlocks, and a <b>Connect</b> answer that applies the idea to new biology (kin selection, the Ultimatum Game).<br><i>Discussion (5 min):</i> "Is the bat being kind, or selfish?"<br><i>Video note:</i> the clip streams from YouTube. If YouTube is blocked for students, the page says so and offers a backup link; playing it on the projector before students start always works.</div>
                 <div><b>Day 2 · Expedition chapters 4–7 (~35 min)</b><br>Students write a hypothesis before each simulation, hunt for their organism's invasion threshold, and analyze a human dilemma of their choice.<br><i>Finale (15 min):</i> compare invasion thresholds across the class (more-forgiving organisms need a longer future), then paste the share cards below and run the <b>Class Championship</b>. Students print or PDF their <b>Expedition Journal</b> to turn in.</div>
             </div>
-            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Exit ticket: the <b>Check-in Quiz</b> in the Open Lab (10 questions, printable score). Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension ideas:</b> after Chapter 7, have students play The Commons twice (no rules, then monitoring + sanctions) and explain the difference. In the Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
+            <p class="muted" style="font-size: 13px; margin-bottom: 0;">Turning work in: students can print (or save as PDF) their Expedition journal at any point with <b>Print my journal so far</b>, and every Open Lab game has <b>Print my results</b> with a reflection question. Work is stored only in the browser, so students who switch Chromebooks should use <b>Save progress</b> (a code they can paste into a Google Doc) and <b>Load progress</b>. Exit ticket: the <b>Check-in Quiz</b> in the Open Lab (10 questions, printable score). Fast finishers: the Open Lab (Tournament, Survival Crucible, Missions, Strategy Lab, Head-to-Head, Evolution Engine) is free play with 15 extra challenges. <b>Extension ideas:</b> after Chapter 7, have students play The Commons twice (no rules, then monitoring + sanctions) and explain the difference. In the Evolution Engine, have students compare an evolved champion with the organism they designed by hand in Chapter 3, then enter both in a tournament. Which design process worked better, and why?</p>
         </div>
         <div class="card soft" style="margin-bottom: 20px;">
             <h3>Classroom link</h3>
@@ -3849,6 +3851,114 @@ function gQuantile(fn, n, q) { const a = []; for (let i = 0; i < n; i++) a.push(
 function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
 
 // ============================================================================
+// SAVE / LOAD PROGRESS (moving between Chromebooks)
+// ============================================================================
+// Everything the app stores lives in this browser under "symbiosis.*". A save packs it into a "progress code"
+// (plain text that can be pasted into a Google Doc or a Classroom comment, for Chromebooks that block files)
+// or a downloadable file. Teacher mode is never included in a save.
+const SAVE_PREFIX = 'SYMBIO-SAVE:';
+const SAVE_SKIP = ['teacherMode'];
+function progressPack() {
+    const data = {};
+    try {
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('symbiosis.') && !SAVE_SKIP.includes(k.slice(10))) data[k.slice(10)] = localStorage.getItem(k);
+        }
+    } catch (e) { /* storage unavailable */ }
+    return { app: 'symbio', v: 1, saved: new Date().toISOString(), name: studentName(), data };
+}
+function progressCode() { return SAVE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(progressPack())))); }
+function openSaveProgress() {
+    if (!studentName()) { toast('Type your name in the name box at the top first, so the save is labeled with your name.', 'warn'); $('student-name').focus(); return; }
+    const code = progressCode(), file = 'symbio-progress-' + studentName().replace(/[^a-z0-9]+/gi, '_') + '.json';
+    window._saveCode = code;
+    showShareModal('Save my progress', `
+        <p style="font-size: 14px; margin-top: 0;">Your work is stored only in this browser. To keep a backup or move to another Chromebook, save it one of these ways.</p>
+        <p style="font-size: 14px; margin-bottom: 6px;"><b>Copy your progress code</b> and paste it into a Google Doc, or into a private comment on your Classroom assignment.</p>
+        <textarea class="plain share-box" id="save-code" readonly onclick="this.select()">${code}</textarea>
+        <div class="btn-group" style="margin-top: 8px;"><button id="save-copy" onclick="copyText(window._saveCode)">${ICON('copy')}Copy progress code</button>
+            <button class="secondary" onclick="downloadFile('${file}', JSON.stringify(progressPack()))">${ICON('download')}Or download a file</button></div>
+        <p class="muted" style="font-size: 13px;">To continue on another Chromebook, open Symbio there and choose <b>Load progress</b>.</p>`);
+}
+function openLoadProgress() {
+    showShareModal('Load my progress', `
+        <p style="font-size: 14px; margin-top: 0;">Paste the progress code you saved (it starts with <span class="mono">${SAVE_PREFIX}</span>), or choose a saved file.</p>
+        <textarea class="plain share-box" id="load-code" placeholder="${SAVE_PREFIX}…"></textarea>
+        <div class="row" style="margin-top: 8px;"><input type="file" id="load-file" accept=".json,application/json,text/plain" onchange="loadProgressFile(event)"></div>
+        <p class="muted" style="font-size: 13px;">Loading replaces whatever is saved in this browser right now.</p>
+        <div class="btn-group"><button id="load-go" onclick="loadProgress($('load-code').value)">${ICON('upload')}Load progress</button></div>`);
+}
+function loadProgressFile(ev) {
+    const f = ev.target.files && ev.target.files[0]; if (!f) return;
+    const r = new FileReader(); r.onload = () => { $('load-code').value = r.result; }; r.readAsText(f);
+}
+function loadProgress(text) {
+    let pack;
+    try {
+        const t = String(text || '').trim();
+        pack = JSON.parse(t.startsWith(SAVE_PREFIX) ? decodeURIComponent(escape(atob(t.slice(SAVE_PREFIX.length)))) : t);
+        if (!pack || pack.app !== 'symbio' || typeof pack.data !== 'object') throw new Error('not a save');
+    } catch (e) { toast('That doesn\'t look like a Symbio progress code. Copy the whole code and try again.', 'warn'); return; }
+    const when = pack.saved ? new Date(pack.saved).toLocaleString() : 'an unknown time';
+    if (!confirm(`Load the progress saved by ${pack.name || 'an unnamed student'} on ${when}?\n\nThis replaces the progress in this browser.`)) return;
+    try {
+        Object.keys(localStorage).filter(k => k.startsWith('symbiosis.') && !SAVE_SKIP.includes(k.slice(10))).forEach(k => localStorage.removeItem(k));
+        Object.entries(pack.data).forEach(([k, v]) => { if (!SAVE_SKIP.includes(k) && typeof v === 'string') localStorage.setItem('symbiosis.' + k, v); });
+    } catch (e) { toast('This browser blocked saving. Ask your teacher for help.', 'warn'); return; }
+    location.reload();
+}
+function printJournalSoFar() {
+    if (!studentName()) { toast('Type your name in the name box at the top first, so your teacher knows whose journal this is.', 'warn'); $('student-name').focus(); return; }
+    generateJournal();
+}
+
+// ============================================================================
+// PRINTABLE GAME RESULTS (Open Lab games)
+// ============================================================================
+const stripEmoji = h => String(h).replace(/[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}](️|‍[\p{Extended_Pictographic}]️?)*\s?/gu, '');
+function gPrintResults(title, stars, summary, logHtml, notes, reflect) {
+    if (!studentName()) { toast('Type your name in the name box at the top first, so your teacher knows whose results these are.', 'warn'); $('student-name').focus(); return; }
+    const n = stars.filter(r => r.ok).length;
+    const html = `<div class="print-report-container"><h2>${title}</h2>
+        <p><b>Name:</b> ${esc(studentName())} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()}${stars.length ? ` &nbsp; <b>Stars:</b> ${n} of ${stars.length}` : ''}</p>
+        ${stars.length ? `<h3>Goals</h3><ul>${stars.map(r => `<li>${r.ok ? '<b>Reached</b>' : 'Not reached'}: ${r.label}</li>`).join('')}</ul>` : ''}
+        ${summary ? `<h3>Summary</h3><p>${summary}</p>` : ''}
+        ${logHtml ? `<h3>My decisions</h3>${logHtml}` : ''}
+        <h3>What happened, and why</h3><ul>${notes.map(x => `<li>${stripEmoji(x)}</li>`).join('')}</ul>
+        <h3>Reflection</h3><p><b>${reflect}</b></p><div class="lines"></div><div class="lines"></div><div class="lines"></div><div class="lines"></div>
+    </div>`;
+    $('report-preview-content').innerHTML = html;
+    $('print-root').innerHTML = html;
+    openModal('report-modal');
+}
+function cmPrint() {
+    const rows = cm.log.map(l => `<tr><td>${l.season}</td><td>${l.rules || 'none'}</td><td>${l.event || ''}</td><td>${l.fair}</td><td>${l.catch === null ? 'out' : l.catch}</td><td>${l.coins}</td><td>${l.stock}</td></tr>`).join('');
+    gPrintResults('THE COMMONS: RESULTS', cm.stars, cm.summary,
+        `<table><tr><th>Season</th><th>Rules</th><th>Event</th><th>Fair share</th><th>My catch</th><th>My coins</th><th>Fish left</th></tr>${rows}</table>`,
+        cm.notes, 'Which rule (or lack of rules) made the biggest difference in your village? Use what your neighbors did as evidence, and connect it to Hardin or Ostrom.');
+}
+function clPrint() {
+    const rows = cl.dayLog.map(d => `<tr><td>${d.day}</td><td style="text-align: left;">${d.acts.join('; ') || 'no clients'}</td><td>${d.energy}</td><td>${d.rep}%</td></tr>`).join('');
+    gPrintResults('CLEANING STATION: RESULTS', cl.stars, cl.summary,
+        `<table><tr><th>Day</th><th>My choices</th><th>Energy</th><th>Reputation</th></tr>${rows}</table>`,
+        cl.notes, 'When (if ever) did you decide to cheat, and how did the watching fish change your choices? How is a cleaner\'s reputation like a person\'s reputation?');
+}
+function knPrint() {
+    const rows = kn.log.map(l => `<tr><td>${l.a}</td><td>${l.threat}</td><td style="text-align: left;">${l.near}</td><td>${l.call ? 'Called' : 'Stayed silent'}</td><td style="text-align: left;">${l.outcome}</td></tr>`).join('');
+    gPrintResults('FAMILY TIES: RESULTS', kn.stars, kn.summary,
+        `<table><tr><th>Alarm</th><th>Predator</th><th>Nearby</th><th>My choice</th><th>What happened</th></tr>${rows}</table>`,
+        kn.notes, 'Pick one alarm where you called and one where you stayed silent. Use Hamilton\'s rule (r × B > C) to explain whether each choice was good for your genes.');
+}
+function duoPrint() {
+    const [n1, n2] = duo.names.map(esc);
+    const rows = duo.hist.map((h, i) => `<tr><td>${i + 1}</td><td>${h.a === 'C' ? 'Cooperate' : 'Defect'} (+${h.pa})</td><td>${h.b === 'C' ? 'Cooperate' : 'Defect'} (+${h.pb})</td></tr>`).join('');
+    gPrintResults('FACE A CLASSMATE: RESULTS', [], `${n1} ${duo.scores[0]} points, ${n2} ${duo.scores[1]} points, after ${duo.hist.length} rounds.`,
+        `<table><tr><th>Round</th><th>${n1}</th><th>${n2}</th></tr>${rows}</table>`,
+        duo.notes, 'Did not knowing when the match would end change how you played? What would you do differently against someone you will sit next to all year?');
+}
+
+// ============================================================================
 // THE COMMONS (a many-player dilemma: Hardin's tragedy vs. Ostrom's rules)
 // ============================================================================
 // Balanced by simulation: with no rules the lake collapses and the whole village goes broke (the greedy
@@ -3879,7 +3989,7 @@ function cmStart() {
         people: [{ name: 'You', emoji: '🙋', you: true, coins: 0, hearts: CM.hearts, offenses: 0, banned: 0, last: null, out: false, fines: 0, bought: 0 },
             ...CM_NAMES.map(([name, emoji], i) => ({ name, emoji, type: types[i], coins: 0, hearts: CM.hearts, offenses: 0, banned: 0, last: null, out: false, fines: 0, bought: 0 }))],
         history: [CM.start], lastAvg: null, lastTotal: null, lastFair: null, sawOver: false, ended: false, collapsed: false, collapseSeason: null,
-        votes: [], rulesLog: [], youOver: 0, youTraderOver: 0, revealed: false
+        votes: [], rulesLog: [], youOver: 0, youTraderOver: 0, revealed: false, log: []
     });
     $('cm-setup').classList.add('hidden'); $('cm-game').classList.remove('hidden'); $('cm-guess').classList.add('hidden');
     $('cm-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear after season ' + CM.seasons + '.</div>';
@@ -3971,6 +4081,7 @@ function cmFish() {
     cm.stock = Math.max(0, cm.stock - total);
     cm.stock = Math.min(CM.K, Math.round(cm.stock + cmRegrowth(cm.stock, storm)));
     cm.history.push(cm.stock);
+    cm.log.push({ season: cm.season, rules: [cm.monitor && 'warden', cm.sanction && 'fines'].filter(Boolean).join(' + '), event: cm.event ? cm.event.kind : '', fair, catch: cm.people[0].last, coins: cm.people[0].coins, stock: cm.stock });
     if (cm.stock < 15 && !cm.collapsed) { cm.collapsed = true; cm.collapseSeason = cm.season; msgs.push('<b>The fishery has collapsed.</b> There are almost no fish left to breed. From now on, families must buy food at the market.'); }
     if (cm.sanction && !cm.monitor && total > fair * CM.villagers * 1.1) msgs.push('The lake shrank, but with no warden nobody can prove who overfished, so no one is fined.');
     msgs.unshift(`The village caught <b>${total}</b> fish (a sustainable catch would be about ${fair * CM.villagers}).${storm ? ' The storm slowed regrowth.' : ''} The lake now holds <b>${cm.stock}</b>.`);
@@ -4063,8 +4174,9 @@ function cmEnd() {
         { ok: healthy && !you.out && you.coins >= CM_GOAL.stretch, label: `Stretch goal: a healthy lake and at least ${CM_GOAL.stretch} coins` },
         { ok: right === 5, label: 'Bonus: you identified all five neighbors' }
     ];
-    cm.notes = notes;
-    $('cm-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="cm-again" onclick="cmAgain()">Play again</button>`;
+    cm.notes = notes; cm.stars = stars;
+    cm.summary = `Lake at the end: ${cm.stock} of ${CM.K} fish${cm.collapsed ? ' (collapsed)' : ''}. My coins: ${you.coins} (#${rank} of 6). Neighbors identified: ${right} of 5.`;
+    $('cm-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><div class="btn-group"><button class="small" id="cm-print" onclick="cmPrint()">${ICON('printer')}Print my results</button><button class="small secondary" id="cm-again" onclick="cmAgain()">Play again</button></div>`;
     cmRender();
     $('cm-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (healthy) completeMission('commons');
@@ -4125,7 +4237,7 @@ function clSimulate(policy) {
 
 function clStart() {
     Object.assign(cl, { on: true, day: 0, energy: CL.energy0, rep: CL.rep0, alive: true, ended: false, cause: '', repHist: [CL.rep0],
-        log: { clean: 0, bite: 0, biteSeen: 0, biteAlone: 0, eye: 0, biteLate: 0, biteEarly: 0, lostVisitors: 0, kinds: { resident: [0, 0], visitor: [0, 0], predator: [0, 0] } } });
+        dayLog: [], today: [], log: { clean: 0, bite: 0, biteSeen: 0, biteAlone: 0, eye: 0, biteLate: 0, biteEarly: 0, lostVisitors: 0, kinds: { resident: [0, 0], visitor: [0, 0], predator: [0, 0] } } });
     $('cl-start').classList.add('hidden'); $('cl-game').classList.remove('hidden');
     $('cl-notes').innerHTML = '<h3>Notes</h3><div class="muted">Your results appear when the season ends.</div>';
     clNewDay();
@@ -4135,6 +4247,7 @@ function clNewDay() {
     cl.day++;
     if (cl.day > CL.days) return clEnd();
     cl.queue = clMakeQueue(cl.rep);
+    cl.today = [];
     clRender();
 }
 function clServe(i, how) {
@@ -4144,10 +4257,12 @@ function clServe(i, how) {
         const n = cl.queue.filter(x => x.kind === 'visitor').length;
         cl.log.lostVisitors += n;
         cl.queue = cl.queue.filter(x => x.kind !== 'visitor');
+        cl.today.push(`${n} visitor${n > 1 ? 's' : ''} left`);
         msgs.push(`The visitor${n > 1 ? 's' : ''} didn't want to wait and swam off to another cleaning station.`);
     }
     cl.queue = cl.queue.filter(x => x !== c);
     const watchers = cl.queue.length, r = clApply(cl, c, how, watchers);
+    cl.today.push(`${K.label}: ${how === 'clean' ? 'cleaned' : 'bit'} (${watchers ? watchers + ' watching' : r.eye ? 'seen by a hidden fish' : 'nobody watching'})`);
     const L = cl.log; L.kinds[c.kind][how === 'clean' ? 0 : 1]++;
     if (how === 'clean') {
         L.clean++;
@@ -4166,6 +4281,7 @@ function clServe(i, how) {
 function clEndDay() {
     cl.energy -= CL.burn;
     cl.repHist.push(cl.rep);
+    cl.dayLog.push({ day: cl.day, acts: cl.today, energy: Math.max(0, cl.energy), rep: Math.round(cl.rep) });
     if (cl.energy <= 0) { cl.energy = 0; cl.alive = false; cl.cause = 'starved'; $('cl-msg').innerHTML = '<b>You ran out of energy</b> overnight and had to abandon your station.'; return clEnd(); }
     $('cl-msg').innerHTML = `You burned ${CL.burn} energy overnight.` + (cl.day === CL.days - 3 ? ' <b>Only 3 days left in the season.</b>' : '');
     clNewDay();
@@ -4216,8 +4332,10 @@ function clEnd() {
         { ok: cl.alive && score >= CL_GOAL.stretch, label: `Stretch goal: at least ${CL_GOAL.stretch} energy` },
         { ok: cl.alive && cl.rep >= CL_GOAL.rep, label: `Bonus: finish with a reputation of ${CL_GOAL.rep}% or more` }
     ];
-    cl.notes = notes;
-    $('cl-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="cl-again" onclick="clStart()">Play another season</button>`;
+    if (!cl.alive && cl.today.length && !cl.dayLog.some(d => d.day === cl.day)) cl.dayLog.push({ day: cl.day, acts: cl.today, energy: cl.energy, rep: Math.round(cl.rep) });
+    cl.notes = notes; cl.stars = stars;
+    cl.summary = `${cl.alive ? 'Survived all ' + CL.days + ' days' : cl.cause === 'eaten' ? 'Eaten by a shark on day ' + cl.day : 'Ran out of energy on day ' + cl.day}. Final energy: ${score}. Final reputation: ${Math.round(cl.rep)}%. Clients cleaned: ${L.clean}; bitten: ${L.bite}.`;
+    $('cl-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><div class="btn-group"><button class="small" id="cl-print" onclick="clPrint()">${ICON('printer')}Print my results</button><button class="small secondary" id="cl-again" onclick="clStart()">Play another season</button></div>`;
     $('cl-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (cl.alive && score >= CL_GOAL.energy && cl.rep >= 60) completeMission('reputation');
 }
@@ -4315,7 +4433,7 @@ function knChoose(call) {
     } else {
         msg = `You stayed silent and safe. Nobody called. ${res.caught.length ? `The ${al.threat.id} caught <b>${res.caught.map(x => `${x.name}</b> (${x.rel.toLowerCase()})`).join(', <b>')}.` : 'Luckily, the predator missed everyone.'}`;
     }
-    kn.log.push({ a: kn.alarm, threat: al.threat.id, call, res });
+    kn.log.push({ a: kn.alarm, threat: al.threat.id, call, res, near: al.near.map(x => `${x.name} (${x.rel.toLowerCase()})`).join(', '), outcome: stripEmoji(msg.replace(/<[^>]+>/g, '')) });
     kn.phase = 'result';
     $('kn-msg').innerHTML = msg;
     knRender();
@@ -4365,9 +4483,10 @@ function knEnd() {
         { ok: score >= KN_GOAL.stretch, label: `Stretch goal: at least ${KN_GOAL.stretch} copies` },
         { ok: kn.alive, label: 'Bonus: survive the summer yourself' }
     ];
-    kn.notes = notes;
+    kn.notes = notes; kn.stars = stars;
+    kn.summary = `Copies of my genes alive at the end: ${score.toFixed(2)}. ${kn.alive ? 'I survived the summer.' : 'I was caught.'} Alarm calls: ${calls} of ${kn.log.length}.`;
     $('kn-msg').innerHTML += '<br><b>The summer is over.</b>';
-    $('kn-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="kn-again" onclick="knStart()">Play another summer</button>`;
+    $('kn-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><div class="btn-group"><button class="small" id="kn-print" onclick="knPrint()">${ICON('printer')}Print my results</button><button class="small secondary" id="kn-again" onclick="knStart()">Play another summer</button></div>`;
     $('kn-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (score >= KN_GOAL.genes) completeMission('hamilton');
 }
@@ -4483,13 +4602,14 @@ function duoEnd() {
     });
     if (revenge) notes.push(`There ${revenge === 1 ? 'was 1 round' : `were ${revenge} rounds`} of revenge (defecting right after being exploited). Did revenge help, or did it start a feud?`);
     notes.push('In Axelrod\'s tournament, Tit for Tat never scored more than a single opponent, yet it earned the most points overall. Beating your partner and doing well are not the same thing.');
+    duo.notes = notes;
     $('duo-box').innerHTML = `
         <div class="duo-board">
             <div class="duo-score"><span>${n1}</span><b>${s1}</b></div><div class="duo-round">Final</div><div class="duo-score"><span>${n2}</span><b>${s2}</b></div></div>
         ${duoHistory()}
         <div class="field-notes" style="margin-top: 16px;"><h3>Notes</h3><ul>${notes.map(x => `<li>${x}</li>`).join('')}</ul>
             <div class="bio"><b>Talk about it:</b> Did not knowing when the match would end change how you played? Would you play differently against someone you'll sit next to all year?</div></div>
-        <div class="btn-group"><button id="duo-rematch" onclick="duoStart()">${ICON('refresh')}Rematch</button><button class="secondary" onclick="duoSetup()">New players</button></div>`;
+        <div class="btn-group"><button id="duo-rematch" onclick="duoStart()">${ICON('refresh')}Rematch</button><button class="secondary" id="duo-print" onclick="duoPrint()">${ICON('printer')}Print results</button><button class="secondary" onclick="duoSetup()">New players</button></div>`;
 }
 
 // ============================================================================
@@ -6221,7 +6341,7 @@ function generateJournal() {
     const name = studentName();
     const ans = t => t ? `<p style="white-space: pre-wrap; border-left: 3px solid #999; padding-left: 10px;">${esc(t)}</p>` : '<div class="lines"></div><div class="lines"></div>';
     const strip = h => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent; };
-    let html = `<div class="print-report-container"><h2>EXPEDITION JOURNAL${teacherOn() ? ' (TEACHER PREVIEW)' : ''}</h2>
+    let html = `<div class="print-report-container"><h2>EXPEDITION JOURNAL${CHAPTERS.every(chapterFinished) ? '' : ' (IN PROGRESS)'}${teacherOn() ? ' (TEACHER PREVIEW)' : ''}</h2>
         <p><b>Name:</b> ${name ? esc(name) : '____________________'} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()} &nbsp; <b>Chapters completed:</b> ${CHAPTERS.filter(chapterFinished).length} of ${CHAPTERS.length}</p>`;
     const whys = { tourney: 'why4', generations: 'why5', biofilm: 'why6' };
     CHAPTERS.forEach((c, i) => {
