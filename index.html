@@ -565,6 +565,43 @@
         .term { border-bottom-color: #a5b4fc; }
         .term:hover { background: var(--brand-50); }
         .vf-icon { margin-bottom: 8px; opacity: .8; }
+        .g-hud { display: flex; flex-wrap: wrap; gap: 8px; }
+        .g-chip { background: var(--soft); border: 1px solid var(--border-color); border-radius: 12px; padding: 6px 12px; display: flex; flex-direction: column; min-width: 86px; }
+        .g-chip span { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: .02em; }
+        .g-chip b { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .g-chip.g-wide { flex: 1; min-width: 160px; justify-content: center; gap: 6px; }
+        .g-hearts { color: var(--defect); letter-spacing: 2px; } .g-hearts i { font-style: normal; color: var(--soft-2); }
+        .g-goal-list { list-style: none; padding: 0; margin: 4px 0 10px; display: grid; gap: 6px; font-size: 14px; }
+        .g-goal-list li { display: flex; gap: 8px; align-items: baseline; }
+        .g-star { color: #f59e0b; font-size: 16px; }
+        .g-stars { display: flex; gap: 4px; margin: 2px 0 8px; }
+        .g-stars .g-star { font-size: 30px; color: var(--soft-2); line-height: 1; }
+        .g-stars .g-star.on { color: #f59e0b; animation: popIn .4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; transform: scale(0); }
+        .g-stars .g-star.on:nth-child(2) { animation-delay: .15s; } .g-stars .g-star.on:nth-child(3) { animation-delay: .3s; }
+        .g-goals { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 4px; font-size: 13px; }
+        .g-goals li { display: flex; gap: 6px; align-items: flex-start; } .g-goals .ico { margin-top: 1px; }
+        .cm-panel { background: var(--soft); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 16px; margin-top: 12px; }
+        .cm-types { padding-left: 18px; margin: 4px 0 0; font-size: 13px; }
+        .cm-guess-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 4px 0; font-size: 14px; }
+        tr.cm-out td { opacity: .5; }
+        .cl-reef { min-height: 150px; text-align: left; display: block; margin-top: 12px; }
+        .cl-line-label { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #155e75; margin-bottom: 8px; }
+        .cl-line { display: flex; gap: 10px; flex-wrap: wrap; }
+        .cl-card { background: rgba(255,255,255,.92); border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 150px; flex: 1 1 150px; box-shadow: var(--shadow-sm); text-align: center; }
+        .cl-card.k-predator { box-shadow: 0 0 0 2px #fecdd3; }
+        .cl-card.k-visitor { box-shadow: 0 0 0 2px #fde68a; }
+        .cl-ic { font-size: 40px; line-height: 1.1; }
+        .cl-card small { color: var(--text-muted); font-size: 12px; }
+        .cl-btns { display: flex; gap: 6px; margin-top: 8px; }
+        .cl-empty { font-size: 15px; padding: 30px 10px; text-align: center; }
+        .cl-guide td { vertical-align: top; font-size: 13px; }
+        .cl-guide td.cl-gic { font-size: 26px; width: 40px; }
+        .kn-risk { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; margin-bottom: 10px; color: var(--text-muted); }
+        .kn-risk span { display: inline-flex; align-items: center; gap: 6px; }
+        .kn-dots { display: inline-flex; gap: 3px; } .kn-dots i { width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; } .kn-dots i.on { background: var(--defect); }
+        .kn-sq.gone { opacity: .45; filter: grayscale(1); }
+        tr.kn-dead td { color: var(--text-muted); text-decoration: line-through; }
+        tr.kn-dead td:last-child { text-decoration: none; color: var(--defect); }
         .duo-board { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin-bottom: 16px; }
         .duo-score { background: var(--soft); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px 16px; text-align: center; min-width: 0; }
         .duo-score span { display: block; font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1272,34 +1309,45 @@
 
     <!-- =================== TAB: THE COMMONS =================== -->
     <div id="tab-commons" class="tab-content">
-        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-fish"/></svg></div><div><div class="page-kicker">Game</div><h2>The Commons</h2><p>Fish a shared lake with five neighbors. Can the village keep catching fish without emptying the lake?</p></div></div>
+        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-fish"/></svg></div><div><div class="page-kicker">Game</div><h2>The Commons</h2><p>Fish a shared lake with five neighbors. Feed your family, build your savings, and keep the lake alive, if your village will let you.</p></div></div>
         <details class="note note-blue explain"><summary><b>How the Commons works</b> <span class="muted">(tap to read)</span></summary>
             Until now, every dilemma had two players. Many real ones have <b>many</b>: a shared fishery, a forest, clean air, or the sugar that yeast cells release for their neighbors.
-            You are one of six villagers fishing the same lake. The fish regrow fastest when the lake is about half full, and not at all when it is empty.
-            Whatever you catch is yours, but the lake belongs to everyone.<br><br>
+            You are one of six families fishing the same lake for 15 seasons. The fish regrow fastest when the lake is about half full, and not at all when it is empty.<br><br>
+            Each season your family eats 4 fish, and you sell the rest for coins. Short on fish? Buy them at the market for 2 coins each. Can't afford it? Your family goes hungry, and after three hungry seasons it leaves the village.
+            Watch for <b>traders</b> (who pay double) and <b>storms</b> (which slow regrowth). In seasons 1, 5, 9 and 13 the village council votes on rules: a warden who posts every catch (each family pays the warden 1 fish a season) and fines for overfishing.<br><br>
             In 1968, ecologist Garrett Hardin argued that shared resources are doomed: each person gains by taking more, so the <b>"tragedy of the commons"</b> is inevitable.
-            Political scientist <b>Elinor Ostrom</b> (Nobel Prize, 2009) found real communities that avoided the tragedy for centuries. Try her rules and see if they work.
+            Political scientist <b>Elinor Ostrom</b> (Nobel Prize, 2009) found real communities that avoided the tragedy for centuries. Can you get your village to do the same?
         </details>
         <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
             <div>
                 <div class="card" id="cm-setup">
-                    <h3>Village rules</h3>
-                    <p style="font-size: 14px; margin-top: 0;">Before the season starts, your village council decides which rules to use. Your five neighbors each have a hidden personality.</p>
-                    <label class="checkline" style="margin: 8px 0;"><input type="checkbox" id="cm-monitor"> <b>Monitoring</b>: everyone's catch is posted publicly</label>
-                    <label class="checkline" style="margin: 8px 0;"><input type="checkbox" id="cm-sanction"> <b>Graduated sanctions</b>: anyone who takes more than the fair share pays a fine, small at first and larger for repeat offenses</label>
-                    <button class="teal" style="margin-top: 10px;" onclick="cmStart()">Start fishing</button>
+                    <h3>Three stars to earn</h3>
+                    <ul class="g-goal-list"><li><span class="g-star">★</span>Keep the lake healthy to the end (at least 40% full)</li><li><span class="g-star">★</span>Finish in the top 3 of 6 families for coins</li><li><span class="g-star">★</span>Figure out every neighbor's hidden personality</li></ul>
+                    <p style="font-size: 14px;">Those goals pull against each other. The richest family is often the one that overfished, and nobody will tell you who your neighbors really are.</p>
+                    <button id="cm-start-btn" onclick="cmStart()"><svg class="ico" width="14" height="14" aria-hidden="true"><use href="#i-play"/></svg>Start the first season</button>
                 </div>
-                <div class="card hidden" id="cm-game" style="margin-top: 0;">
-                    <div class="row" style="justify-content: space-between;">
-                        <h3 style="border: none; margin: 0; padding: 0;" id="cm-season">Season 1</h3>
-                        <span class="muted" style="font-size: 13px;" id="cm-rules"></span>
-                    </div>
+                <div class="card hidden" id="cm-game">
+                    <div class="g-hud" id="cm-hud"></div>
+                    <div id="cm-rules" style="font-size: 13px; margin-top: 10px;"></div>
                     <div class="cm-lake" id="cm-lake"></div>
-                    <div class="row" style="font-size: 13px; margin: 4px 0 12px;"><span>Fish in the lake: <b id="cm-stock"></b></span><span class="spacer"></span><span class="muted" title="The most each person can take while keeping the lake near half full, where fish regrow fastest">Fair share this season: <b id="cm-fair"></b> fish each</span></div>
-                    <div class="cm-choose">
-                        <label for="cm-catch"><b>How many fish will you catch this season?</b></label>
-                        <div class="row"><input type="range" id="cm-catch" min="0" max="15" value="4" oninput="$('cm-catch-val').innerText = this.value" style="flex: 1;"><b class="gen-counter" id="cm-catch-val" style="min-width: 32px; text-align: right;">4</b></div>
-                        <button class="teal big" onclick="cmFish()">Go fishing</button>
+                    <div class="cm-panel hidden" id="cm-council">
+                        <b>Village council</b>
+                        <p class="muted" style="font-size: 13px; margin: 4px 0 8px;">Rules need 4 of 6 votes and last until the next council.</p>
+                        <label class="checkline" style="margin: 8px 0;"><input type="checkbox" id="cm-p-mon"> <b>Hire a warden</b>: every family's catch is posted publicly. Each family pays the warden 1 fish a season.</label>
+                        <label class="checkline" style="margin: 8px 0;"><input type="checkbox" id="cm-p-san"> <b>Fines</b>: anyone caught taking more than the fair share pays a fine that grows with how much they took and with each repeat offense. A third offense means two seasons without fishing.</label>
+                        <div class="btn-group" style="margin-top: 10px;"><button id="cm-vote" onclick="cmCouncil($('cm-p-mon').checked, $('cm-p-san').checked)">Hold the vote</button><button class="secondary" id="cm-norules" onclick="cmCouncil(false, false)">No rules this time</button></div>
+                    </div>
+                    <div class="cm-panel hidden" id="cm-choose">
+                        <div class="row" style="justify-content: space-between;"><label for="cm-catch"><b>How many fish will you catch this season?</b></label><span class="muted" style="font-size: 13px;">Fair share <b id="cm-fair"></b> · <b id="cm-price"></b> coin per fish sold</span></div>
+                        <div class="row"><input type="range" id="cm-catch" min="0" max="15" value="6" oninput="cmPreview()" style="flex: 1;"><b class="gen-counter" id="cm-catch-val" style="min-width: 32px; text-align: right;">6</b></div>
+                        <div id="cm-preview" style="font-size: 14px; margin: 4px 0 12px;"></div>
+                        <button class="big" id="cm-fish" onclick="cmFish()">Go fishing</button>
+                    </div>
+                    <div class="cm-panel hidden" id="cm-guess">
+                        <b>Who was who?</b>
+                        <p class="muted" style="font-size: 13px; margin: 4px 0 8px;">The village had one Steward, one Greedy fisher, two Reciprocators and one Copycat. Guess each neighbor, then reveal.</p>
+                        <div id="cm-guess-list"></div>
+                        <button id="cm-reveal" style="margin-top: 10px;" onclick="cmEnd()">Reveal the results</button>
                     </div>
                     <div class="note note-blue" id="cm-msg" style="margin: 14px 0 0;"></div>
                 </div>
@@ -1308,75 +1356,94 @@
             <div>
                 <div class="card soft">
                     <h3>The village</h3>
-                    <div class="scroll-box" style="max-height: none;"><table id="cm-table" style="margin-top: 0;"><tbody><tr><td class="muted">Start fishing to meet your neighbors.</td></tr></tbody></table></div>
+                    <div class="scroll-box" style="max-height: none;"><table id="cm-table" style="margin-top: 0;"><tbody><tr><td class="muted">Start the first season to meet your neighbors.</td></tr></tbody></table></div>
+                    <h4>Possible personalities</h4>
+                    <ul class="cm-types">
+                        <li>🌿 <b>Steward</b>: always takes the fair share</li>
+                        <li>🦈 <b>Greedy</b>: takes as much as possible unless fines make it a bad deal</li>
+                        <li>🦇 <b>Reciprocator</b>: fair, until others overfish</li>
+                        <li>🐒 <b>Copycat</b>: copies last season's average catch</li>
+                    </ul>
                 </div>
-                <div class="field-notes" id="cm-notes" style="margin-top: 14px;"><h3>Notes</h3><div class="muted">Observations appear when the fishing ends. Nobody tells you when that is.</div></div>
+                <div class="field-notes" id="cm-notes" style="margin-top: 14px;"><h3>Notes</h3><div class="muted">Your results appear after the last season.</div></div>
             </div>
         </div>
     </div>
 
     <!-- =================== TAB: CLEANING STATION (reputation) =================== -->
     <div id="tab-clean" class="tab-content">
-        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-shield"/></svg></div><div><div class="page-kicker">Game</div><h2>Cleaning Station</h2><p>You are a cleaner fish. Earn as much food as you can without losing your reputation.</p></div></div>
+        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-shield"/></svg></div><div><div class="page-kicker">Game</div><h2>Cleaning Station</h2><p>You are a cleaner fish. Serve the clients in line, earn enough energy to survive the season, and decide when, if ever, it is worth cheating.</p></div></div>
         <details class="note note-blue explain"><summary><b>How the Cleaning Station works</b> <span class="muted">(tap to read)</span></summary>
-            You are a <b>cleaner wrasse</b>, a small reef fish that runs a "cleaning station." Bigger fish visit to have parasites picked off their skin. Eating parasites is an honest meal.
-            But cleaners would rather bite off a mouthful of the client's protective mucus, which is more nutritious and hurts the client.<br><br>
-            Clients choose which cleaner to visit, and other fish nearby are often <b>watching</b>. This time you will rarely meet the same client twice, so what keeps you honest is your <b>reputation</b>.
+            You are a <b>cleaner wrasse</b>, a small reef fish that runs a "cleaning station." Bigger fish line up to have parasites picked off their skin. Eating parasites is an honest meal.
+            But cleaners would rather <b>bite</b> off a mouthful of the client's protective mucus, which is more nutritious and hurts the client.<br><br>
+            Each day, serve the clients in line one at a time, in any order. <b>The fish still waiting in line watch what you do</b>, and clients prefer cleaners with a good reputation. Even when the line is empty, a fish hiding in the coral might be watching.
+            You burn energy every night, so you can't afford a bad day. You rarely meet the same client twice, so the only thing that pays you back for honesty is your <b>reputation</b>.
         </details>
         <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
             <div>
                 <div class="card" id="cl-start">
-                    <h3>Open your cleaning station</h3>
-                    <p style="font-size: 14px; margin-top: 0;">Each day, a client may visit. You decide how to treat it. Nobody tells you how long the season lasts.</p>
-                    <button class="teal" id="cl-start-btn" onclick="clStart()">Open the station</button>
+                    <h3>Three stars to earn</h3>
+                    <ul class="g-goal-list"><li><span class="g-star">★</span>Survive all 15 days</li><li><span class="g-star">★</span>Earn as much energy as the average honest cleaner</li><li><span class="g-star">★</span>Beat 3 out of 4 honest cleaners</li></ul>
+                    <p style="font-size: 14px;">The stars are measured against thousands of simulated cleaners. Is there a smarter strategy than always being honest?</p>
+                    <button id="cl-start-btn" onclick="clStart()"><svg class="ico" width="14" height="14" aria-hidden="true"><use href="#i-play"/></svg>Open the station</button>
                 </div>
                 <div class="card hidden" id="cl-game">
-                    <div class="row" style="justify-content: space-between;"><h3 style="border: none; margin: 0; padding: 0;" id="cl-day">Day 1</h3><span class="muted" style="font-size: 13px;">Food: <b id="cl-food">0</b></span></div>
-                    <div class="cl-reef" id="cl-reef"></div>
-                    <div class="row" style="font-size: 13px; margin: 6px 0 12px;"><span>Reputation</span><div class="meter" style="flex: 1; max-width: 260px;"><div id="cl-rep" style="background: #0ea5e9;"></div></div><b id="cl-rep-val"></b></div>
-                    <div class="row" id="cl-actions" style="gap: 10px;">
-                        <button class="big-btn coop" id="cl-clean" onclick="clChoose('clean')">Clean honestly (+2)</button>
-                        <button class="big-btn defect" id="cl-bite" onclick="clChoose('bite')">Bite the mucus (+4)</button>
-                        <button class="secondary hidden" id="cl-next" onclick="clNextDay()">Wait for the next day</button>
-                    </div>
+                    <div class="g-hud" id="cl-hud"></div>
+                    <div class="cl-reef" id="cl-queue"></div>
+                    <div class="row" style="margin-top: 10px;"><button class="secondary hidden" id="cl-next" onclick="clEndDay()">Rest for the night</button></div>
                     <div class="note note-blue" id="cl-msg" style="margin: 14px 0 0;"></div>
                 </div>
                 <div class="chart-box" style="margin-top: 14px;"><b style="font-size: 14px;">Your reputation over the season</b><canvas id="cl-chart" width="720" height="170"></canvas></div>
             </div>
             <div>
-                <div class="field-notes" id="cl-notes"><h3>Notes</h3><div class="muted">Observations appear when the season ends.</div></div>
+                <div class="card soft">
+                    <h3>Client guide</h3>
+                    <table class="cl-guide" style="margin-top: 0;">
+                        <tr><td class="cl-gic">🐠</td><td><b>Resident</b> · clean +2, bite +4<br><span class="muted">Lives on your reef and can't go elsewhere. A bitten resident sometimes chases you (−1 energy).</span></td></tr>
+                        <tr><td class="cl-gic">🐟</td><td><b>Visitor</b> · clean +4, bite +6<br><span class="muted">Only comes to cleaners with a good reputation, and swims off if you serve someone else first.</span></td></tr>
+                        <tr><td class="cl-gic">🦈</td><td><b>Predator</b> · clean +3, bite +5<br><span class="muted">A reef shark. Bite it and it might bite back.</span></td></tr>
+                    </table>
+                    <p class="muted" style="font-size: 13px; margin-bottom: 0;">Every night costs 4 energy. Each fish that sees you bite lowers your reputation; each one that sees you clean raises it.</p>
+                </div>
+                <div class="field-notes" id="cl-notes" style="margin-top: 14px;"><h3>Notes</h3><div class="muted">Your results appear when the season ends.</div></div>
             </div>
         </div>
     </div>
 
     <!-- =================== TAB: FAMILY TIES (kin selection) =================== -->
     <div id="tab-kin" class="tab-content">
-        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-users"/></svg></div><div><div class="page-kicker">Game</div><h2>Family Ties</h2><p>You are a ground squirrel. When a predator appears, do you risk your life to warn the others?</p></div></div>
+        <div class="page-head"><div class="page-ic"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-users"/></svg></div><div><div class="page-kicker">Game</div><h2>Family Ties</h2><p>You are a ground squirrel. When a predator appears, do you risk your life to warn the others? Your score is every copy of your genes still alive at the end of summer.</p></div></div>
         <details class="note note-blue explain"><summary><b>How Family Ties works</b> <span class="muted">(tap to read)</span></summary>
-            You are a <b>Belding's ground squirrel</b> in a mountain meadow. When a predator appears, you can give an <b>alarm call</b>. Calling warns everyone nearby, but it draws the predator's attention to <i>you</i>.
-            Some of your neighbors are relatives. Relatives share some of your genes: a sister shares about half, a cousin about an eighth, a stranger none (beyond what everyone in the population shares).
-            Your score counts every copy of your genes that survives: in you, <i>and</i> in your relatives.
+            You are a female <b>Belding's ground squirrel</b> in a mountain meadow, living among your family and some unrelated neighbors. Twelve times this summer a predator shows up.
+            You can give an <b>alarm call</b>: everyone nearby escapes into their burrows, but the predator notices <i>you</i>. If you stay silent, you are safe, but the others may be caught. Sometimes another adult female calls instead.<br><br>
+            Relatives share some of your genes: your mother and your pups share about half, an aunt a quarter, a cousin an eighth, and unrelated neighbors none (beyond what everyone in the population shares).
+            Your littermates might be full sisters (½) or half sisters (¼): you won't know until the end of summer. If you are caught, you can't warn anyone for the rest of the summer, but the genes you saved in your relatives still count.
         </details>
         <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
             <div>
                 <div class="card" id="kn-start">
-                    <h3>Into the meadow</h3>
-                    <p style="font-size: 14px; margin-top: 0;">Predators will appear several times. Each time, look at who is nearby and how dangerous it is to call.</p>
-                    <button class="teal" id="kn-start-btn" onclick="knStart()">Start foraging</button>
+                    <h3>Three stars to earn</h3>
+                    <ul class="g-goal-list"><li><span class="g-star">★</span>Survive the summer</li><li><span class="g-star">★</span>Save more of your genes than a squirrel that never calls</li><li><span class="g-star">★</span>Beat a squirrel that carefully weighs the risk</li></ul>
+                    <p style="font-size: 14px;">Calling every time is brave, but a squirrel that gets caught can't protect anyone later.</p>
+                    <button id="kn-start-btn" onclick="knStart()"><svg class="ico" width="14" height="14" aria-hidden="true"><use href="#i-play"/></svg>Start the summer</button>
                 </div>
                 <div class="card hidden" id="kn-game">
-                    <div class="row" style="justify-content: space-between;"><h3 style="border: none; margin: 0; padding: 0;" id="kn-round">Alarm 1</h3><span class="muted" style="font-size: 13px;">Gene score: <b id="kn-score">0</b></span></div>
+                    <div class="g-hud" id="kn-hud"></div>
                     <div class="kn-scene" id="kn-scene"></div>
                     <div class="row" id="kn-actions" style="gap: 10px;">
-                        <button class="big-btn coop" id="kn-call" onclick="knChoose(true)">Give an alarm call</button>
+                        <button class="big-btn coop" id="kn-call" onclick="knChoose(true)">Sound the alarm</button>
                         <button class="big-btn defect" id="kn-silent" onclick="knChoose(false)">Stay silent and hide</button>
-                        <button class="secondary hidden" id="kn-next" onclick="knNext()">Next</button>
+                        <button class="hidden" id="kn-next" onclick="knNext()">Next alarm</button>
                     </div>
                     <div class="note note-blue" id="kn-msg" style="margin: 14px 0 0;"></div>
                 </div>
             </div>
             <div>
-                <div class="field-notes" id="kn-notes"><h3>Notes</h3><div class="muted">Observations appear when the season ends.</div></div>
+                <div class="card soft">
+                    <h3>Your colony</h3>
+                    <div style="overflow-x: auto;"><table style="margin-top: 0;"><thead><tr><th>Name</th><th>Who</th><th>Genes shared</th><th>Status</th></tr></thead><tbody id="kn-colony"><tr><td colspan="4" class="muted">Start the summer to meet your colony.</td></tr></tbody></table></div>
+                </div>
+                <div class="field-notes" id="kn-notes" style="margin-top: 14px;"><h3>Notes</h3><div class="muted">Your results appear at the end of the summer.</div></div>
             </div>
         </div>
     </div>
@@ -3751,41 +3818,87 @@ return random() < p[last] ? 'C' : 'D';`;
 }
 
 // ============================================================================
+// SHARED GAME HELPERS (stars, stat chips)
+// ============================================================================
+function gStars(rows) {
+    // rows: [{ ok, label }] -> three stars plus a checklist of what each star needs
+    const n = rows.filter(r => r.ok).length;
+    return `<div class="g-stars" aria-label="${n} of ${rows.length} stars">${rows.map(r => `<span class="g-star ${r.ok ? 'on' : ''}">★</span>`).join('')}</div>
+        <ul class="g-goals">${rows.map(r => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? ICON('check-circle', 16, 'ok') : ICON('x-circle', 16, 'bad')} ${r.label}</li>`).join('')}</ul>`;
+}
+function gAvg(fn, n) { let s = 0; for (let i = 0; i < n; i++) s += fn(); return s / n; }
+function gQuantile(fn, n, q) { const a = []; for (let i = 0; i < n; i++) a.push(fn()); a.sort((x, y) => x - y); return a[Math.floor(q * (n - 1))]; }
+function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+// ============================================================================
 // THE COMMONS (a many-player dilemma: Hardin's tragedy vs. Ostrom's rules)
 // ============================================================================
-// The lake regrows logistically (fastest at half capacity). Each season every villager chooses a catch.
-const CM = { K: 200, r: 0.6, start: 150, maxCatch: 15, seasons: 20, villagers: 6 };
+// Balanced by simulation: with no rules the lake collapses and the whole village goes broke (the greedy
+// villager "wins" a ruined village); once monitoring + escalating fines pass, taking the fair share earns
+// the most. Neighbors usually vote rules down until they have seen someone overfish.
+const CM = { K: 300, r: 0.6, start: 220, maxCatch: 15, seasons: 15, villagers: 6, need: 4, hearts: 3, warden: 1, marketPrice: 2, storm: 0.15, trader: 0.15, councils: [1, 5, 9, 13] };
 const CM_TYPES = {
-    steward: { label: 'Steward', emoji: '🌿', desc: 'always takes the fair share' },
-    greedy: { label: 'Greedy', emoji: '🦈', desc: 'takes as much as possible, unless fines make it not worth it' },
-    reciprocator: { label: 'Reciprocator', emoji: '🦇', desc: 'takes the fair share, but if others overfish, overfishes too' },
-    copycat: { label: 'Copycat', emoji: '🐒', desc: 'copies the average catch from last season' }
+    steward: { label: 'Steward', emoji: '🌿', desc: 'always takes the fair share, and votes for rules' },
+    greedy: { label: 'Greedy', emoji: '🦈', desc: 'takes as much as possible unless fines make it a bad deal, and votes against rules' },
+    reciprocator: { label: 'Reciprocator', emoji: '🦇', desc: 'takes the fair share, but overfishes if others do; votes for rules once it has seen cheating' },
+    copycat: { label: 'Copycat', emoji: '🐒', desc: 'copies last season\'s average catch; votes for rules when the lake looks low' }
 };
 const CM_NAMES = [['Ana', '👩‍🌾'], ['Ben', '🧔'], ['Chloe', '👩'], ['Dev', '👨'], ['Elif', '🧕']];
 const cm = { on: false };
 
-function cmRegrowth(S) { return CM.r * S * (1 - S / CM.K); }
+function cmRegrowth(S, storm) { return CM.r * (storm ? 0.5 : 1) * S * (1 - S / CM.K); }
 // The fair share works like a real fishery quota: it steers the lake toward half full, where fish regrow
 // fastest ("maximum sustainable yield"). Above half, a little extra may be taken; below half, less. Rounded down.
 function cmFair(S) { return Math.max(1, Math.floor((cmRegrowth(S) + 0.5 * (S - CM.K / 2)) / CM.villagers)); }
-function cmFine(n) { return n <= 1 ? 3 : n === 2 ? 6 : 12; }   // graduated: bigger for repeat offenses
 
 function cmStart() {
     const types = shuffle(['steward', 'greedy', 'reciprocator', 'reciprocator', 'copycat']);
     Object.assign(cm, {
-        on: true, season: 1, stock: CM.start, monitor: $('cm-monitor').checked, sanction: $('cm-sanction').checked,
-        people: [{ name: 'You', emoji: '🙋', you: true, total: 0, fines: 0, offenses: 0, last: null, banned: 0 },
-            ...CM_NAMES.map(([name, emoji], i) => ({ name, emoji, type: types[i], total: 0, fines: 0, offenses: 0, last: null, banned: 0 }))],
-        history: [CM.start], lastAvg: null, lastTotal: null, ended: false, collapsed: false
+        on: true, season: 1, stock: CM.start, monitor: false, sanction: false, phase: 'council', event: null,
+        people: [{ name: 'You', emoji: '🙋', you: true, coins: 0, hearts: CM.hearts, offenses: 0, banned: 0, last: null, out: false, fines: 0, bought: 0 },
+            ...CM_NAMES.map(([name, emoji], i) => ({ name, emoji, type: types[i], coins: 0, hearts: CM.hearts, offenses: 0, banned: 0, last: null, out: false, fines: 0, bought: 0 }))],
+        history: [CM.start], lastAvg: null, lastTotal: null, lastFair: null, sawOver: false, ended: false, collapsed: false, collapseSeason: null,
+        votes: [], rulesLog: [], youOver: 0, youTraderOver: 0
     });
-    $('cm-setup').classList.add('hidden'); $('cm-game').classList.remove('hidden');
-    $('cm-rules').innerText = [cm.monitor ? 'Monitoring' : 'No monitoring', cm.sanction ? 'Sanctions' : 'No sanctions'].join(' · ');
-    $('cm-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear when the fishing ends. Nobody tells you when that is.</div>';
-    $('cm-msg').innerHTML = cm.sanction && !cm.monitor
-        ? 'Your village has sanctions, but no monitoring. Think about how the council will know who overfished.'
-        : 'The lake is healthy. Choose your catch.';
-    $('cm-catch').value = cmFair(cm.stock); $('cm-catch-val').innerText = cmFair(cm.stock);
+    $('cm-setup').classList.add('hidden'); $('cm-game').classList.remove('hidden'); $('cm-guess').classList.add('hidden');
+    $('cm-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear after season ' + CM.seasons + '.</div>';
+    $('cm-msg').innerHTML = 'The village council meets before the first season. Do you want to propose any rules?';
+    $('cm-catch').value = cmFair(CM.start); $('cm-p-mon').checked = false; $('cm-p-san').checked = false;
     cmRender();
+}
+
+function cmCouncil(proposeMon, proposeSan) {
+    // Each villager votes on each proposal; a rule needs a majority (4 of 6). Rules last until the next council.
+    const yes = { mon: 1, san: 1 }, ballots = [];
+    const lowLake = cm.stock < CM.K * 0.6;
+    cm.people.slice(1).forEach(p => {
+        const v = p.out ? false
+            : p.type === 'steward' ? true
+            : p.type === 'greedy' ? false
+            : p.type === 'reciprocator' ? (cm.sawOver || lowLake || Math.random() < 0.5)
+            : cm.stock < CM.K * 0.7;
+        ballots.push({ p, v });
+        if (v) { yes.mon++; yes.san++; }
+    });
+    const passMon = proposeMon && yes.mon >= 4, passSan = proposeSan && yes.san >= 4;
+    cm.monitor = passMon; cm.sanction = passSan;
+    cm.rulesLog.push({ season: cm.season, mon: cm.monitor, san: cm.sanction });
+    const any = proposeMon || proposeSan;
+    let msg = !any ? 'You didn\'t propose any rules. The village fishes with no rules until the next council.'
+        : `The vote: ${ballots.map(b => `${b.p.emoji} ${b.p.name} ${b.v ? '<b style="color: var(--coop);">yes</b>' : '<b style="color: var(--defect);">no</b>'}`).join(' · ')} · 🙋 You <b style="color: var(--coop);">yes</b>. `
+          + (passMon || passSan ? `<b>Passed.</b> In effect: ${[passMon && 'a warden who posts every catch (costs each family 1 fish a season)', passSan && 'fines for taking more than the fair share'].filter(Boolean).join(' and ')}.`
+             : '<b>Voted down.</b> Rules need 4 of 6 votes. The village fishes with no rules for now.');
+    cm.phase = 'fish';
+    cmNewEvent();
+    $('cm-msg').innerHTML = msg + (cm.event ? '<br>' + cm.event.text : '');
+    cmRender();
+}
+
+function cmNewEvent() {
+    const r = Math.random();
+    cm.event = r < CM.storm ? { kind: 'storm', text: '<b>Storm forecast.</b> Rough water will slow the fish\'s growth this season.' }
+        : r < CM.storm + CM.trader ? { kind: 'trader', text: '<b>A trader from the city is in town,</b> paying 2 coins a fish this season instead of 1.' }
+        : null;
 }
 
 function cmAiCatch(p, fair) {
@@ -3795,249 +3908,438 @@ function cmAiCatch(p, fair) {
     if (enforced && p.offenses >= (p.type === 'greedy' ? 2 : 1)) return fair;
     if (p.type === 'greedy') return max;
     if (p.type === 'copycat') return cm.lastAvg === null ? fair : Math.min(max, Math.round(cm.lastAvg));
-    // Reciprocator: cooperates while it trusts the system. With enforcement it relies on the fines (Ostrom's
-    // "conditional cooperators"); with monitoring alone it reacts to the visible average; without, only to the lake shrinking.
+    // Reciprocator: cooperates while it trusts the system (Ostrom's "conditional cooperators").
     if (cm.lastAvg === null || enforced) return fair;
     const othersOverfished = cm.monitor ? cm.lastAvg > cm.lastFair * 1.5 : cm.lastTotal > cm.lastFair * CM.villagers * 1.5;
     return othersOverfished ? Math.min(max, Math.round(cm.lastAvg * 1.2)) : fair;
 }
 
 function cmFish() {
-    if (!cm.on || cm.ended) return;
-    const fair = cmFair(cm.stock), msgs = [];
-    // Excluded fishers (third offense) sit out a season: the last step of graduated sanctions.
-    const wants = cm.people.map(p => p.banned > 0 ? 0 : p.you ? +$('cm-catch').value : cmAiCatch(p, fair));
-    cm.people.forEach(p => { if (p.banned > 0) { msgs.push(`${p.you ? 'You are' : p.name + ' is'} barred from fishing this season (third offense).`); p.banned--; } });
+    if (!cm.on || cm.ended || cm.phase !== 'fish') return;
+    const fair = cmFair(cm.stock), msgs = [], price = cm.event && cm.event.kind === 'trader' ? 2 : 1, storm = cm.event && cm.event.kind === 'storm';
+    const enforced = cm.monitor && cm.sanction;
+    const wants = cm.people.map(p => p.banned > 0 || p.out ? 0 : p.you ? +$('cm-catch').value : cmAiCatch(p, fair));
+    cm.people.forEach(p => { if (p.banned > 0 && !p.out) { msgs.push(`${p.you ? 'You are' : p.name + ' is'} barred from fishing this season.`); p.banned--; } });
     const wanted = wants.reduce((a, b) => a + b, 0);
     const scale = wanted > cm.stock ? cm.stock / wanted : 1;   // can't catch fish that aren't there
     if (scale < 1) msgs.push('Everyone wanted more fish than the lake had left. Catches were cut short.');
+    let total = 0;
     cm.people.forEach((p, i) => {
         const got = Math.floor(wants[i] * scale);
-        p.last = got; p.total += got;
-        if (cm.sanction && cm.monitor && got > fair) {
+        p.last = p.out ? null : got; total += got;
+        if (p.out) return;
+        if (p.you && got > fair) { cm.youOver++; if (price > 1) cm.youTraderOver++; }
+        if (!p.you && got > fair * 1.5) cm.sawOver = true;
+        // Feed the family first (and pay the warden, if there is one); sell what's left.
+        const food = got - (cm.monitor ? CM.warden : 0);
+        if (food >= CM.need) p.coins += (food - CM.need) * price;
+        else {
+            const cost = (CM.need - food) * CM.marketPrice;
+            if (p.coins >= cost) { p.coins -= cost; p.bought += cost; if (p.you) msgs.push(`You didn't catch enough to feed your family and spent <b>${cost}</b> coins on fish at the market.`); }
+            else { p.coins = 0; p.hearts--; if (p.you) msgs.push(`<b>Your family went hungry.</b> You couldn't catch or buy enough fish.`); if (p.hearts <= 0) { p.out = true; msgs.push(`${p.you ? 'Your family has' : p.name + '\'s family has'} left the village to find food elsewhere.`); } }
+        }
+        if (enforced && got > fair) {
             p.offenses++;
-            const fine = Math.min(p.total, cmFine(p.offenses));
-            p.total -= fine; p.fines += fine;
-            if (p.offenses >= 3) p.banned = 1;
-            msgs.push(`${p.you ? 'You were' : p.name + ' was'} fined ${fine} fish for taking ${got} (fair share ${fair}).${p.offenses === 2 ? ' Repeat offense: bigger fine.' : p.offenses >= 3 ? ' Third offense: barred from fishing next season.' : ''}`);
+            const fine = Math.min(p.coins, (got - fair) * (p.offenses + 1));
+            p.coins -= fine; p.fines += fine;
+            if (p.offenses >= 3) p.banned = 2;
+            msgs.push(`${p.you ? 'You were' : p.name + ' was'} fined <b>${fine}</b> coins for taking ${got} (fair share ${fair}).${p.offenses === 2 ? ' Repeat offense: double the fine.' : p.offenses >= 3 ? ' Third offense: barred from fishing for two seasons.' : ''}`);
         }
     });
-    const total = cm.people.reduce((t, p) => t + p.last, 0);
     cm.lastAvg = total / CM.villagers; cm.lastTotal = total; cm.lastFair = fair;
     cm.stock = Math.max(0, cm.stock - total);
-    cm.stock = Math.min(CM.K, Math.round(cm.stock + cmRegrowth(cm.stock)));
+    cm.stock = Math.min(CM.K, Math.round(cm.stock + cmRegrowth(cm.stock, storm)));
     cm.history.push(cm.stock);
-    if (cm.sanction && !cm.monitor && total > fair * CM.villagers * 1.1) msgs.push('The lake shrank, but with no monitoring nobody can prove who overfished, so no one is fined.');
-    msgs.unshift(`The village caught <b>${total}</b> fish (a sustainable catch would be about ${fair * CM.villagers}). The lake now holds <b>${cm.stock}</b>.`);
-    $('cm-msg').innerHTML = msgs.join('<br>');
+    if (cm.stock < 15 && !cm.collapsed) { cm.collapsed = true; cm.collapseSeason = cm.season; msgs.push('<b>The fishery has collapsed.</b> There are almost no fish left to breed. From now on, families must buy food at the market.'); }
+    if (cm.sanction && !cm.monitor && total > fair * CM.villagers * 1.1) msgs.push('The lake shrank, but with no warden nobody can prove who overfished, so no one is fined.');
+    msgs.unshift(`The village caught <b>${total}</b> fish (a sustainable catch would be about ${fair * CM.villagers}).${storm ? ' The storm slowed regrowth.' : ''} The lake now holds <b>${cm.stock}</b>.`);
     cm.season++;
-    if (cm.stock < 10) { cm.collapsed = true; cmEnd(); }
-    else if (cm.season > CM.seasons) cmEnd();
-    else { $('cm-catch').max = CM.maxCatch; cmRender(); }
+    if (cm.people[0].out || cm.season > CM.seasons) { $('cm-msg').innerHTML = msgs.join('<br>'); return cmFinish(); }
+    if (CM.councils.includes(cm.season)) { cm.phase = 'council'; msgs.push('<b>The council meets again.</b> Propose rules, or keep fishing without them.'); }
+    else { cmNewEvent(); if (cm.event) msgs.push(cm.event.text); }
+    $('cm-msg').innerHTML = msgs.join('<br>');
+    cmRender();
 }
 
 function cmRender() {
-    const fishIcons = Math.round(cm.stock / 10);
+    const you = cm.people[0], fair = cmFair(cm.stock), price = cm.event && cm.event.kind === 'trader' ? 2 : 1;
+    const fishIcons = Math.round(cm.stock / 15);
     $('cm-lake').innerHTML = fishIcons ? '🐟'.repeat(fishIcons) : '<span class="muted">No fish left.</span>';
-    $('cm-stock').innerText = cm.stock + ' / ' + CM.K;
-    $('cm-fair').innerText = cmFair(cm.stock);
-    $('cm-season').innerText = cm.ended ? 'Fishing is over' : 'Season ' + cm.season;
+    $('cm-hud').innerHTML = `<div class="g-chip"><span>Season</span><b>${Math.min(cm.season, CM.seasons)} / ${CM.seasons}</b></div>
+        <div class="g-chip"><span>Your coins</span><b>${you.coins}</b></div>
+        <div class="g-chip"><span>Family</span><b class="g-hearts">${'♥'.repeat(Math.max(0, you.hearts))}<i>${'♥'.repeat(CM.hearts - Math.max(0, you.hearts))}</i></b></div>
+        <div class="g-chip"><span>Fish in lake</span><b>${cm.stock}</b></div>`;
+    $('cm-rules').innerHTML = `Rules: ${cm.monitor ? '<span class="badge badge-blue">Warden</span>' : '<span class="badge badge-grey">No warden</span>'} ${cm.sanction ? '<span class="badge badge-blue">Fines</span>' : '<span class="badge badge-grey">No fines</span>'}`;
+    const council = cm.phase === 'council' && !cm.ended, fishing = cm.phase === 'fish' && !cm.ended;
+    $('cm-council').classList.toggle('hidden', !council);
+    if (council && cm.season > 1) { $('cm-p-mon').checked = cm.monitor; $('cm-p-san').checked = cm.sanction; }
+    $('cm-choose').classList.toggle('hidden', !fishing);
+    if (fishing) {
+        const v = Math.min(+$('cm-catch').value || fair, CM.maxCatch);
+        $('cm-fair').innerText = fair;
+        $('cm-price').innerText = price;
+        $('cm-catch').value = v; cmPreview();
+    }
     const reveal = cm.ended;
-    $('cm-table').innerHTML = `<thead><tr><th>Villager</th><th>Last catch</th><th>Total</th>${cm.sanction ? '<th>Fines</th>' : ''}</tr></thead><tbody>` + cm.people.map(p => {
+    $('cm-table').innerHTML = `<thead><tr><th>Villager</th><th>Last catch</th><th>Coins</th></tr></thead><tbody>` + cm.people.map(p => {
         const t = p.you ? null : CM_TYPES[p.type];
         const showLast = p.you || cm.monitor || reveal;
-        return `<tr class="${p.you ? 'lb-row me' : ''}"><td>${p.emoji} ${esc(p.name)}${reveal && t ? `<br><span class="badge badge-grey">${t.emoji} ${t.label}</span>` : ''}</td>
-            <td>${p.last === null ? '–' : showLast ? p.last : '<span class="muted" title="No monitoring: catches are private">?</span>'}</td><td><b>${p.total}</b></td>${cm.sanction ? `<td>${p.fines || '–'}</td>` : ''}</tr>`;
-    }).join('') + '</tbody>' + (cm.monitor || reveal || cm.lastTotal === null ? '' : `<caption style="caption-side: bottom; font-size: 12px; padding-top: 6px;" class="muted">No monitoring: you only see the village total (${cm.lastTotal} last season).</caption>`);
+        return `<tr class="${p.you ? 'lb-row me' : ''}${p.out ? ' cm-out' : ''}"><td>${p.emoji} ${esc(p.name)}${p.out ? ' <span class="badge badge-neg">left</span>' : ''}${reveal && t ? `<br><span class="badge badge-grey">${t.emoji} ${t.label}</span>` : ''}</td>
+            <td>${p.last === null ? '–' : showLast ? p.last : '<span class="muted" title="No warden: catches are private">?</span>'}</td><td><b>${p.coins}</b></td></tr>`;
+    }).join('') + '</tbody>' + (cm.monitor || reveal || cm.lastTotal === null ? '' : `<caption style="caption-side: bottom; font-size: 12px; padding-top: 6px;" class="muted">No warden: you only see the village total (${cm.lastTotal} last season).</caption>`);
     drawLineChart($('cm-chart'), [
         { name: 'Half full', color: '#cbd5e1', values: cm.history.map(() => CM.K / 2), width: 1 },
         { name: 'Fish', color: '#0ea5e9', values: cm.history, width: 2.6 }
     ], { yMax: CM.K, xLabel: 'Season' });
 }
 
-function cmEnd() {
-    cm.ended = true;
+function cmPreview() {
+    const n = +$('cm-catch').value, price = cm.event && cm.event.kind === 'trader' ? 2 : 1;
+    $('cm-catch-val').innerText = n;
+    const food = n - (cm.monitor ? CM.warden : 0), extra = food - CM.need, fair = cmFair(cm.stock);
+    let t = extra >= 0 ? `Your family eats ${CM.need}${cm.monitor ? ', the warden gets 1' : ''}, and you sell <b>${extra}</b> for <b>${extra * price}</b> coin${extra * price === 1 ? '' : 's'}.`
+        : `Not enough to feed your family: you'll have to buy ${-extra} fish at the market (${-extra * CM.marketPrice} coins).`;
+    if (n > fair) t += cm.monitor && cm.sanction ? ` <span style="color: var(--defect);">Over the fair share: the warden will fine you.</span>` : cm.monitor ? ' Over the fair share. Everyone will see it.' : ' Over the fair share. Nobody will know it was you.';
+    $('cm-preview').innerHTML = t;
+}
+
+function cmFinish() {
+    cm.ended = true; cm.phase = 'done';
     cmRender();
-    $('cm-game').querySelector('.cm-choose').classList.add('hidden');
-    const you = cm.people[0], others = cm.people.slice(1), village = cm.people.reduce((t, p) => t + p.total, 0);
-    const healthy = cm.stock >= CM.K * 0.4, seasons = cm.history.length - 1;
-    const best = Math.max(...others.map(p => p.total));
+    // Before revealing personalities, ask the player to identify them.
+    $('cm-guess').classList.remove('hidden');
+    $('cm-guess-list').innerHTML = cm.people.slice(1).map((p, i) => `<label class="cm-guess-row"><span>${p.emoji} ${esc(p.name)}</span>
+        <select id="cm-g${i}"><option value="">Guess…</option>${Object.entries(CM_TYPES).map(([k, t]) => `<option value="${k}">${t.emoji} ${t.label}</option>`).join('')}</select></label>`).join('');
+    $('cm-msg').innerHTML += '<br><b>Fishing is over.</b> Before you see the results: who was who?';
+    $('cm-guess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cmEnd() {
+    const others = cm.people.slice(1);
+    const guesses = others.map((p, i) => $('cm-g' + i).value);
+    const right = others.filter((p, i) => guesses[i] === p.type).length;
+    $('cm-guess').classList.add('hidden');
+    const you = cm.people[0], village = cm.people.reduce((t, p) => t + p.coins, 0);
+    const rank = 1 + others.filter(p => p.coins > you.coins).length;
+    const healthy = cm.stock >= CM.K * 0.4 && !cm.collapsed;
     const notes = [];
-    notes.push(cm.collapsed ? `<b>The fishery collapsed</b> after ${seasons} season${seasons === 1 ? '' : 's'}. Nobody will catch anything next year, including the people who overfished.` : `After ${seasons} seasons the lake holds <b>${cm.stock}</b> fish${healthy ? ', and it can keep feeding the village.' : ', far below the level where it regrows well.'}`);
-    // What a village taking only the fair share would have caught over the same seasons, starting from the same lake.
-    let sS = CM.start, sCatch = 0;
-    for (let k = 0; k < seasons; k++) { const f = cmFair(sS) * CM.villagers; sCatch += f; sS = Math.min(CM.K, Math.round(sS - f + cmRegrowth(sS - f))); }
-    notes.push(`You caught <b>${you.total}</b> fish (after fines). The whole village caught <b>${village}</b>. A village where everyone took only the fair share would have caught about <b>${sCatch}</b> over the same ${seasons} seasons${cm.collapsed ? ', and would still have a lake' : ''}.`);
-    notes.push('Your neighbors were: ' + others.map(p => `${p.emoji} ${esc(p.name)} = ${CM_TYPES[p.type].emoji} ${CM_TYPES[p.type].label} (${CM_TYPES[p.type].desc})`).join('; ') + '.');
-    if (!cm.monitor && !cm.sanction) notes.push('With no rules, this is Hardin\'s tragedy of the commons: each person gains by taking more, and the cost is shared by everyone. Try again with Ostrom\'s rules.');
-    if (cm.sanction && !cm.monitor) notes.push('Sanctions without monitoring did nothing: you can\'t punish what you can\'t see. Ostrom found that successful communities always had a way to monitor use.');
-    if (cm.monitor && !cm.sanction) notes.push('Monitoring let the reciprocators see exactly who overfished, but with no consequences the greedy villager kept taking. What would change if cheating cost something?');
-    if (cm.monitor && cm.sanction) notes.push(`With monitoring <i>and</i> graduated sanctions, cheating became visible and expensive. Small first fines gave offenders a chance to change; repeat offenses cost more. These are two of Elinor Ostrom's design principles for long-lasting commons.`);
-    if (you.total > best && cm.collapsed) notes.push('You out-caught your neighbors, but the lake is gone. Did you win?');
-    if (cm.collapsed && village > sCatch) notes.push('Overfishing really can catch more fish for a while, by "mining" the stock. But it only works until the fish run out. The longer the village depends on the lake, the more restraint pays: the shadow of the future again.');
+    notes.push(cm.collapsed ? `<b>The fishery collapsed</b> in season ${cm.collapseSeason}. After that, every family had to spend its savings on market fish.`
+        : `After ${CM.seasons} seasons the lake holds <b>${cm.stock}</b> fish${healthy ? ', and it can keep feeding the village.' : ', far below the level where it regrows well.'}`);
+    notes.push(`You finished with <b>${you.coins}</b> coins, <b>#${rank}</b> of 6 in the village${you.out ? ' (your family had to leave)' : ''}. The whole village ended with <b>${village}</b> coins.`);
+    if (cm.collapsed && rank === 1) notes.push('You were the richest family in a village with no fish. Did you win?');
+    notes.push(`You identified <b>${right} of 5</b> neighbors. ` + others.map((p, i) => `${p.emoji} ${esc(p.name)} was ${CM_TYPES[p.type].emoji} <b>${CM_TYPES[p.type].label}</b> (${CM_TYPES[p.type].desc})${guesses[i] === p.type ? '' : guesses[i] ? `, not ${CM_TYPES[guesses[i]].label}` : ''}`).join('; ') + '.');
+    const everRules = cm.rulesLog.some(r => r.mon && r.san), lastRules = cm.rulesLog[cm.rulesLog.length - 1] || {};
+    if (!cm.rulesLog.some(r => r.mon || r.san)) notes.push('The village never had rules. This is Hardin\'s tragedy of the commons: each family gains by taking more, and the cost is shared by everyone. Next time, try to get Ostrom\'s rules passed. When do your neighbors vote yes?');
+    if (everRules) notes.push('With a warden <i>and</i> fines, cheating became visible and expensive. Fines started small and grew for repeat offenses. These are two of Elinor Ostrom\'s design principles for commons that last for generations, and her research found that people who make their own rules are more likely to follow them.');
+    else if (cm.rulesLog.some(r => r.san && !r.mon)) notes.push('Fines without a warden did nothing: you can\'t punish what you can\'t see.');
+    else if (cm.rulesLog.some(r => r.mon && !r.san)) notes.push('The warden made cheating visible, but with no consequences the greedy fisher kept taking. Monitoring also costs something: every family paid a fish each season.');
+    if (cm.rulesLog.some((r, i) => i === 0 && !(r.mon && r.san)) && everRules) notes.push('Notice that the neighbors voted for rules only after they had seen someone overfish. Real communities often build rules after a crisis, not before.');
+    if (cm.youTraderOver) notes.push(`You overfished in ${cm.youTraderOver} trader season${cm.youTraderOver === 1 ? '' : 's'}. A bigger temptation makes cheating more tempting, which is exactly when rules matter most.`);
+    const stars = [
+        { ok: healthy, label: 'The lake is still healthy at the end (at least 40% full)' },
+        { ok: !you.out && rank <= 3, label: 'Your family finished in the top 3 for coins' },
+        { ok: right === 5, label: 'You identified all five neighbors' }
+    ];
     cm.notes = notes;
-    $('cm-notes').innerHTML = `<h3>Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="cmAgain()">Try different village rules</button>`;
-    $('cm-msg').innerHTML += '<br><b>Fishing is over.</b> Read the notes to meet your neighbors.';
-    if (healthy && !cm.collapsed) completeMission('commons');
-    if (healthy && cm.monitor && cm.sanction) completeMission('ostrom');
+    $('cm-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="cm-again" onclick="cmAgain()">Play again</button>`;
+    cmRender();
+    $('cm-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (healthy) completeMission('commons');
+    if (healthy && lastRules.mon && lastRules.san) completeMission('ostrom');
 }
-function cmAgain() {
-    $('cm-game').classList.add('hidden'); $('cm-setup').classList.remove('hidden');
-    $('cm-game').querySelector('.cm-choose').classList.remove('hidden');
-}
+function cmAgain() { $('cm-game').classList.add('hidden'); $('cm-setup').classList.remove('hidden'); }
 
 // ============================================================================
 // THE CLEANING STATION (reputation / indirect reciprocity, after Bshary & Grutter)
 // ============================================================================
-// Tuned by simulation: on average honest cleaners out-earn "sneaky" ones (cheat only when unobserved),
-// who far out-earn constant cheaters. Bitten clients sometimes chase the cleaner (a real punishment).
-const CL = { days: 25, rep0: 0.6, base: 0.15, clean: 2, bite: 4, biteHit: 0.12, watchHit: 0.12, cleanGain: 0.04, watchGain: 0.03, chase: 0.4, chaseCost: 2 };
-const CL_CLIENTS = ['🐠', '🐡', '🐟', '🦈', '🐢', '🦑'];
+// Clients queue at your station; the fish still waiting in line are the bystanders who watch (image scoring).
+// Visitors from other reefs won't wait; predators may bite back. Balanced by simulation: honest cleaners do
+// well, cheating only when nobody is in line is a riskier gamble that is slightly better on average, and
+// cheating everyone (especially predators) fails.
+const CL = { days: 15, energy0: 6, rep0: 60, burn: 4, watchHit: 12, watchGain: 3, cleanBase: 1, hiddenEye: 0.4, chase: 0.4, chaseCost: 1, snap: 0.35, visitorP: 0.9, predP: 0.3 };
+const CL_KINDS = {
+    resident: { label: 'Resident', sub: 'lives on this reef', icons: ['🐠', '🐡'], clean: 2, bite: 4, tag: '' },
+    visitor: { label: 'Visitor', sub: 'from another reef', icons: ['🐟'], clean: 4, bite: 6, tag: 'Won\'t wait in line' },
+    predator: { label: 'Predator', sub: 'a reef shark', icons: ['🦈'], clean: 3, bite: 5, tag: 'Might bite back' }
+};
 const cl = { on: false };
 
-function clStart() {
-    Object.assign(cl, { on: true, day: 0, rep: CL.rep0, food: 0, history: [CL.rep0], log: { clean: 0, bite: 0, biteWatched: 0, cleanWatched: 0, empty: 0 }, ended: false });
-    $('cl-start').classList.add('hidden'); $('cl-game').classList.remove('hidden');
-    $('cl-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear when the season ends.</div>';
-    clNextDay();
+function clMakeQueue(rep) {
+    const q = [], add = kind => q.push({ kind, icon: pick(CL_KINDS[kind].icons) });
+    add('resident'); if (Math.random() < 0.5) add('resident');
+    if (Math.random() < rep / 100 * CL.visitorP) add('visitor');
+    if (rep >= 75 && Math.random() < (rep - 60) / 80) add('visitor');
+    if (Math.random() < CL.predP) add('predator');
+    return shuffle(q);
 }
-function clNextDay() {
+// One cleaning decision (shared by the game and the baseline simulations).
+function clApply(s, c, how, watchers) {
+    const K = CL_KINDS[c.kind];
+    let seen = watchers, eye = false, chased = false, eaten = false;
+    if (!watchers && Math.random() < CL.hiddenEye) { seen = 1; eye = true; }
+    s.energy += K[how];
+    if (how === 'clean') s.rep += CL.cleanBase + CL.watchGain * seen;
+    else {
+        s.rep -= CL.watchHit * seen;
+        if (c.kind === 'resident' && Math.random() < CL.chase) { s.energy -= CL.chaseCost; chased = true; }
+        if (c.kind === 'predator' && Math.random() < CL.snap) eaten = true;
+    }
+    s.rep = Math.max(0, Math.min(100, s.rep));
+    return { seen, eye, chased, eaten };
+}
+function clSimulate(policy) {
+    const s = { energy: CL.energy0, rep: CL.rep0 };
+    for (let d = 1; d <= CL.days; d++) {
+        const q = clMakeQueue(s.rep).sort((a, b) => (b.kind === 'visitor') - (a.kind === 'visitor'));
+        while (q.length) { const c = q.shift(); if (clApply(s, c, policy(c, q.length, d), q.length).eaten) return 0; }
+        s.energy -= CL.burn; if (s.energy <= 0) return 0;
+    }
+    return s.energy;
+}
+
+function clStart() {
+    Object.assign(cl, { on: true, day: 0, energy: CL.energy0, rep: CL.rep0, alive: true, ended: false, cause: '', repHist: [CL.rep0],
+        log: { clean: 0, bite: 0, biteSeen: 0, biteAlone: 0, eye: 0, biteLate: 0, biteEarly: 0, lostVisitors: 0, kinds: { resident: [0, 0], visitor: [0, 0], predator: [0, 0] } } });
+    $('cl-start').classList.add('hidden'); $('cl-game').classList.remove('hidden');
+    $('cl-notes').innerHTML = '<h3>Notes</h3><div class="muted">Your results appear when the season ends.</div>';
+    clNewDay();
+    $('cl-msg').innerHTML = 'Your station is open. Serve the clients one at a time, in any order. <b>Everyone still waiting in line watches what you do.</b>';
+}
+function clNewDay() {
     cl.day++;
     if (cl.day > CL.days) return clEnd();
-    $('cl-day').innerText = 'Day ' + cl.day;
-    cl.client = Math.random() < CL.base + (1 - CL.base) * cl.rep;
-    const r = Math.random();
-    cl.watch = r < 0.35 ? 0 : r < 0.65 ? 1 : r < 0.85 ? 2 : 3;
-    const c = CL_CLIENTS[Math.floor(Math.random() * CL_CLIENTS.length)];
-    $('cl-reef').innerHTML = cl.client
-        ? `<div class="cl-client">${c}</div><div class="cl-watchers">${cl.watch ? '🐟'.repeat(cl.watch) : ''}</div><div class="cl-caption">${cl.watch ? `A client is waiting, and <b>${cl.watch}</b> fish ${cl.watch === 1 ? 'is' : 'are'} watching.` : 'A client is waiting. <b>Nobody is watching.</b>'}</div>`
-        : `<div class="cl-caption">No clients came to your station today.${cl.rep < 0.4 ? ' Word may be getting around.' : ''}</div>`;
-    $('cl-clean').classList.toggle('hidden', !cl.client); $('cl-bite').classList.toggle('hidden', !cl.client);
-    $('cl-next').classList.toggle('hidden', !!cl.client);
-    if (!cl.client) { cl.log.empty++; cl.history.push(cl.rep); }
-    if (cl.day === 1) $('cl-msg').innerHTML = 'Your station is open. Clients prefer cleaners with a good reputation.';
+    cl.queue = clMakeQueue(cl.rep);
     clRender();
 }
-function clChoose(how) {
-    const msgs = [];
-    if (how === 'clean') {
-        cl.food += CL.clean; cl.rep += CL.cleanGain + CL.watchGain * cl.watch; cl.log.clean++; if (cl.watch) cl.log.cleanWatched++;
-        msgs.push(`You cleaned honestly: <b>+${CL.clean}</b> food.${cl.watch ? ' The watching fish noticed.' : ''}`);
-    } else {
-        cl.food += CL.bite; cl.rep -= CL.biteHit + CL.watchHit * cl.watch; cl.log.bite++; if (cl.watch) cl.log.biteWatched++;
-        msgs.push(`You bit the client: <b>+${CL.bite}</b> food. It jolted and swam off${cl.watch ? `, and ${cl.watch} fish saw it happen` : ''}.`);
-        if (Math.random() < CL.chase) { cl.food -= CL.chaseCost; msgs.push(`The angry client chased you around the reef: <b>−${CL.chaseCost}</b> food in wasted energy.`); }
+function clServe(i, how) {
+    if (!cl.on || cl.ended) return;
+    const c = cl.queue[i], K = CL_KINDS[c.kind], msgs = [];
+    if (c.kind !== 'visitor' && cl.queue.some(x => x.kind === 'visitor')) {
+        const n = cl.queue.filter(x => x.kind === 'visitor').length;
+        cl.log.lostVisitors += n;
+        cl.queue = cl.queue.filter(x => x.kind !== 'visitor');
+        msgs.push(`The visitor${n > 1 ? 's' : ''} didn't want to wait and swam off to another cleaning station.`);
     }
-    cl.rep = Math.max(0, Math.min(1, cl.rep));
-    cl.history.push(cl.rep);
+    cl.queue = cl.queue.filter(x => x !== c);
+    const watchers = cl.queue.length, r = clApply(cl, c, how, watchers);
+    const L = cl.log; L.kinds[c.kind][how === 'clean' ? 0 : 1]++;
+    if (how === 'clean') {
+        L.clean++;
+        msgs.unshift(`You cleaned the ${K.label.toLowerCase()} honestly: <b>+${K.clean}</b> energy.${watchers ? ` ${watchers} fish in line saw you do good work.` : ''}`);
+    } else {
+        L.bite++; if (r.seen) L.biteSeen++; else L.biteAlone++; if (r.eye) L.eye++;
+        if (cl.day > CL.days - 3) L.biteLate++; else L.biteEarly++;
+        msgs.unshift(`You bit the ${K.label.toLowerCase()}: <b>+${K.bite}</b> energy. ` + (watchers ? `${watchers} fish in line saw it, and your reputation dropped.` : r.eye ? 'You thought nobody was looking, but a fish hiding in the coral saw it. Your reputation dropped.' : 'Nobody saw it.'));
+        if (r.chased) msgs.push(`The angry client chased you around the reef: <b>−${CL.chaseCost}</b> energy.`);
+        if (r.eaten) { cl.alive = false; cl.cause = 'eaten'; msgs.push('<b>The shark snapped back.</b> Your cleaning days are over.'); }
+    }
     $('cl-msg').innerHTML = msgs.join('<br>');
-    $('cl-clean').classList.add('hidden'); $('cl-bite').classList.add('hidden'); $('cl-next').classList.remove('hidden');
+    if (!cl.alive) return clEnd();
     clRender();
+}
+function clEndDay() {
+    cl.energy -= CL.burn;
+    cl.repHist.push(cl.rep);
+    if (cl.energy <= 0) { cl.energy = 0; cl.alive = false; cl.cause = 'starved'; $('cl-msg').innerHTML = '<b>You ran out of energy</b> overnight and had to abandon your station.'; return clEnd(); }
+    $('cl-msg').innerHTML = `You burned ${CL.burn} energy overnight.` + (cl.day === CL.days - 3 ? ' <b>Only 3 days left in the season.</b>' : '');
+    clNewDay();
 }
 function clRender() {
-    $('cl-food').innerText = cl.food;
-    $('cl-rep').style.width = Math.round(cl.rep * 100) + '%';
-    $('cl-rep-val').innerText = Math.round(cl.rep * 100) + '%';
-    drawLineChart($('cl-chart'), [{ name: 'Reputation', color: '#0ea5e9', values: cl.history, width: 2.6 }], { yMax: 1, percent: true, xLabel: 'Day' });
-}
-function clBaseline(policy) {
-    let total = 0;
-    for (let k = 0; k < 2000; k++) {
-        let rep = CL.rep0, food = 0;
-        for (let d = 0; d < CL.days; d++) {
-            if (Math.random() >= CL.base + (1 - CL.base) * rep) continue;
-            const r = Math.random(), a = r < 0.35 ? 0 : r < 0.65 ? 1 : r < 0.85 ? 2 : 3;
-            const bite = policy === 'cheat' || (policy === 'sneaky' && a === 0);
-            if (bite) { food += CL.bite; rep -= CL.biteHit + CL.watchHit * a; if (Math.random() < CL.chase) food -= CL.chaseCost; }
-            else { food += CL.clean; rep += CL.cleanGain + CL.watchGain * a; }
-            rep = Math.max(0, Math.min(1, rep));
-        }
-        total += food;
+    $('cl-hud').innerHTML = `<div class="g-chip"><span>Day</span><b>${Math.min(cl.day, CL.days)} / ${CL.days}</b></div>
+        <div class="g-chip"><span>Energy</span><b>${cl.energy}</b></div>
+        <div class="g-chip g-wide"><span>Reputation ${Math.round(cl.rep)}%</span><div class="meter"><div style="width: ${Math.round(cl.rep)}%; background: var(--brand);"></div></div></div>`;
+    if (cl.ended) { $('cl-queue').innerHTML = ''; $('cl-next').classList.add('hidden'); }
+    else if (!cl.queue.length) {
+        $('cl-queue').innerHTML = `<div class="cl-empty">No one left in line. Rest for the night (<b>−${CL.burn}</b> energy).</div>`;
+        $('cl-next').classList.remove('hidden');
+    } else {
+        $('cl-next').classList.add('hidden');
+        $('cl-queue').innerHTML = `<div class="cl-line-label">In line: ${cl.queue.length} · the others watch whoever you serve</div><div class="cl-line">` + cl.queue.map((c, i) => {
+            const K = CL_KINDS[c.kind];
+            return `<div class="cl-card k-${c.kind}"><div class="cl-ic">${c.icon}</div><b>${K.label}</b><small>${K.sub}</small>${K.tag ? `<span class="badge ${c.kind === 'predator' ? 'badge-neg' : 'badge-amber'}">${K.tag}</span>` : ''}
+                <div class="cl-btns"><button class="small" data-act="clean" onclick="clServe(${i}, 'clean')">Clean +${K.clean}</button><button class="small red" data-act="bite" onclick="clServe(${i}, 'bite')">Bite +${K.bite}</button></div></div>`;
+        }).join('') + '</div>';
     }
-    return Math.round(total / 2000);
+    drawLineChart($('cl-chart'), [{ name: 'Reputation', color: '#4f46e5', values: cl.repHist.map(v => v / 100), width: 2.6 }], { yMax: 1, percent: true, xLabel: 'Day' });
 }
 function clEnd() {
     cl.ended = true;
-    $('cl-day').innerText = 'The season is over';
-    $('cl-reef').innerHTML = '<div class="cl-caption">The season is over.</div>';
-    ['cl-clean', 'cl-bite', 'cl-next'].forEach(id => $(id).classList.add('hidden'));
-    const L = cl.log, served = L.clean + L.bite;
-    const base = { honest: clBaseline('honest'), sneaky: clBaseline('sneaky'), cheat: clBaseline('cheat') };
-    const notes = [`You served <b>${served}</b> clients (${L.empty} day${L.empty === 1 ? '' : 's'} nobody came) and finished with <b>${cl.food}</b> food and a reputation of <b>${Math.round(cl.rep * 100)}%</b>.`,
-        `For comparison, over thousands of simulated seasons: always-honest cleaners averaged <b>${base.honest}</b> food, cleaners who cheated only when nobody was watching averaged <b>${base.sneaky}</b>, and cleaners who always cheated averaged <b>${base.cheat}</b>.`];
-    if (L.bite && L.biteWatched < L.bite) notes.push(`You cheated ${L.bite - L.biteWatched} time${L.bite - L.biteWatched === 1 ? '' : 's'} when nobody was watching${L.biteWatched ? ` and ${L.biteWatched} time${L.biteWatched === 1 ? '' : 's'} in front of an audience` : ''}. Real cleaner wrasse do the same: they cooperate more when other clients are watching (Bshary &amp; Grutter 2006).`);
-    if (!L.bite) notes.push('You never cheated. Your good reputation kept clients coming, even though each honest meal was smaller.');
-    notes.push('This is <b>indirect reciprocity</b>: you rarely meet the same client twice, so nobody can pay you back directly. Instead, your reputation does it, because clients choose cleaners that others have seen behaving well. Reviews, references and gossip do the same job for people.');
+    clRender();
+    const L = cl.log, N = 1500;
+    const honest = () => clSimulate(() => 'clean');
+    const base = {
+        honest: Math.round(gAvg(honest, N)), top: Math.round(gQuantile(honest, N, 0.75)),
+        sneaky: Math.round(gAvg(() => clSimulate((c, w) => !w && c.kind !== 'predator' ? 'bite' : 'clean'), N)),
+        cheat: Math.round(gAvg(() => clSimulate(() => 'bite'), N))
+    };
+    const score = cl.alive ? cl.energy : 0;
+    const notes = [];
+    notes.push(cl.cause === 'eaten' ? `A shark ended your season on day ${cl.day}. Real cleaner wrasse treat predatory clients especially gently.`
+        : cl.cause === 'starved' ? `You ran out of energy on day ${cl.day}.`
+        : `You finished the season with <b>${score}</b> energy and a reputation of <b>${Math.round(cl.rep)}%</b>.`);
+    notes.push(`Over thousands of simulated seasons, cleaners who were always honest averaged <b>${base.honest}</b> energy. Cleaners who cheated whenever the line was empty averaged <b>${base.sneaky}</b>, but with much bigger swings, because hidden fish sometimes saw them. Cleaners who cheated everyone averaged <b>${base.cheat}</b>.`);
+    if (L.bite) notes.push(`You bit ${L.bite} client${L.bite === 1 ? '' : 's'}: ${L.biteSeen} in front of witnesses${L.eye ? ` (${L.eye} by a fish you didn't see)` : ''} and ${L.biteAlone} with nobody watching. By type: residents ${L.kinds.resident[1]}, visitors ${L.kinds.visitor[1]}, predators ${L.kinds.predator[1]}.`);
+    else notes.push('You never cheated. Your reputation kept the visitors coming.');
+    if (L.lostVisitors) notes.push(`${L.lostVisitors} visitor${L.lostVisitors === 1 ? '' : 's'} left because you served someone else first. Visitors can choose between cleaning stations, so they don't wait.`);
+    if (L.biteLate > L.biteEarly) notes.push('You cheated more near the end of the season. With no future visitors to lose, reputation stops paying. That is the shadow of the future again.');
+    notes.push('<b>What real cleaner wrasse do:</b> Redouan Bshary and colleagues found that cleaners give visiting clients priority (visitors can simply swim to another station), are especially gentle with predatory clients, and cheat less when other clients are watching. Did you end up playing like a wrasse?');
+    notes.push('This is <b>indirect reciprocity</b>: you rarely meet the same client twice, so nobody can pay you back directly. Your reputation does it instead. Reviews, references and gossip do the same job for people.');
+    const stars = [
+        { ok: cl.alive, label: 'Survive the whole season' },
+        { ok: cl.alive && score >= base.honest, label: `Earn at least ${base.honest} energy (the average honest cleaner)` },
+        { ok: cl.alive && score >= base.top, label: `Earn at least ${base.top} energy (better than 3 in 4 honest cleaners)` }
+    ];
     cl.notes = notes;
-    $('cl-notes').innerHTML = `<h3>Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="clStart()">Play another season</button>`;
-    if (cl.food >= base.honest && cl.rep >= 0.6) completeMission('reputation');
+    $('cl-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="cl-again" onclick="clStart()">Play another season</button>`;
+    $('cl-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (cl.alive && score >= base.honest && cl.rep >= 60) completeMission('reputation');
 }
 
 // ============================================================================
 // FAMILY TIES (kin selection and Hamilton's rule, after Sherman 1977)
 // ============================================================================
-const KIN = [
-    { rel: 'sister', r: 0.5 }, { rel: 'mother', r: 0.5 }, { rel: 'daughter', r: 0.5 }, { rel: 'half-sister', r: 0.25 },
-    { rel: 'niece', r: 0.25 }, { rel: 'cousin', r: 0.125 }, { rel: 'stranger', r: 0 }, { rel: 'stranger', r: 0 }
-];
-const KN = { rounds: 8, B: 2 };   // each warned neighbor gains B in survival
+// A fixed colony. Littermates may be full or half sisters (Belding's litters often have several fathers),
+// pups come above ground mid-summer, and your mother or aunt sometimes calls so you don't have to.
+// Score = copies of your genes alive at the end: 1 for you, plus r for each living relative.
+// Balanced by simulation: never calling ≈ 1.4, always calling ≈ 1.7, weighing the risk ≈ 2.0.
+const KN = { alarms: 12, pupsAt: 5 };
 const KN_THREATS = [
-    { what: 'A hawk is circling far overhead.', C: 0.5 },
-    { what: 'A coyote is creeping closer through the grass.', C: 1 },
-    { what: 'A weasel is just a few meters away.', C: 1.5 }
+    { id: 'hawk', what: 'A hawk is circling high overhead.', you: 0.04, them: 0.25, youLvl: 1, themLvl: 1 },
+    { id: 'coyote', what: 'A coyote is creeping through the tall grass.', you: 0.12, them: 0.40, youLvl: 2, themLvl: 2 },
+    { id: 'weasel', what: 'A weasel is slinking between the burrows, very close.', you: 0.30, them: 0.55, youLvl: 3, themLvl: 3 }
+];
+const KN_CAST = [
+    { id: 'mom', name: 'Rose', rel: 'Your mother', r: 0.5, caller: 0.5 },
+    { id: 'lit1', name: 'Juno', rel: 'Littermate', litter: true },
+    { id: 'lit2', name: 'Mia', rel: 'Littermate', litter: true },
+    { id: 'aunt', name: 'Fern', rel: 'Aunt', r: 0.25, caller: 0.3 },
+    { id: 'cou1', name: 'Ivy', rel: 'Cousin', r: 0.125 },
+    { id: 'cou2', name: 'Hazel', rel: 'Cousin', r: 0.125 },
+    { id: 'n1', name: 'Ash', rel: 'Neighbor', r: 0 },
+    { id: 'n2', name: 'Willow', rel: 'Neighbor', r: 0 },
+    { id: 'm1', name: 'Cedar', rel: 'Newcomer male', r: 0 },
+    { id: 'm2', name: 'Flint', rel: 'Newcomer male', r: 0 },
+    { id: 'pup1', name: 'Pip', rel: 'Your pup', r: 0.5, pup: true },
+    { id: 'pup2', name: 'Dot', rel: 'Your pup', r: 0.5, pup: true },
+    { id: 'pup3', name: 'Bean', rel: 'Your pup', r: 0.5, pup: true }
 ];
 const kn = { on: false };
+const knFrac = r => r === 0.5 ? '½' : r === 0.25 ? '¼' : r === 0.125 ? '⅛' : '0';
+
+function knColony() { return KN_CAST.map(c => ({ ...c, r: c.litter ? (Math.random() < 0.5 ? 0.5 : 0.25) : c.r, alive: true })); }
+function knAlarm(colony, a) {
+    const pool = colony.filter(x => x.alive && (!x.pup || a >= KN.pupsAt));
+    return { threat: pick(KN_THREATS), near: shuffle(pool).slice(0, 3 + (Math.random() < 0.5 ? 1 : 0)) };
+}
+// Resolve one alarm. Returns who called, who was caught, and whether you died.
+function knResolve(al, youCall, youAlive) {
+    const t = al.threat;
+    if (youCall && youAlive) return { caller: 'you', caught: [], youDied: Math.random() < t.you };
+    const helper = al.near.find(x => x.caller && Math.random() < x.caller);
+    if (helper) { const died = Math.random() < t.you; if (died) helper.alive = false; return { caller: helper, caught: died ? [helper] : [], youDied: false }; }
+    const caught = al.near.filter(x => Math.random() < t.them);
+    caught.forEach(x => { x.alive = false; });
+    return { caller: null, caught, youDied: false };
+}
+function knGenes(colony, youAlive) { return (youAlive ? 1 : 0) + colony.filter(x => x.alive).reduce((s, x) => s + x.r, 0); }
+function knSimulate(policy) {
+    const colony = knColony(); let alive = true;
+    for (let a = 1; a <= KN.alarms; a++) {
+        const al = knAlarm(colony, a), call = alive && policy(al);
+        if (knResolve(al, call, alive).youDied) alive = false;
+    }
+    return knGenes(colony, alive);
+}
+// "Weigh the risk": call when the expected relatives saved outweigh your own risk (with your own life valued at about 2 copies).
+const knSmart = al => al.near.reduce((s, x) => s + (x.litter ? 0.375 : x.r) * al.threat.them, 0) > al.threat.you * 2;
 
 function knStart() {
-    Object.assign(kn, { on: true, round: 0, score: 0, direct: 0, indirect: 0, choices: [], ended: false });
+    Object.assign(kn, { on: true, alarm: 0, colony: knColony(), alive: true, ended: false, log: [], momSaves: 0, callsNoKin: 0, silentKin: 0 });
     $('kn-start').classList.add('hidden'); $('kn-game').classList.remove('hidden');
-    $('kn-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear when the season ends.</div>';
+    $('kn-notes').innerHTML = '<h3>Notes</h3><div class="muted">Your results appear at the end of the summer.</div>';
+    $('kn-msg').innerHTML = 'Summer has begun. Watch who is nearby each time a predator shows up.';
     knNext();
 }
 function knNext() {
-    kn.round++;
-    if (kn.round > KN.rounds) return knEnd();
-    const n = 2 + Math.floor(Math.random() * 3);
-    kn.near = shuffle(KIN).slice(0, n);
-    kn.threat = KN_THREATS[Math.floor(Math.random() * KN_THREATS.length)];
-    $('kn-round').innerText = 'Alarm ' + kn.round;
-    $('kn-scene').innerHTML = `<div class="kn-threat">${kn.threat.what}</div>
-        <div class="kn-terms"><span class="badge badge-amber">Cost of calling to you: C = ${kn.threat.C}</span> <span class="badge badge-pos">Benefit to each neighbor you warn: B = ${KN.B}</span></div>
-        <div class="kn-near">${kn.near.map(k => `<div class="kn-sq"><span class="kn-emoji">🐿️</span><b>${k.rel}</b><span class="muted">shares ${k.r ? (k.r === 0.5 ? '½' : k.r === 0.25 ? '¼' : '⅛') : 'none'} of your genes</span></div>`).join('')}</div>`;
-    $('kn-call').classList.remove('hidden'); $('kn-silent').classList.remove('hidden'); $('kn-next').classList.add('hidden');
-    if (kn.round === 1) $('kn-msg').innerHTML = 'Who is nearby, and how risky is calling? Decide.';
+    kn.alarm++;
+    if (kn.alarm > KN.alarms) return knEnd();
+    kn.cur = knAlarm(kn.colony, kn.alarm);
+    if (kn.alarm === KN.pupsAt) $('kn-msg').innerHTML = '<b>Your pups have come above ground for the first time.</b> They are small and slow.';
+    if (!kn.alive) return knAutoRest();
+    kn.phase = 'choose';
+    knRender();
 }
 function knChoose(call) {
-    const C = kn.threat.C, rB = kn.near.reduce((t, k) => t + k.r * KN.B, 0);
-    const terms = kn.near.filter(k => k.r).map(k => `${k.r} × ${KN.B}`).join(' + ') || '0';
+    if (kn.phase !== 'choose') return;
+    const al = kn.cur, kin = al.near.filter(x => x.r > 0 || x.litter);
+    if (call && !kin.length) kn.callsNoKin++;
+    if (!call && al.threat.id === 'weasel' && al.near.some(x => x.r === 0.5 || x.litter)) kn.silentKin++;
+    const res = knResolve(al, call, true);
     let msg;
-    if (call) {
-        kn.direct -= C; kn.indirect += rB; kn.score += rB - C;
-        msg = `You called. Everyone nearby escaped, but you took a risk of <b>${C}</b>. Copies of your genes saved in relatives: ${terms} = <b>${rB.toFixed(2)}</b>. Net effect on your genes: <b>${(rB - C >= 0 ? '+' : '') + (rB - C).toFixed(2)}</b>.`;
+    if (res.caller === 'you') {
+        msg = res.youDied ? `<b>You called, and the ${al.threat.id} came for you.</b> Everyone else escaped.` : `You called. Everyone dove into their burrows, and you got away too.`;
+        if (res.youDied) kn.alive = false;
+    } else if (res.caller) {
+        kn.momSaves++;
+        msg = `You stayed silent, but <b>${res.caller.name}</b> (${res.caller.rel.toLowerCase()}) called. Everyone escaped${res.caught.length ? `, except ${res.caller.name}, who was caught` : ''}.`;
     } else {
-        msg = `You stayed silent and safe. Your neighbors had to fend for themselves. If you had called, your genes' net gain would have been ${terms} − ${C} = <b>${(rB - C).toFixed(2)}</b>.`;
+        msg = `You stayed silent and safe. Nobody called. ${res.caught.length ? `The ${al.threat.id} caught <b>${res.caught.map(x => `${x.name}</b> (${x.rel.toLowerCase()})`).join(', <b>')}.` : 'Luckily, the predator missed everyone.'}`;
     }
-    kn.choices.push({ call, gain: rB - C, rB, C });
-    msg += `<div class="kn-rule">Hamilton's rule: helping pays your genes when <b>r × B &gt; C</b>. Here r × B = ${rB.toFixed(2)} and C = ${C}, so calling ${rB > C ? '<b>helps</b>' : rB === C ? 'breaks even' : '<b>does not help</b>'} your genes.</div>`;
+    kn.log.push({ a: kn.alarm, threat: al.threat.id, call, res });
+    kn.phase = 'result';
     $('kn-msg').innerHTML = msg;
-    $('kn-score').innerText = kn.score.toFixed(2);
-    $('kn-call').classList.add('hidden'); $('kn-silent').classList.add('hidden'); $('kn-next').classList.remove('hidden');
+    knRender();
+}
+function knAutoRest() {
+    // You were caught: the rest of the summer plays out without you.
+    const lines = [];
+    for (; kn.alarm <= KN.alarms; kn.alarm++) {
+        const al = knAlarm(kn.colony, kn.alarm), res = knResolve(al, false, false);
+        if (res.caught.length) lines.push(`Alarm ${kn.alarm}: the ${al.threat.id} caught ${res.caught.map(x => x.name).join(', ')}.`);
+    }
+    kn.afterlife = lines;
+    knEnd();
+}
+function knRender() {
+    const est = (kn.alive ? 1 : 0) + kn.colony.filter(x => x.alive).reduce((s, x) => s + (x.litter ? 0.375 : x.r), 0);
+    $('kn-hud').innerHTML = `<div class="g-chip"><span>Alarm</span><b>${Math.min(kn.alarm, KN.alarms)} / ${KN.alarms}</b></div>
+        <div class="g-chip"><span>You</span><b>${kn.alive ? 'Alive' : 'Caught'}</b></div>
+        <div class="g-chip"><span>Copies of your genes alive</span><b>≈ ${est.toFixed(2)}</b></div>`;
+    const al = kn.cur, dots = n => `<span class="kn-dots">${[1, 2, 3].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
+    $('kn-scene').innerHTML = kn.ended || !al ? '' : `<div class="kn-threat">${al.threat.what}</div>
+        <div class="kn-risk"><span>Risk to you if you call ${dots(al.threat.youLvl)}</span><span>Risk to the others if nobody calls ${dots(al.threat.themLvl)}</span></div>
+        <div class="kn-near">${al.near.map(k => `<div class="kn-sq ${k.alive ? '' : 'gone'}"><span class="kn-emoji">🐿️</span><b>${k.name}</b><span class="muted">${k.rel}</span></div>`).join('')}</div>`;
+    const choosing = kn.phase === 'choose' && !kn.ended;
+    $('kn-call').classList.toggle('hidden', !choosing); $('kn-silent').classList.toggle('hidden', !choosing);
+    $('kn-next').classList.toggle('hidden', choosing || kn.ended);
+    $('kn-next').innerText = kn.alive ? (kn.alarm >= KN.alarms ? 'End of summer' : 'Next alarm') : 'See how the summer ends';
+    $('kn-colony').innerHTML = kn.colony.map(x => `<tr class="${x.alive ? '' : 'kn-dead'}"><td>${x.name}</td><td>${x.rel}${x.pup && kn.alarm < KN.pupsAt ? ' <span class="muted">(in the burrow)</span>' : ''}</td><td>${x.litter && !kn.ended ? '½ or ¼?' : knFrac(x.r)}</td><td>${x.alive ? 'Alive' : 'Caught'}</td></tr>`).join('');
 }
 function knEnd() {
-    kn.ended = true;
-    $('kn-round').innerText = 'The season is over';
-    $('kn-scene').innerHTML = '';
-    ['kn-call', 'kn-silent', 'kn-next'].forEach(id => $(id).classList.add('hidden'));
-    const best = kn.choices.reduce((t, c) => t + Math.max(0, c.gain), 0);
-    const always = kn.choices.reduce((t, c) => t + c.gain, 0);
-    const followed = kn.choices.filter(c => c.call === (c.gain > 0)).length;
-    const notes = [`Your gene score: <b>${kn.score.toFixed(2)}</b>. Calling every time would have scored ${always.toFixed(2)}; never calling scores 0; calling only when r × B &gt; C would have scored <b>${best.toFixed(2)}</b>.`,
-        `Your choices matched Hamilton's rule in <b>${followed} of ${kn.choices.length}</b> alarms.`,
-        'This is <b>kin selection</b> (W. D. Hamilton, 1964). A behavior that costs you can still spread through a population if it helps enough relatives, because they carry copies of the same genes.',
-        'Real Belding\'s ground squirrels behave this way. Paul Sherman (1977) found that females, which live near their relatives, gave alarm calls more often than males, which move away from home, and that females with relatives nearby were the most likely to call.'];
+    kn.ended = true; kn.phase = 'done';
+    knRender();
+    const score = knGenes(kn.colony, kn.alive), N = 2500;
+    const never = gAvg(() => knSimulate(() => false), N), always = gAvg(() => knSimulate(() => true), N), smart = gAvg(() => knSimulate(knSmart), N);
+    const lit = kn.colony.filter(x => x.litter);
+    const calls = kn.log.filter(l => l.call).length;
+    const notes = [];
+    notes.push(`<b>${score.toFixed(2)}</b> copies of your genes are alive at the end of the summer: ${kn.alive ? '1 in you' : 'none in you (you were caught)'}, plus ${(score - (kn.alive ? 1 : 0)).toFixed(2)} in your living relatives.`);
+    if (kn.afterlife && kn.afterlife.length) notes.push('After you were gone: ' + kn.afterlife.join(' '));
+    notes.push(`Over thousands of simulated summers, squirrels that never called averaged <b>${never.toFixed(2)}</b>, squirrels that always called averaged <b>${always.toFixed(2)}</b>, and squirrels that weighed the risk against who was nearby averaged <b>${smart.toFixed(2)}</b>.`);
+    notes.push(`Your littermates: ${lit.map(x => `${x.name} was a ${x.r === 0.5 ? '<b>full sister</b> (½ of your genes)' : '<b>half sister</b> (¼): same mother, different father'}`).join('; ')}. Belding's ground squirrel litters often have more than one father (Hanken &amp; Sherman 1981), and sisters can tell full from half sisters, probably by smell (Holmes &amp; Sherman 1982).`);
+    notes.push(`You called ${calls} time${calls === 1 ? '' : 's'} out of ${kn.log.length}.` + (kn.callsNoKin ? ` ${kn.callsNoKin} of those calls only helped unrelated squirrels, which cost you risk without helping your genes.` : '') + (kn.momSaves ? ` Your mother or aunt called for you ${kn.momSaves} time${kn.momSaves === 1 ? '' : 's'}, taking the risk herself.` : ''));
+    notes.push('This is <b>kin selection</b> (W. D. Hamilton, 1964): a costly behavior can spread if it helps relatives enough, because they carry copies of the same genes. Hamilton\'s rule says helping pays when <b>r × B &gt; C</b>: relatedness times the benefit to the relative must be bigger than the cost to the helper.');
+    notes.push('Paul Sherman (1977) found that real Belding\'s ground squirrels that gave alarm calls were stalked and chased more often than silent ones. Females, which live near their relatives, called more than males, which move away from home, and females with relatives nearby called the most.');
+    const stars = [
+        { ok: kn.alive, label: 'Survive the summer' },
+        { ok: score > never, label: `Beat the average squirrel that never calls (${never.toFixed(2)})` },
+        { ok: score > smart, label: `Beat the average squirrel that weighs the risk (${smart.toFixed(2)})` }
+    ];
     kn.notes = notes;
-    $('kn-notes').innerHTML = `<h3>Notes</h3><ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="teal small" onclick="knStart()">Play again</button>`;
-    if (followed === kn.choices.length) completeMission('hamilton');
+    $('kn-msg').innerHTML += '<br><b>The summer is over.</b>';
+    $('kn-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="kn-again" onclick="knStart()">Play another summer</button>`;
+    $('kn-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (score > never) completeMission('hamilton');
 }
 
 // ============================================================================
@@ -4279,13 +4581,13 @@ const MISSIONS = [
       lesson: 'A genetic algorithm designs without a designer: random variation plus selection is enough to build a working strategy. Engineers use the same idea to optimize real designs.' },
     { id: 'rediscover', ic: '🔁', tag: 'Evolution', title: 'Evolution Rediscovers Cooperation', desc: 'Finish an Evolution Engine run (starting from random strategies) in which the population evolves to cooperate, earning close to the mutual-cooperation payoff.',
       lesson: 'Starting from random behavior, selection alone produced organisms that cooperate with cooperators and punish cheaters. No one had to invent reciprocity: it evolved.' },
-    { id: 'commons', ic: '🎣', tag: 'Commons', title: 'Keeper of the Lake', desc: 'In The Commons, finish the fishing with the lake still at least 40% full.',
+    { id: 'commons', ic: '🎣', tag: 'Commons', title: 'Keeper of the Lake', desc: 'In The Commons, finish all 15 seasons with the lake still at least 40% full.',
       lesson: 'A shared resource survives when users take no more than it can regrow. Restraint now is what makes catches possible later.' },
-    { id: 'ostrom', ic: '⚖️', tag: 'Commons', title: "Ostrom's Rules", desc: 'In The Commons, turn on monitoring AND graduated sanctions, and keep the lake at least 40% full.',
+    { id: 'ostrom', ic: '⚖️', tag: 'Commons', title: "Ostrom's Rules", desc: 'In The Commons, get the council to pass a warden AND fines, keep them in place to the end, and keep the lake at least 40% full.',
       lesson: "The tragedy of the commons is not inevitable. Communities that can see who takes what, and respond with fair, escalating penalties, can share a resource for generations." },
-    { id: 'reputation', ic: '🐟', tag: 'Reputation', title: 'Good Name', desc: 'In the Cleaning Station, finish a season with at least as much food as the average honest cleaner and a reputation of 60% or more.',
+    { id: 'reputation', ic: '🐟', tag: 'Reputation', title: 'Good Name', desc: 'In the Cleaning Station, survive the season with at least as much energy as the average honest cleaner and a reputation of 60% or more.',
       lesson: 'When you rarely meet the same partner twice, reputation does the work that payback does in repeated meetings. Being seen as trustworthy brings partners to you.' },
-    { id: 'hamilton', ic: '🐿️', tag: 'Kin', title: "Hamilton's Rule", desc: 'In Family Ties, make every alarm-call decision the way Hamilton\'s rule predicts.',
+    { id: 'hamilton', ic: '🐿️', tag: 'Kin', title: "Hamilton's Rule", desc: 'In Family Ties, end the summer with more copies of your genes alive than the average squirrel that never calls.',
       lesson: 'Helping relatives can spread your genes even when it costs you, as long as relatedness × benefit is greater than the cost (r × B > C).' },
     { id: 'class', ic: '👑', tag: 'Class', title: 'Class Champion', desc: 'Win a tournament that includes at least 3 classmates\' strategies, using one of your strategies.',
       lesson: "You can't control what your classmates submit — the environment is made of other organisms' strategies. That's evolution." }
