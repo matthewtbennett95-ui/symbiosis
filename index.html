@@ -572,7 +572,13 @@
         .g-chip.g-wide { flex: 1; min-width: 160px; justify-content: center; gap: 6px; }
         .g-hearts { color: var(--defect); letter-spacing: 2px; } .g-hearts i { font-style: normal; color: var(--soft-2); }
         .g-goal-list { list-style: none; padding: 0; margin: 4px 0 10px; display: grid; gap: 6px; font-size: 14px; }
-        .g-goal-list li { display: flex; gap: 8px; align-items: baseline; }
+        .g-goal-list li { display: flex; gap: 10px; align-items: baseline; }
+        .g-tag { flex: none; width: 62px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 0; border-radius: 999px; background: var(--brand-50); color: var(--brand-600); }
+        .g-tag.stretch { background: #fef3c7; color: #92400e; } .g-tag.bonus { background: var(--soft-2); color: var(--text-muted); }
+        .g-goal span { font-size: 12px; } .g-goal span b { font-size: 12px; font-weight: 700; } .g-hit { color: #047857; }
+        .g-track { position: relative; height: 8px; border-radius: 999px; background: var(--soft-2); margin-top: 6px; }
+        .g-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--brand), #f59e0b); transition: width .35s; }
+        .g-track i { position: absolute; top: -3px; width: 2px; height: 14px; background: var(--text-main); border-radius: 1px; }
         .g-star { color: #f59e0b; font-size: 16px; }
         .g-stars { display: flex; gap: 4px; margin: 2px 0 8px; }
         .g-stars .g-star { font-size: 30px; color: var(--soft-2); line-height: 1; }
@@ -1321,9 +1327,9 @@
         <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
             <div>
                 <div class="card" id="cm-setup">
-                    <h3>Three stars to earn</h3>
-                    <ul class="g-goal-list"><li><span class="g-star">★</span>Keep the lake healthy to the end (at least 40% full)</li><li><span class="g-star">★</span>Finish in the top 3 of 6 families for coins</li><li><span class="g-star">★</span>Figure out every neighbor's hidden personality</li></ul>
-                    <p style="font-size: 14px;">Those goals pull against each other. The richest family is often the one that overfished, and nobody will tell you who your neighbors really are.</p>
+                    <h3>Your goals</h3>
+                    <ul class="g-goal-list"><li><span class="g-tag">Goal</span>Keep the lake healthy (at least 40% full) and finish with <b>25 coins</b></li><li><span class="g-tag stretch">Stretch</span>Keep the lake healthy and finish with <b>40 coins</b></li><li><span class="g-tag bonus">Bonus</span>Figure out every neighbor's hidden personality</li></ul>
+                    <p style="font-size: 14px;">Without rules the lake won't last, and your neighbors won't vote for rules until they trust they're needed. Nobody will tell you who your neighbors really are.</p>
                     <button id="cm-start-btn" onclick="cmStart()"><svg class="ico" width="14" height="14" aria-hidden="true"><use href="#i-play"/></svg>Start the first season</button>
                 </div>
                 <div class="card hidden" id="cm-game">
@@ -1382,9 +1388,9 @@
         <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
             <div>
                 <div class="card" id="cl-start">
-                    <h3>Three stars to earn</h3>
-                    <ul class="g-goal-list"><li><span class="g-star">★</span>Survive all 15 days</li><li><span class="g-star">★</span>Earn as much energy as the average honest cleaner</li><li><span class="g-star">★</span>Beat 3 out of 4 honest cleaners</li></ul>
-                    <p style="font-size: 14px;">The stars are measured against thousands of simulated cleaners. Is there a smarter strategy than always being honest?</p>
+                    <h3>Your goals</h3>
+                    <ul class="g-goal-list"><li><span class="g-tag">Goal</span>Survive all 15 days with at least <b>75 energy</b></li><li><span class="g-tag stretch">Stretch</span>Finish with at least <b>90 energy</b></li><li><span class="g-tag bonus">Bonus</span>End the season with a reputation of 80% or more</li></ul>
+                    <p style="font-size: 14px;">The goals are set from thousands of simulated seasons. An honest cleaner reaches the goal most of the time, but the stretch goal takes more than honesty. Can you find the smarter strategy without wrecking your reputation?</p>
                     <button id="cl-start-btn" onclick="clStart()"><svg class="ico" width="14" height="14" aria-hidden="true"><use href="#i-play"/></svg>Open the station</button>
                 </div>
                 <div class="card hidden" id="cl-game">
@@ -1422,9 +1428,9 @@
         <div class="grid" style="grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px;">
             <div>
                 <div class="card" id="kn-start">
-                    <h3>Three stars to earn</h3>
-                    <ul class="g-goal-list"><li><span class="g-star">★</span>Survive the summer</li><li><span class="g-star">★</span>Save more of your genes than a squirrel that never calls</li><li><span class="g-star">★</span>Beat a squirrel that carefully weighs the risk</li></ul>
-                    <p style="font-size: 14px;">Calling every time is brave, but a squirrel that gets caught can't protect anyone later.</p>
+                    <h3>Your goals</h3>
+                    <ul class="g-goal-list"><li><span class="g-tag">Goal</span>End the summer with at least <b>1.75 copies</b> of your genes alive</li><li><span class="g-tag stretch">Stretch</span>At least <b>2.5 copies</b></li><li><span class="g-tag bonus">Bonus</span>Survive the summer yourself</li></ul>
+                    <p style="font-size: 14px;">You start with about 4 copies of your genes alive (in you and your family). Calling every time is brave, but a squirrel that gets caught can't protect anyone later.</p>
                     <button id="kn-start-btn" onclick="knStart()"><svg class="ico" width="14" height="14" aria-hidden="true"><use href="#i-play"/></svg>Start the summer</button>
                 </div>
                 <div class="card hidden" id="kn-game">
@@ -3826,6 +3832,18 @@ function gStars(rows) {
     return `<div class="g-stars" aria-label="${n} of ${rows.length} stars">${rows.map(r => `<span class="g-star ${r.ok ? 'on' : ''}">★</span>`).join('')}</div>
         <ul class="g-goals">${rows.map(r => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? ICON('check-circle', 16, 'ok') : ICON('x-circle', 16, 'bad')} ${r.label}</li>`).join('')}</ul>`;
 }
+// Live progress toward a goal and a stretch goal (marker = goal, full bar = stretch).
+function gGoalChip(label, v, goal, stretch, fmt = x => x, extra = '') {
+    const pct = x => Math.max(0, Math.min(100, x / stretch * 100));
+    const state = v >= stretch ? '<b class="g-hit">Stretch goal reached!</b>' : v >= goal ? '<b class="g-hit">Goal reached</b>' : `goal ${fmt(goal)} · stretch ${fmt(stretch)}`;
+    return `<div class="g-chip g-wide g-goal"><span>${label} <b>${fmt(v)}</b> · ${state}${extra}</span><div class="g-track"><div class="g-fill" style="width: ${pct(v)}%;"></div><i style="left: ${pct(goal)}%;" title="Goal"></i></div></div>`;
+}
+// For scores you start high and try to keep (bar = what's left; markers = goal and stretch goal).
+function gKeepChip(label, v, goal, stretch, max, fmt = x => x) {
+    const pct = x => Math.max(0, Math.min(100, x / max * 100));
+    const state = v >= stretch ? '<b class="g-hit">above the stretch goal</b>' : v >= goal ? '<b style="color: #92400e;">above the goal, below the stretch goal</b>' : '<b style="color: var(--defect);">below the goal</b>';
+    return `<div class="g-chip g-wide g-goal"><span>${label} <b>${fmt(v)}</b> · ${state}</span><div class="g-track"><div class="g-fill" style="width: ${pct(v)}%;"></div><i style="left: ${pct(goal)}%;" title="Goal"></i><i style="left: ${pct(stretch)}%;" title="Stretch goal"></i></div></div>`;
+}
 function gAvg(fn, n) { let s = 0; for (let i = 0; i < n; i++) s += fn(); return s / n; }
 function gQuantile(fn, n, q) { const a = []; for (let i = 0; i < n; i++) a.push(fn()); a.sort((x, y) => x - y); return a[Math.floor(q * (n - 1))]; }
 function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -3837,6 +3855,9 @@ function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
 // villager "wins" a ruined village); once monitoring + escalating fines pass, taking the fair share earns
 // the most. Neighbors usually vote rules down until they have seen someone overfish.
 const CM = { K: 300, r: 0.6, start: 220, maxCatch: 15, seasons: 15, villagers: 6, need: 4, hearts: 3, warden: 1, marketPrice: 2, storm: 0.15, trader: 0.15, councils: [1, 5, 9, 13] };
+// Goals calibrated by simulation: thoughtful players who get rules passed reach the goal about 70-80% of the
+// time and the stretch goal about 15-30%; without rules nobody reaches either.
+const CM_GOAL = { coins: 25, stretch: 40 };
 const CM_TYPES = {
     steward: { label: 'Steward', emoji: '🌿', desc: 'always takes the fair share, and votes for rules' },
     greedy: { label: 'Greedy', emoji: '🦈', desc: 'takes as much as possible unless fines make it a bad deal, and votes against rules' },
@@ -3858,7 +3879,7 @@ function cmStart() {
         people: [{ name: 'You', emoji: '🙋', you: true, coins: 0, hearts: CM.hearts, offenses: 0, banned: 0, last: null, out: false, fines: 0, bought: 0 },
             ...CM_NAMES.map(([name, emoji], i) => ({ name, emoji, type: types[i], coins: 0, hearts: CM.hearts, offenses: 0, banned: 0, last: null, out: false, fines: 0, bought: 0 }))],
         history: [CM.start], lastAvg: null, lastTotal: null, lastFair: null, sawOver: false, ended: false, collapsed: false, collapseSeason: null,
-        votes: [], rulesLog: [], youOver: 0, youTraderOver: 0
+        votes: [], rulesLog: [], youOver: 0, youTraderOver: 0, revealed: false
     });
     $('cm-setup').classList.add('hidden'); $('cm-game').classList.remove('hidden'); $('cm-guess').classList.add('hidden');
     $('cm-notes').innerHTML = '<h3>Notes</h3><div class="muted">Observations appear after season ' + CM.seasons + '.</div>';
@@ -3968,7 +3989,8 @@ function cmRender() {
     $('cm-hud').innerHTML = `<div class="g-chip"><span>Season</span><b>${Math.min(cm.season, CM.seasons)} / ${CM.seasons}</b></div>
         <div class="g-chip"><span>Your coins</span><b>${you.coins}</b></div>
         <div class="g-chip"><span>Family</span><b class="g-hearts">${'♥'.repeat(Math.max(0, you.hearts))}<i>${'♥'.repeat(CM.hearts - Math.max(0, you.hearts))}</i></b></div>
-        <div class="g-chip"><span>Fish in lake</span><b>${cm.stock}</b></div>`;
+        <div class="g-chip"><span>Fish in lake</span><b>${cm.stock}</b></div>
+        ${gGoalChip('Coins', you.coins, CM_GOAL.coins, CM_GOAL.stretch, x => x, cm.stock < CM.K * 0.4 ? ' · <b style="color: var(--defect);">lake below 40%</b>' : '')}`;
     $('cm-rules').innerHTML = `Rules: ${cm.monitor ? '<span class="badge badge-blue">Warden</span>' : '<span class="badge badge-grey">No warden</span>'} ${cm.sanction ? '<span class="badge badge-blue">Fines</span>' : '<span class="badge badge-grey">No fines</span>'}`;
     const council = cm.phase === 'council' && !cm.ended, fishing = cm.phase === 'fish' && !cm.ended;
     $('cm-council').classList.toggle('hidden', !council);
@@ -3980,7 +4002,7 @@ function cmRender() {
         $('cm-price').innerText = price;
         $('cm-catch').value = v; cmPreview();
     }
-    const reveal = cm.ended;
+    const reveal = cm.revealed;
     $('cm-table').innerHTML = `<thead><tr><th>Villager</th><th>Last catch</th><th>Coins</th></tr></thead><tbody>` + cm.people.map(p => {
         const t = p.you ? null : CM_TYPES[p.type];
         const showLast = p.you || cm.monitor || reveal;
@@ -4019,6 +4041,7 @@ function cmEnd() {
     const guesses = others.map((p, i) => $('cm-g' + i).value);
     const right = others.filter((p, i) => guesses[i] === p.type).length;
     $('cm-guess').classList.add('hidden');
+    cm.revealed = true;
     const you = cm.people[0], village = cm.people.reduce((t, p) => t + p.coins, 0);
     const rank = 1 + others.filter(p => p.coins > you.coins).length;
     const healthy = cm.stock >= CM.K * 0.4 && !cm.collapsed;
@@ -4036,9 +4059,9 @@ function cmEnd() {
     if (cm.rulesLog.some((r, i) => i === 0 && !(r.mon && r.san)) && everRules) notes.push('Notice that the neighbors voted for rules only after they had seen someone overfish. Real communities often build rules after a crisis, not before.');
     if (cm.youTraderOver) notes.push(`You overfished in ${cm.youTraderOver} trader season${cm.youTraderOver === 1 ? '' : 's'}. A bigger temptation makes cheating more tempting, which is exactly when rules matter most.`);
     const stars = [
-        { ok: healthy, label: 'The lake is still healthy at the end (at least 40% full)' },
-        { ok: !you.out && rank <= 3, label: 'Your family finished in the top 3 for coins' },
-        { ok: right === 5, label: 'You identified all five neighbors' }
+        { ok: healthy && !you.out && you.coins >= CM_GOAL.coins, label: `Goal: a healthy lake and at least ${CM_GOAL.coins} coins` },
+        { ok: healthy && !you.out && you.coins >= CM_GOAL.stretch, label: `Stretch goal: a healthy lake and at least ${CM_GOAL.stretch} coins` },
+        { ok: right === 5, label: 'Bonus: you identified all five neighbors' }
     ];
     cm.notes = notes;
     $('cm-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="cm-again" onclick="cmAgain()">Play again</button>`;
@@ -4057,6 +4080,9 @@ function cmAgain() { $('cm-game').classList.add('hidden'); $('cm-setup').classLi
 // well, cheating only when nobody is in line is a riskier gamble that is slightly better on average, and
 // cheating everyone (especially predators) fails.
 const CL = { days: 15, energy0: 6, rep0: 60, burn: 4, watchHit: 12, watchGain: 3, cleanBase: 1, hiddenEye: 0.4, chase: 0.4, chaseCost: 1, snap: 0.35, visitorP: 0.9, predP: 0.3 };
+// Goals calibrated by simulation: the goal is reached in about 2 of 3 decent seasons; the stretch goal by about
+// 1 in 5 always-honest cleaners and about 2 in 5 that pick their moments.
+const CL_GOAL = { energy: 75, stretch: 90, rep: 80 };
 const CL_KINDS = {
     resident: { label: 'Resident', sub: 'lives on this reef', icons: ['🐠', '🐡'], clean: 2, bite: 4, tag: '' },
     visitor: { label: 'Visitor', sub: 'from another reef', icons: ['🐟'], clean: 4, bite: 6, tag: 'Won\'t wait in line' },
@@ -4147,7 +4173,8 @@ function clEndDay() {
 function clRender() {
     $('cl-hud').innerHTML = `<div class="g-chip"><span>Day</span><b>${Math.min(cl.day, CL.days)} / ${CL.days}</b></div>
         <div class="g-chip"><span>Energy</span><b>${cl.energy}</b></div>
-        <div class="g-chip g-wide"><span>Reputation ${Math.round(cl.rep)}%</span><div class="meter"><div style="width: ${Math.round(cl.rep)}%; background: var(--brand);"></div></div></div>`;
+        <div class="g-chip g-wide"><span>Reputation ${Math.round(cl.rep)}%</span><div class="meter"><div style="width: ${Math.round(cl.rep)}%; background: var(--brand);"></div></div></div>
+        ${gGoalChip('Energy', cl.energy, CL_GOAL.energy, CL_GOAL.stretch)}`;
     if (cl.ended) { $('cl-queue').innerHTML = ''; $('cl-next').classList.add('hidden'); }
     else if (!cl.queue.length) {
         $('cl-queue').innerHTML = `<div class="cl-empty">No one left in line. Rest for the night (<b>−${CL.burn}</b> energy).</div>`;
@@ -4185,14 +4212,14 @@ function clEnd() {
     notes.push('<b>What real cleaner wrasse do:</b> Redouan Bshary and colleagues found that cleaners give visiting clients priority (visitors can simply swim to another station), are especially gentle with predatory clients, and cheat less when other clients are watching. Did you end up playing like a wrasse?');
     notes.push('This is <b>indirect reciprocity</b>: you rarely meet the same client twice, so nobody can pay you back directly. Your reputation does it instead. Reviews, references and gossip do the same job for people.');
     const stars = [
-        { ok: cl.alive, label: 'Survive the whole season' },
-        { ok: cl.alive && score >= base.honest, label: `Earn at least ${base.honest} energy (the average honest cleaner)` },
-        { ok: cl.alive && score >= base.top, label: `Earn at least ${base.top} energy (better than 3 in 4 honest cleaners)` }
+        { ok: cl.alive && score >= CL_GOAL.energy, label: `Goal: survive the season with at least ${CL_GOAL.energy} energy` },
+        { ok: cl.alive && score >= CL_GOAL.stretch, label: `Stretch goal: at least ${CL_GOAL.stretch} energy` },
+        { ok: cl.alive && cl.rep >= CL_GOAL.rep, label: `Bonus: finish with a reputation of ${CL_GOAL.rep}% or more` }
     ];
     cl.notes = notes;
     $('cl-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="cl-again" onclick="clStart()">Play another season</button>`;
     $('cl-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    if (cl.alive && score >= base.honest && cl.rep >= 60) completeMission('reputation');
+    if (cl.alive && score >= CL_GOAL.energy && cl.rep >= 60) completeMission('reputation');
 }
 
 // ============================================================================
@@ -4203,6 +4230,9 @@ function clEnd() {
 // Score = copies of your genes alive at the end: 1 for you, plus r for each living relative.
 // Balanced by simulation: never calling ≈ 1.4, always calling ≈ 1.7, weighing the risk ≈ 2.0.
 const KN = { alarms: 12, pupsAt: 5 };
+// Goals calibrated by simulation: careful players reach the goal a bit more than half the time and the stretch
+// goal about 2 in 5 summers; squirrels that never call reach the stretch goal fewer than 1 in 10 times.
+const KN_GOAL = { genes: 1.75, stretch: 2.5 };
 const KN_THREATS = [
     { id: 'hawk', what: 'A hawk is circling high overhead.', you: 0.04, them: 0.25, youLvl: 1, themLvl: 1 },
     { id: 'coyote', what: 'A coyote is creeping through the tall grass.', you: 0.12, them: 0.40, youLvl: 2, themLvl: 2 },
@@ -4304,7 +4334,7 @@ function knRender() {
     const est = (kn.alive ? 1 : 0) + kn.colony.filter(x => x.alive).reduce((s, x) => s + (x.litter ? 0.375 : x.r), 0);
     $('kn-hud').innerHTML = `<div class="g-chip"><span>Alarm</span><b>${Math.min(kn.alarm, KN.alarms)} / ${KN.alarms}</b></div>
         <div class="g-chip"><span>You</span><b>${kn.alive ? 'Alive' : 'Caught'}</b></div>
-        <div class="g-chip"><span>Copies of your genes alive</span><b>≈ ${est.toFixed(2)}</b></div>`;
+        ${gKeepChip('Copies of your genes alive ≈', est, KN_GOAL.genes, KN_GOAL.stretch, 4.25, x => x.toFixed(2))}`;
     const al = kn.cur, dots = n => `<span class="kn-dots">${[1, 2, 3].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
     $('kn-scene').innerHTML = kn.ended || !al ? '' : `<div class="kn-threat">${al.threat.what}</div>
         <div class="kn-risk"><span>Risk to you if you call ${dots(al.threat.youLvl)}</span><span>Risk to the others if nobody calls ${dots(al.threat.themLvl)}</span></div>
@@ -4331,15 +4361,15 @@ function knEnd() {
     notes.push('This is <b>kin selection</b> (W. D. Hamilton, 1964): a costly behavior can spread if it helps relatives enough, because they carry copies of the same genes. Hamilton\'s rule says helping pays when <b>r × B &gt; C</b>: relatedness times the benefit to the relative must be bigger than the cost to the helper.');
     notes.push('Paul Sherman (1977) found that real Belding\'s ground squirrels that gave alarm calls were stalked and chased more often than silent ones. Females, which live near their relatives, called more than males, which move away from home, and females with relatives nearby called the most.');
     const stars = [
-        { ok: kn.alive, label: 'Survive the summer' },
-        { ok: score > never, label: `Beat the average squirrel that never calls (${never.toFixed(2)})` },
-        { ok: score > smart, label: `Beat the average squirrel that weighs the risk (${smart.toFixed(2)})` }
+        { ok: score >= KN_GOAL.genes, label: `Goal: at least ${KN_GOAL.genes} copies of your genes alive` },
+        { ok: score >= KN_GOAL.stretch, label: `Stretch goal: at least ${KN_GOAL.stretch} copies` },
+        { ok: kn.alive, label: 'Bonus: survive the summer yourself' }
     ];
     kn.notes = notes;
     $('kn-msg').innerHTML += '<br><b>The summer is over.</b>';
     $('kn-notes').innerHTML = `<h3>Results</h3>${gStars(stars)}<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul><button class="small" id="kn-again" onclick="knStart()">Play another summer</button>`;
     $('kn-notes').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    if (score > never) completeMission('hamilton');
+    if (score >= KN_GOAL.genes) completeMission('hamilton');
 }
 
 // ============================================================================
@@ -4585,9 +4615,9 @@ const MISSIONS = [
       lesson: 'A shared resource survives when users take no more than it can regrow. Restraint now is what makes catches possible later.' },
     { id: 'ostrom', ic: '⚖️', tag: 'Commons', title: "Ostrom's Rules", desc: 'In The Commons, get the council to pass a warden AND fines, keep them in place to the end, and keep the lake at least 40% full.',
       lesson: "The tragedy of the commons is not inevitable. Communities that can see who takes what, and respond with fair, escalating penalties, can share a resource for generations." },
-    { id: 'reputation', ic: '🐟', tag: 'Reputation', title: 'Good Name', desc: 'In the Cleaning Station, survive the season with at least as much energy as the average honest cleaner and a reputation of 60% or more.',
+    { id: 'reputation', ic: '🐟', tag: 'Reputation', title: 'Good Name', desc: 'In the Cleaning Station, reach the goal (75 energy) with a reputation of 60% or more.',
       lesson: 'When you rarely meet the same partner twice, reputation does the work that payback does in repeated meetings. Being seen as trustworthy brings partners to you.' },
-    { id: 'hamilton', ic: '🐿️', tag: 'Kin', title: "Hamilton's Rule", desc: 'In Family Ties, end the summer with more copies of your genes alive than the average squirrel that never calls.',
+    { id: 'hamilton', ic: '🐿️', tag: 'Kin', title: "Hamilton's Rule", desc: 'In Family Ties, reach the goal: end the summer with at least 1.75 copies of your genes alive.',
       lesson: 'Helping relatives can spread your genes even when it costs you, as long as relatedness × benefit is greater than the cost (r × B > C).' },
     { id: 'class', ic: '👑', tag: 'Class', title: 'Class Champion', desc: 'Win a tournament that includes at least 3 classmates\' strategies, using one of your strategies.',
       lesson: "You can't control what your classmates submit — the environment is made of other organisms' strategies. That's evolution." }
