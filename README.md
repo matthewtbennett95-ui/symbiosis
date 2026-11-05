@@ -1,4 +1,6 @@
-# Symbiosis Lab: The Evolution of Cooperation
+# Symbio: The Evolution of Cooperation
+
+*Cooperate. Cheat. Evolve.*
 
 A classroom game built on Robert Axelrod's Iterated Prisoner's Dilemma tournaments. Students design
 strategies (with a no-code Rule Builder or JavaScript), then test them against the famous strategies,
@@ -14,13 +16,13 @@ one task, a discovery, and a journal question. Students print their answers as o
 
 | Day | Chapter | What students do |
 | --- | --- | --- |
-| 1 | 🦇 The Roost | Play as a vampire bat: share blood or keep it, against a hidden Tit for Tat roostmate |
-| 1 | 🌱 The Nodules | Play as a soybean: feed or cut off three root-nodule bacteria, then identify each strain |
-| 1 | 🧬 Design an Organism | Combine genes (brain type, testing, reactions, memory) that can express all 15 famous strategies; run two survival trials, then release it |
-| 2 | 🏆 The Tournament | Predict, then run Axelrod's tournament against 15 famous strategies |
-| 2 | 🐣 Generations | Predict, then watch 300 generations of evolution |
-| 2 | 🧫 The Biofilm | A tiny colony vs. freeloaders: strangers (dies out) vs. lifelong neighbors (takes over) |
-| 2 | 🏛️ From Cells to Societies | Trench truces, Ostrom, cartels; send the organism to the Class Championship |
+| 1 | The Roost | Play as a vampire bat: share blood or keep it, against a hidden Tit for Tat roostmate |
+| 1 | The Nodules | Play as a soybean: feed or cut off three root-nodule bacteria, then identify each strain |
+| 1 | Design an Organism | Combine genes (brain type, testing, reactions, memory) that can express all 15 famous strategies; run two survival trials, then release it |
+| 2 | The Tournament | Predict, then run Axelrod's tournament against 15 famous strategies |
+| 2 | Generations | Predict, then watch 300 generations of evolution |
+| 2 | The Biofilm | A tiny colony vs. freeloaders: strangers (dies out) vs. lifelong neighbors (takes over) |
+| 2 | From Cells to Societies | Trench truces, Ostrom, cartels; send the organism to the Class Championship |
 
 The Teacher tab has a suggested lesson plan, an answer guide, and **teacher mode**, which skips all writing and unlocks every chapter on that device. The teacher code is `symbiosis`; change `TEACHER_CODE` in `index.html` to set your own.
 
@@ -32,19 +34,25 @@ The Teacher tab maps the activities to the Georgia CTAE **Engineering Applicatio
 
 | Tab | What students do |
 | --- | --- |
-| 🧬 Strategy Lab | Build strategies with the Rule Builder or code, quick-test them, save several, share them as "cards" |
-| ⚔️ Head-to-Head | Animated 1v1 duel, behavior timeline, data log, auto-written field notes, printable report |
-| 🏆 Global Tournament | Axelrod-style round robin: noise, unknown match length, personality traits (nice / retaliatory / forgiving), clickable payoff matrix, and the ecological "future generations" simulation |
-| 🧫 Survival Crucible | Two models: **free-roaming** organisms that bump, gain or lose energy, reproduce and starve; or a **grid** where strategies spread cell by cell. Territories, well-mixed, and invasion layouts; a "shadow of the future" slider |
-| 🧪 Evolution Engine | A genetic algorithm (like Axelrod 1987): random strategies mutate, cross over and reproduce by fitness; watch evolution rediscover reciprocity, then adopt the champion |
-| 🎣 The Commons | A six-villager fishery (many-player dilemma): Hardin's tragedy of the commons vs. Elinor Ostrom's monitoring and graduated sanctions, with hidden neighbor personalities |
-| 🐟 Cleaning Station | Reputation and indirect reciprocity as a cleaner wrasse: clients pick cleaners by reputation, bystanders watch (Bshary & Grutter 2006) |
-| 🐿️ Family Ties | Kin selection as a Belding's ground squirrel: alarm calls, relatedness and Hamilton's rule r × B > C (Sherman 1977) |
-| 🎯 Missions | 19 guided experiments that unlock "discoveries" |
-| 📚 Field Guide | History, the math, biology case files, bio-politics, discussion questions, glossary |
-| 🛠️ Class Arena | Teacher roster: paste share cards, validate, import/export JSON, run class tournaments |
+| Strategy Lab | Build strategies with the Rule Builder or code, quick-test them, save several, share them as "cards" |
+| Head-to-Head | Animated 1v1 duel, behavior timeline, data log, auto-written field notes, printable report |
+| Tournament | Axelrod-style round robin: noise, unknown match length, personality traits (nice / retaliatory / forgiving), clickable payoff matrix, and the ecological "future generations" simulation |
+| Survival Crucible | Two models: **free-roaming** organisms that bump, gain or lose energy, reproduce and starve; or a **grid** where strategies spread cell by cell. Territories, well-mixed, and invasion layouts; a "shadow of the future" slider |
+| Evolution Engine | A genetic algorithm (like Axelrod 1987): random strategies mutate, cross over and reproduce by fitness; watch evolution rediscover reciprocity, then adopt the champion |
+| The Commons | A six-villager fishery (many-player dilemma): Hardin's tragedy of the commons vs. Elinor Ostrom's monitoring and graduated sanctions, with hidden neighbor personalities |
+| Cleaning Station | Reputation and indirect reciprocity as a cleaner wrasse: clients pick cleaners by reputation, bystanders watch (Bshary & Grutter 2006) |
+| Family Ties | Kin selection as a Belding's ground squirrel: alarm calls, relatedness and Hamilton's rule r × B > C (Sherman 1977) |
+| Missions | 19 guided experiments that unlock "discoveries" |
+| Field Guide | History, the math, biology case files, bio-politics, discussion questions, glossary |
+| Teacher | Lesson plan, answer guide, standards, and the class roster: paste share cards, validate, import/export JSON, run class tournaments |
 
-Payoffs can be changed from **⚙️ Environment Payoffs** (including a Snowdrift preset).
+Payoffs can be changed from **Environment Payoffs** (including a Snowdrift preset).
+
+In the app, Missions, the Field Guide and the Teacher tab sit in the top bar; the other Open Lab pages are grouped in the Open Lab menu as **Games**, **Simulations** and **Build & test**.
+
+## Design
+
+The interface uses one brand color (indigo), green for cooperation and rose for defection, the Inter typeface (with system-font fallbacks if Google Fonts is blocked), and an inline SVG icon set. Emojis are kept only for organisms, strategies and game pieces.
 
 ## Running it
 
