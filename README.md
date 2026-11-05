@@ -42,13 +42,15 @@ The Teacher tab maps the activities to the Georgia CTAE **Engineering Applicatio
 | The Commons | A six-villager fishery (many-player dilemma): Hardin's tragedy of the commons vs. Elinor Ostrom's monitoring and graduated sanctions, with hidden neighbor personalities |
 | Cleaning Station | Reputation and indirect reciprocity as a cleaner wrasse: clients pick cleaners by reputation, bystanders watch (Bshary & Grutter 2006) |
 | Family Ties | Kin selection as a Belding's ground squirrel: alarm calls, relatedness and Hamilton's rule r × B > C (Sherman 1977) |
+| Face a Classmate | Pass-and-play Prisoner's Dilemma for two students on one device: secret choices, a hidden end, and a debrief comparing the score gap with what the pair earned together |
+| Check-in Quiz | Ten multiple-choice questions on the big ideas (exit ticket), each with an explanation; shuffled per student, printable score |
 | Missions | 19 guided experiments that unlock "discoveries" |
 | Field Guide | History, the math, biology case files, bio-politics, discussion questions, glossary |
 | Teacher | Lesson plan, answer guide, standards, and the class roster: paste share cards, validate, import/export JSON, run class tournaments |
 
 Payoffs can be changed from **Environment Payoffs** (including a Snowdrift preset).
 
-In the app, Missions, the Field Guide and the Teacher tab sit in the top bar; the other Open Lab pages are grouped in the Open Lab menu as **Games**, **Simulations** and **Build & test**.
+In the app, Missions, the Field Guide and the Teacher tab sit in the top bar; the other Open Lab pages are grouped in the Open Lab menu as **Games**, **Simulations**, **Build & test** and **Review**.
 
 ## Design
 
