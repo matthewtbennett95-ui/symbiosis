@@ -39,9 +39,9 @@ The Teacher tab maps the activities to the Georgia CTAE **Engineering Applicatio
 | Tournament | Axelrod-style round robin: noise, unknown match length, personality traits (nice / retaliatory / forgiving), clickable payoff matrix, and the ecological "future generations" simulation |
 | Survival Crucible | Two models: **free-roaming** organisms that bump, gain or lose energy, reproduce and starve; or a **grid** where strategies spread cell by cell. Territories, well-mixed, and invasion layouts; a "shadow of the future" slider |
 | Evolution Engine | A genetic algorithm (like Axelrod 1987): random strategies mutate, cross over and reproduce by fitness; watch evolution rediscover reciprocity, then adopt the champion |
-| The Commons | A six-villager fishery (many-player dilemma): Hardin's tragedy of the commons vs. Elinor Ostrom's monitoring and graduated sanctions, with hidden neighbor personalities |
-| Cleaning Station | Reputation and indirect reciprocity as a cleaner wrasse: clients pick cleaners by reputation, bystanders watch (Bshary & Grutter 2006) |
-| Family Ties | Kin selection as a Belding's ground squirrel: alarm calls, relatedness and Hamilton's rule r × B > C (Sherman 1977) |
+| The Commons | A six-family fishery over 15 seasons: feed your family, sell the extra, survive traders and storms, win council votes for Ostrom's warden and escalating fines, then guess each neighbor's hidden personality. Three stars: healthy lake, top-3 savings, all neighbors identified |
+| Cleaning Station | A cleaner wrasse serving a queue of clients: the fish waiting in line are the watchers; visitors won't wait, predators may bite back, and energy drains nightly. Stars are measured against thousands of simulated cleaners (Bshary & Grutter) |
+| Family Ties | A Belding's ground squirrel colony with a fixed cast: risky alarm calls, littermates that may be full or half sisters, pups that emerge mid-summer, and a mother who sometimes calls for you. Score = copies of your genes alive (Hamilton's rule; Sherman 1977) |
 | Face a Classmate | Pass-and-play Prisoner's Dilemma for two students on one device: secret choices, a hidden end, and a debrief comparing the score gap with what the pair earned together |
 | Check-in Quiz | Ten multiple-choice questions on the big ideas (exit ticket), each with an explanation; shuffled per student, printable score |
 | Missions | 19 guided experiments that unlock "discoveries" |
